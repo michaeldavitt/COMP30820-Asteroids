@@ -9,12 +9,15 @@ import javax.swing.JPanel;
 
 public class Screen {
 
+    private JFrame frame;
+    private JPanel panel;
+
     // Reference: https://www.youtube.com/watch?v=5o3fMLPY7qY
     public Screen() {
-        JFrame frame = new JFrame();
+        frame = new JFrame();
 
-        JPanel panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 10, 30));
+        panel = new JPanel();
+        panel.setBorder(BorderFactory.createEmptyBorder(800, 800, 800, 800));
         panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
 
         frame.add(panel, BorderLayout.CENTER);
@@ -25,6 +28,6 @@ public class Screen {
     }
 
     public static void main(String[] args) {
-        Screen testScreen = new Screen();
+        new Screen();
     }
 }
