@@ -13,6 +13,7 @@ public class Screen extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Shuts down application when user presses the "x" button
         this.setSize(500, 500); // Sets default screen size
         this.setVisible(true); // Makes screen visible
+        this.setLayout(null);
 
         // Changes the default icon of our screen
         ImageIcon image = new ImageIcon("resources/asteroid.jpg");
@@ -20,5 +21,4 @@ public class Screen extends JFrame {
 
         this.getContentPane().setBackground(Color.BLACK); // Sets screen background colour
     }
-
 }
