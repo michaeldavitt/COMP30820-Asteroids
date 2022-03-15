@@ -12,7 +12,6 @@ public class Screen extends JFrame {
         this.setTitle("Asteroids"); // Sets title of screen
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Shuts down application when user presses the "x" button
         this.setSize(500, 500); // Sets default screen size
-        this.setVisible(true); // Makes screen visible
         this.setLayout(null);
 
         // Changes the default icon of our screen
