@@ -1,33 +1,18 @@
 package asteroids;
 
-import java.awt.BorderLayout;
-
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 
-public class Screen {
+public class Screen extends JFrame {
 
-    private JFrame frame;
-    private JPanel panel;
-
-    // Reference: https://www.youtube.com/watch?v=5o3fMLPY7qY
+    // Reference: https://www.youtube.com/watch?v=Kmgo00avvEw
     public Screen() {
-        frame = new JFrame();
-
-        panel = new JPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(800, 800, 800, 800));
-        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
-
-        frame.add(panel, BorderLayout.CENTER);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setTitle("Screen");
-        frame.pack();
-        frame.setVisible(true);
+        this.setTitle("Asteroids"); // Sets title of screen
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Shuts down application when user presses the "x" button
+        this.setSize(500, 500); // Sets default screen size
+        this.setVisible(true); // Makes screen visible
     }
 
     public static void main(String[] args) {
-        new Screen();
+        Screen frame = new Screen();
     }
 }
