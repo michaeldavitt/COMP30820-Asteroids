@@ -1,7 +1,14 @@
 .root {
 	-fx-background-color: black;
+	background-color: black;
 }
 
 .label {
 	-fx-text-fill: white;
+	-fx-alignment: center;
+}
+
+.button {
+	-fx-font-size: 20px;
+	font-size: 20px;
 }

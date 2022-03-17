@@ -21,12 +21,17 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		Parent root = FXMLLoader.load(getClass().getResource("/Main.fxml"));
+		// Create the welcome screen
+		Parent root = FXMLLoader.load(getClass().getResource("Welcome_Screen.fxml"));
 		Scene scene = new Scene(root);
-		// scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+		
+		// Style the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Put welcome screen onto the main screen
 		stage.setScene(scene);
+		stage.setResizable(false);
 		stage.show();
 		
 	}

@@ -6,11 +6,11 @@
 
 <AnchorPane id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Label id="title" alignment="CENTER" layoutX="107.0" layoutY="29.0" prefHeight="196.0" prefWidth="387.0" text="Welcome to Asteroids">
+      <Label id="title" alignment="CENTER" layoutX="-1.0" layoutY="29.0" prefHeight="196.0" prefWidth="600.0" text="Welcome to Asteroids">
          <font>
             <Font size="31.0" />
          </font></Label>
-      <Label id="pressEnter" alignment="CENTER" layoutX="170.0" layoutY="225.0" prefHeight="74.0" prefWidth="261.0" text="Press Enter to Start">
+      <Label id="pressEnter" alignment="CENTER" layoutY="225.0" prefHeight="74.0" prefWidth="600.0" text="Press Enter to Start">
          <font>
             <Font size="21.0" />
          </font>
