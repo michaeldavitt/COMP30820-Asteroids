@@ -1,7 +1,5 @@
-module myfx {
-	requires javafx.graphics;
+module HelloFX {
 	requires javafx.controls;
-	requires javafx.fxml;
 	
-	opens asteroids;
+	opens application to javafx.graphics, javafx.fxml;
 }
