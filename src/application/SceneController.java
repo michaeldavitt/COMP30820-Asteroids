@@ -43,7 +43,6 @@ public class SceneController {
 		// Create player ship
 		Ship playerShip = new Ship();
 		
-		
 		// Create asteroid
 		Asteroid firstAsteroid = new Asteroid();
 		
