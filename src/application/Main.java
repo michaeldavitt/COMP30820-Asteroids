@@ -3,8 +3,11 @@ package application;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import javafx.scene.Parent;
+//import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+//import javafx.scene.paint.Color;
+//import javafx.scene.shape.Polygon;
 //import javafx.scene.image.Image;
 //import javafx.scene.layout.Pane;
 //import javafx.scene.paint.Color;
@@ -22,7 +25,7 @@ public class Main extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		// Create the welcome screen
-		Parent root = FXMLLoader.load(getClass().getResource("Welcome_Screen.fxml"));
+		AnchorPane root = FXMLLoader.<AnchorPane>load(getClass().getResource("Welcome_Screen.fxml"));
 		Scene scene = new Scene(root);
 		
 		// Style the welcome screen
