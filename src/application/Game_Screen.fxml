@@ -6,7 +6,7 @@
 
 <AnchorPane id="gameScreen" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.SceneController">
    <children>
-      <Button layoutX="169.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToWelcomeScreen" text="Return to Welcome Screen">
+      <Button layoutX="242.0" layoutY="14.0" mnemonicParsing="false" onAction="#switchToGameOverScreen" text="End Game">
          <font>
             <Font size="20.0" />
          </font></Button>
