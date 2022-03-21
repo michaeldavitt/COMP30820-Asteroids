@@ -18,7 +18,7 @@ public class HighScores {
 	public HighScores() {
 		try {
 			// Open text file and get the number of lines in the file
-			File myFile = openTextFile("src/test/scores.txt");
+			File myFile = openTextFile("src/application/scores.txt");
 			Scanner reader = new Scanner(myFile);
 			int counter = getNumberOfLines(reader);
 			
@@ -28,7 +28,7 @@ public class HighScores {
 			
 			// Close and reopen file
 			reader.close();
-			myFile = openTextFile("src/test/scores.txt");
+			myFile = openTextFile("src/application/scores.txt");
 			reader = new Scanner(myFile);
 			
 			// Assign high scores to highScoreLists array
@@ -77,7 +77,7 @@ public class HighScores {
 	// Method for writing a new high score to the text file containing all scores
 	public void updateHighScore(Score newScore)
 		throws IOException {
-		    FileWriter fw = new FileWriter("src/test/scores.txt", true);
+		    FileWriter fw = new FileWriter("src/application/scores.txt", true);
 		    BufferedWriter bw = new BufferedWriter(fw);
 		    bw.newLine();
 		    bw.write(newScore.toString());
