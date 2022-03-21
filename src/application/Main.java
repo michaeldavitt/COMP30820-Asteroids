@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 //import javafx.scene.paint.Color;
 //import javafx.scene.shape.Polygon;
@@ -31,6 +32,10 @@ public class Main extends Application {
 		// Style the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
 		
 		// Put welcome screen onto the main screen
 		stage.setScene(scene);

@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -24,6 +25,10 @@ public class SceneController {
 		// Add styling to the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
@@ -52,6 +57,10 @@ public class SceneController {
 		root.getChildren().add(playerShip);
 		root.getChildren().add(firstAsteroid);
 		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
+		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
 		stage.setTitle("Asteroids");
@@ -70,6 +79,10 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
+		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
 		stage.setTitle("Asteroids");
@@ -87,6 +100,10 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
+		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
 		stage.setTitle("Asteroids");
@@ -103,6 +120,10 @@ public class SceneController {
 		// Add styling to the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
