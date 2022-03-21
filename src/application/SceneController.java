@@ -27,6 +27,8 @@ public class SceneController {
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
 		stage.show();
 	}
 	
@@ -52,6 +54,8 @@ public class SceneController {
 		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
 		stage.show();
 	}
 	
@@ -68,6 +72,8 @@ public class SceneController {
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
 		stage.show();
 	}
 	
@@ -83,6 +89,8 @@ public class SceneController {
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
 		stage.show();
 	}
 	
@@ -98,6 +106,8 @@ public class SceneController {
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
 		stage.show();
 	}
 }

@@ -34,6 +34,7 @@ public class Main extends Application {
 		
 		// Put welcome screen onto the main screen
 		stage.setScene(scene);
+		stage.setTitle("Asteroids");
 		stage.setResizable(false);
 		stage.show();
 		
