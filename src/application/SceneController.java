@@ -16,11 +16,14 @@ public class SceneController {
 	private Stage stage;
 	private Scene scene;
 	private AnchorPane root;
+	private int screenX = 800;
+	private int screenY = 600;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Welcome_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -42,6 +45,7 @@ public class SceneController {
 		// Generate the welcome screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Controls_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -63,6 +67,7 @@ public class SceneController {
 		// Generate the game screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Game_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the game screen
@@ -95,6 +100,7 @@ public class SceneController {
 		// Generate the welcome screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Game_Over_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -116,6 +122,7 @@ public class SceneController {
 		// Generate the welcome screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Enter_Name_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -137,6 +144,7 @@ public class SceneController {
 		// Generate the welcome screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("View_High_Score_Screen.fxml"));
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
