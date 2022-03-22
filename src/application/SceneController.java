@@ -146,7 +146,7 @@ public class SceneController {
 		// Add high scores to the screen
 		// Create scores object and new user score
 		ScoresList scores = new ScoresList();
-		Score newScore = new Score("HEM", 444);
+		Score newScore = new Score("TRK", 5000);
 		
 		// Update scores with new score
 		scores.updateHighScore(newScore);

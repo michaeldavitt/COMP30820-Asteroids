@@ -15,9 +15,9 @@ public class Ship extends Polygon {
 	
 	public void drawShip() {
 		this.getPoints().setAll(
-			this.xLocation - 20, this.yLocation,
-			this.xLocation + 10, this.yLocation + 10,
-			this.xLocation + 10, this.yLocation - 10
-		);
+				this.xLocation - 20, this.yLocation,
+				this.xLocation + 10, this.yLocation + 10,
+				this.xLocation + 10, this.yLocation - 10
+				);
 	}
 }
