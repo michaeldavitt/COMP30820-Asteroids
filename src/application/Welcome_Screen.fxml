@@ -11,9 +11,14 @@
          <font>
             <Font size="31.0" />
          </font></Label>
-      <Button id="startGameButton" layoutX="205.0" layoutY="225.0" mnemonicParsing="false" onAction="#switchToGameScreen" text="Click to start game">
+      <Button id="startGameButton" layoutX="226.0" layoutY="178.0" mnemonicParsing="false" onAction="#switchToGameScreen" text="Launch Game">
          <font>
             <Font size="20.0" />
          </font></Button>
+      <Button id="startGameButton" layoutX="249.0" layoutY="236.0" mnemonicParsing="false" onAction="#switchToControlsScreen" text="Controls">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

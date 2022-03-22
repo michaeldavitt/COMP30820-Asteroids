@@ -38,6 +38,27 @@ public class SceneController {
 		stage.show();
 	}
 	
+	public void switchToControlsScreen(ActionEvent event) throws IOException {
+		// Generate the welcome screen
+		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Controls_Screen.fxml"));
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		
+		// Add styling to the welcome screen
+		String css = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css);
+		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
+		
+		// Add the welcome screen to the window and show the window
+		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
+		stage.show();
+	}
+	
 	public void switchToGameScreen(ActionEvent event) throws IOException {
 		// Generate the game screen
 		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Game_Screen.fxml"));
