@@ -13,35 +13,5 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Label layoutX="206.0" layoutY="129.0" text="XYZ">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="364.0" layoutY="129.0" text="1000">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="206.0" layoutY="173.0" text="ABC">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="369.0" layoutY="173.0" text="800">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="208.0" layoutY="223.0" text="DEF">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="369.0" layoutY="223.0" text="700">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
    </children>
 </AnchorPane>

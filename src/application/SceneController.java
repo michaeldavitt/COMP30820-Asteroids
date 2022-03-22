@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -120,6 +121,25 @@ public class SceneController {
 		// Add styling to the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Add high scores to the screen
+		// Create scores object and new user score
+		ScoresList scores = new ScoresList();
+		Score newScore = new Score("HEM", 444);
+		
+		// Update scores with new score
+		scores.updateHighScore(newScore);
+		
+		// Get high scores
+		Score[] highScores = scores.getHighScores();
+		
+		// Get high scores
+		for (int i = 0; i < highScores.length; i++) {
+			Label newHighScoreLabel = new Label(highScores[i].getName() + " - " + highScores[i].getScore());
+			newHighScoreLabel.setLayoutX(250);
+			newHighScoreLabel.setLayoutY(150 + i * 20);
+			root.getChildren().add(newHighScoreLabel);
+		}
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");
