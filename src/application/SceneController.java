@@ -3,12 +3,15 @@ package application;
 import java.io.IOException;
 
 import javafx.event.ActionEvent;
+//import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+//import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
@@ -16,8 +19,8 @@ public class SceneController {
 	private Stage stage;
 	private Scene scene;
 	private AnchorPane root;
-	private int screenX = 800;
-	private int screenY = 600;
+	private final int screenX = 800;
+	private final int screenY = 600;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
@@ -75,7 +78,7 @@ public class SceneController {
 		scene.getStylesheets().add(css);
 		
 		// Create player ship
-		Ship playerShip = new Ship();
+		Ship playerShip = new Ship(screenX / 2, screenY / 2);
 		
 		// Create asteroid
 		Asteroid firstAsteroid = new Asteroid();
@@ -92,7 +95,21 @@ public class SceneController {
 		stage.setScene(scene);
 		stage.setTitle("Asteroids");
 		stage.setResizable(false);
+		
+		// Get ship to rotate
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.RIGHT) {
+				playerShip.rotateRight();
+			} else if (e.getCode() == KeyCode.LEFT) {
+				playerShip.rotateLeft();
+			}
+		});
+		
 		stage.show();
+		
+		// Request focus on the player ship, so that it will react to key events
+		playerShip.requestFocus();
 	}
 	
 	

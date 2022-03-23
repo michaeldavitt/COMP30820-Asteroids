@@ -19,8 +19,8 @@ import javafx.scene.layout.AnchorPane;
 
 //Reference: https://www.youtube.com/watch?v=9XJicRt_FaI
 public class Main extends Application {
-	private int screenX = 800;
-	private int screenY = 600;
+	private final int screenX = 800;
+	private final int screenY = 600;
 	
 	public static void main(String[] args) {
 		launch(args);
