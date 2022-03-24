@@ -116,7 +116,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToGameScreen(arg0);
+					switchToLevelScreen(arg0);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -151,7 +151,6 @@ public class SceneController {
 	public void switchToGameScreen(ActionEvent event) throws IOException {
 		// Generate the game screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
@@ -388,7 +387,7 @@ public class SceneController {
 		levelText.setText("Level " + currentLevel);
 		levelText.setX(screenX / 4);
 		levelText.setY(screenY / 4);
-		levelText.setFont(Font.font("Verdana", 50));
+		levelText.setFont(Font.font("Verdana", 100));
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
 		
@@ -424,34 +423,34 @@ public class SceneController {
 		stage.show();
 		
 		// Adds buttons to the screen to switch scenes
-		Button switchToGameButton = new Button("Begin Game");
-		switchToGameButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					switchToGameScreen(arg0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
-			}
-		});
-		
-		switchToGameButton.setTranslateX(50);
-		switchToGameButton.setTranslateY(50);
-		root.getChildren().add(switchToGameButton);
-		
-		// Change scene when the user presses Enter
-//		stage.getScene().setOnKeyPressed(e -> {
-//			e.consume();
-//			if (e.getCode() == KeyCode.ENTER) {
+//		Button switchToGameButton = new Button("Begin Game");
+//		switchToGameButton.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent arg0) {
 //				try {
-//					switchToGameScreen(event);
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
+//					switchToGameScreen(arg0);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}	
 //			}
 //		});
+//		
+//		switchToGameButton.setTranslateX(50);
+//		switchToGameButton.setTranslateY(50);
+//		root.getChildren().add(switchToGameButton);
+		
+		// Change scene when the user presses Enter
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
+				try {
+					switchToGameScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
 	}
 }
