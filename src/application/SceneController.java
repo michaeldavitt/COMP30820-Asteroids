@@ -22,6 +22,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
+import javafx.scene.Group;
+import java.lang.Math;
+import java.util.Random;
+
 public class SceneController {
 	private Stage stage;
 	private Scene scene;
@@ -161,12 +172,65 @@ public class SceneController {
 		// Create player ship
 		Ship playerShip = new Ship(screenX / 2, screenY / 2);
 		
-		// Create asteroid
-		Asteroid firstAsteroid = new Asteroid();
+		int x = 10;
+		
+		Asteroid[] asteroids = new Asteroid[x];
+
+		Group[] groups = new Group[x];
+		Path[] paths = new Path[x];
+		PathTransition[] pathTransitions = new PathTransition[x];
+		RotateTransition[] rotateTransitions = new RotateTransition[x];
+		
+
+		
+		for (int i = 0; i < x; i++)
+		{
+		    //get input variables;
+		    asteroids[i] = new Asteroid();
+
+		
+        groups[i] = new Group(asteroids[i]);
+
+		int[] randomOfTwoInts = new int[8];
+		
+		for (int j = 0; j < 4; j++) {  
+			int a = -50;
+	        int b = 850;
+			randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
+		}
+
+        paths[i] = new Path();
+        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
+        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
+        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
+        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
+       
+        paths[i].setOpacity(0);
+
+        groups[i].getChildren().add(paths[i]);
+
+        pathTransitions[i] = new PathTransition();
+
+        pathTransitions[i].setDuration(Duration.seconds(10.0));
+        pathTransitions[i].setPath(paths[i]);
+        pathTransitions[i].setNode(asteroids[i]); 
+        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
+        pathTransitions[i].setAutoReverse(true);
+        pathTransitions[i].play();
+        
+        
+        rotateTransitions[i] = new RotateTransition();
+        rotateTransitions[i].setDuration(Duration.seconds(10.0));
+        rotateTransitions[i].setNode(asteroids[i]); 
+        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+        rotateTransitions[i].setByAngle(360);
+        rotateTransitions[i].play();
 		
 		// Add objects to scene
-		root.getChildren().add(playerShip);
-		root.getChildren().add(firstAsteroid);
+		
+		root.getChildren().add(asteroids[i]);}
+
+		
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");
