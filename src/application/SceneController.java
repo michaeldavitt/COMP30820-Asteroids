@@ -196,7 +196,7 @@ public class SceneController {
 		
 		for (int j = 0; j < 4; j++) {  
 			int a = -50;
-	        int b = 650;
+	        int b = 850;
 			randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
 		}
 
