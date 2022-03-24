@@ -10,5 +10,10 @@
          <font>
             <Font size="20.0" />
          </font></Button>
+      <Button layoutX="209.0" layoutY="73.0" mnemonicParsing="false" onAction="#switchToLevelScreen" text="View Level Screen">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

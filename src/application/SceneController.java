@@ -11,6 +11,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 //import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.scene.Node;
@@ -21,6 +24,7 @@ public class SceneController {
 	private AnchorPane root;
 	private final int screenX = 800;
 	private final int screenY = 600;
+	private int currentLevel = 1;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
@@ -186,6 +190,61 @@ public class SceneController {
 			newHighScoreLabel.setLayoutY(150 + i * 20);
 			root.getChildren().add(newHighScoreLabel);
 		}
+		
+		// Add image to screen
+		Image icon = new Image("asteroid.jpg");
+		stage.getIcons().add(icon);
+		
+		// Add the welcome screen to the window and show the window
+		stage.setScene(scene);
+		stage.setTitle("Asteroids");
+		stage.setResizable(false);
+		stage.show();
+		
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
+				try {
+					switchToGameScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		});
+	}
+	
+	public void switchToLevelScreen(ActionEvent event) throws IOException {
+		// Generate the welcome screen
+		root = FXMLLoader.<AnchorPane>load(getClass().getResource("Level_Screen.fxml"));
+		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+		root.setPrefSize(screenX, screenY);
+		scene = new Scene(root);
+		
+		// Add styling to the welcome screen
+		String css = this.getClass().getResource("application.css").toExternalForm();
+		scene.getStylesheets().add(css);
+		
+		// Add text representing the user's current level
+		Text levelText = new Text();
+		levelText.setText("Level " + currentLevel + " complete!");
+		levelText.setX(screenX / 4);
+		levelText.setY(screenY / 4);
+		levelText.setFont(Font.font("Verdana", 50));
+		levelText.setFill(Color.WHITE);
+		root.getChildren().add(levelText);
+		
+		// Update level
+		currentLevel += 1;
+		
+		// Add text prompting the user to hit enter to begin next level
+		Text nextLevelText = new Text();
+		nextLevelText.setText("Press Enter to begin Level " + currentLevel);
+		nextLevelText.setX(screenX / 4);
+		nextLevelText.setY(screenY / 2);
+		nextLevelText.setFont(Font.font("Verdana", 30));
+		nextLevelText.setFill(Color.WHITE);
+		root.getChildren().add(nextLevelText);
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");

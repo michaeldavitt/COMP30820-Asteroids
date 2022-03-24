@@ -36,6 +36,7 @@ public class Ship extends Polygon {
 	public double getYLocation() {
 		return this.yLocation;
 	}
+
 	
 	// Getter for the ship's angle
 	public int getAngle() {
