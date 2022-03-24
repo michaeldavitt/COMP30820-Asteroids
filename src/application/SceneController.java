@@ -25,7 +25,6 @@ import javafx.scene.Node;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
@@ -232,7 +231,7 @@ public class SceneController {
 		
 		root.getChildren().add(asteroids[i]);}
 
-		root.getChildren().add(firstAsteroid);
+		
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");
