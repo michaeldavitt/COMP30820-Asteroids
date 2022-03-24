@@ -22,6 +22,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
+import javafx.scene.Group;
+import java.lang.Math;
+import java.util.Random;
+
 public class SceneController {
 	private Stage stage;
 	private Scene scene;
