@@ -227,10 +227,8 @@ public class SceneController {
         rotateTransitions[i].play();
 		
 		// Add objects to scene
-		
 		root.getChildren().add(asteroids[i]);}
-
-		
+		root.getChildren().add(playerShip);
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");
@@ -277,7 +275,6 @@ public class SceneController {
 		switchToGameOverScreenButton.setTranslateX(screenX / 2);
 		switchToGameOverScreenButton.setTranslateY(screenY / 4);
 		root.getChildren().add(switchToGameOverScreenButton);
-				
 		
 		// Get ship to rotate
 		stage.getScene().setOnKeyPressed(e -> {
