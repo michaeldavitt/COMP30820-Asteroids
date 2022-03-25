@@ -21,7 +21,7 @@ import javafx.scene.text.Text;
 //import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.scene.Node;
-
+import javafx.animation.AnimationTimer;
 import javafx.animation.PathTransition;
 import javafx.animation.RotateTransition;
 import javafx.animation.Timeline;
@@ -40,6 +40,8 @@ public class SceneController {
 	private final int screenX = 800;
 	private final int screenY = 600;
 	private int currentLevel = 1;
+	public boolean rotateLeft = false;
+	public boolean rotateRight = false;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Create the welcome screen
@@ -183,51 +185,51 @@ public class SceneController {
 		
 
 		
-		for (int i = 0; i < x; i++)
-		{
+		for (int i = 0; i < x; i++) {
 		    //get input variables;
 		    asteroids[i] = new Asteroid();
-
 		
-        groups[i] = new Group(asteroids[i]);
-
-		int[] randomOfTwoInts = new int[8];
-		
-		for (int j = 0; j < 4; j++) {  
-			int a = -50;
-	        int b = 850;
-			randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
+	        groups[i] = new Group(asteroids[i]);
+	
+			int[] randomOfTwoInts = new int[8];
+			
+			for (int j = 0; j < 4; j++) {  
+				int a = -50;
+		        int b = 850;
+				randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
+			}
+	
+	        paths[i] = new Path();
+	        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
+	       
+	        paths[i].setOpacity(0);
+	
+	        groups[i].getChildren().add(paths[i]);
+	
+	        pathTransitions[i] = new PathTransition();
+	
+	        pathTransitions[i].setDuration(Duration.seconds(10.0));
+	        pathTransitions[i].setPath(paths[i]);
+	        pathTransitions[i].setNode(asteroids[i]); 
+	        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
+	        pathTransitions[i].setAutoReverse(true);
+	        pathTransitions[i].play();
+	        
+	        
+	        rotateTransitions[i] = new RotateTransition();
+	        rotateTransitions[i].setDuration(Duration.seconds(10.0));
+	        rotateTransitions[i].setNode(asteroids[i]); 
+	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+	        rotateTransitions[i].setByAngle(360);
+	        rotateTransitions[i].play();
+			
+			// Add objects to scene
+			root.getChildren().add(asteroids[i]);
 		}
-
-        paths[i] = new Path();
-        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
-        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
-        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
-        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
-       
-        paths[i].setOpacity(0);
-
-        groups[i].getChildren().add(paths[i]);
-
-        pathTransitions[i] = new PathTransition();
-
-        pathTransitions[i].setDuration(Duration.seconds(10.0));
-        pathTransitions[i].setPath(paths[i]);
-        pathTransitions[i].setNode(asteroids[i]); 
-        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
-        pathTransitions[i].setAutoReverse(true);
-        pathTransitions[i].play();
-        
-        
-        rotateTransitions[i] = new RotateTransition();
-        rotateTransitions[i].setDuration(Duration.seconds(10.0));
-        rotateTransitions[i].setNode(asteroids[i]); 
-        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
-        rotateTransitions[i].setByAngle(360);
-        rotateTransitions[i].play();
 		
-		// Add objects to scene
-		root.getChildren().add(asteroids[i]);}
 		root.getChildren().add(playerShip);
 		
 		// Add image to screen
@@ -280,11 +282,48 @@ public class SceneController {
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			if (e.getCode() == KeyCode.RIGHT) {
-				playerShip.rotateRight();
+				rotateRight = true;
 			} else if (e.getCode() == KeyCode.LEFT) {
-				playerShip.rotateLeft();
+				rotateLeft = true;
 			}
+//			switch (e.getCode()) {
+//			case LEFT: rotateLeft = true;System.out.println("Left");break;
+//			case RIGHT: rotateRight = true;System.out.println("Right");break;
+//			default:break;
+//			}
 		});
+		
+		stage.getScene().setOnKeyReleased(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.RIGHT) {
+				rotateRight = false;
+			} else if (e.getCode() == KeyCode.LEFT) {
+				rotateLeft = false;
+			}
+//			switch (e.getCode()) {
+//			case LEFT: this.rotateLeft = false;break;
+//			case RIGHT: this.rotateRight = false;break;
+//			default:break;
+//			}
+		});
+		
+		AnimationTimer timer = new AnimationTimer() {
+
+			int delta = 2;
+			@Override
+			public void handle(long arg0) {
+				// TODO Auto-generated method stub
+				if (rotateLeft == true) {
+					playerShip.rotateLeft(delta);
+				}
+				if (rotateRight == true) {
+					playerShip.rotateRight(delta);
+				}
+			}
+			
+		};
+		
+		timer.start();
 		
 		stage.show();
 		
@@ -482,24 +521,6 @@ public class SceneController {
 		stage.setTitle("Asteroids");
 		stage.setResizable(false);
 		stage.show();
-		
-		// Adds buttons to the screen to switch scenes
-//		Button switchToGameButton = new Button("Begin Game");
-//		switchToGameButton.setOnAction(new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				try {
-//					switchToGameScreen(arg0);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}	
-//			}
-//		});
-//		
-//		switchToGameButton.setTranslateX(50);
-//		switchToGameButton.setTranslateY(50);
-//		root.getChildren().add(switchToGameButton);
 		
 		// Change scene when the user presses Enter
 		stage.getScene().setOnKeyPressed(e -> {

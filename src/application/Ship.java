@@ -44,14 +44,14 @@ public class Ship extends Polygon {
 	}
 	
 	// Rotate the ship to the right
-	public void rotateRight() {
-		this.setAngle(this.getAngle() + 5);
+	public void rotateRight(int delta) {
+		this.setAngle(this.getAngle() + delta);
 		this.setRotate(this.getAngle());
 	}
 	
 	// Rotate the ship to the left
-	public void rotateLeft() {
-		this.setAngle(this.getAngle() - 5);
+	public void rotateLeft(int delta) {
+		this.setAngle(this.getAngle() - delta);
 		this.setRotate(this.getAngle());
 	}
 	
