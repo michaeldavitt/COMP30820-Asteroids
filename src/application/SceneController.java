@@ -21,6 +21,17 @@ import javafx.scene.text.Text;
 //import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.scene.Node;
+import javafx.animation.AnimationTimer;
+import javafx.animation.PathTransition;
+import javafx.animation.RotateTransition;
+import javafx.animation.Timeline;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.util.Duration;
+import javafx.scene.Group;
+import java.lang.Math;
+import java.util.Random;
 
 public class SceneController {
 	private Stage stage;
@@ -29,6 +40,8 @@ public class SceneController {
 	private final int screenX = 800;
 	private final int screenY = 600;
 	private int currentLevel = 1;
+	public boolean rotateLeft = false;
+	public boolean rotateRight = false;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Create the welcome screen
@@ -116,7 +129,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToGameScreen(arg0);
+					switchToLevelScreen(arg0);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -151,7 +164,6 @@ public class SceneController {
 	public void switchToGameScreen(ActionEvent event) throws IOException {
 		// Generate the game screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
@@ -162,12 +174,63 @@ public class SceneController {
 		// Create player ship
 		Ship playerShip = new Ship(screenX / 2, screenY / 2);
 		
-		// Create asteroid
-		Asteroid firstAsteroid = new Asteroid();
+		int x = 10;
 		
-		// Add objects to scene
+		Asteroid[] asteroids = new Asteroid[x];
+
+		Group[] groups = new Group[x];
+		Path[] paths = new Path[x];
+		PathTransition[] pathTransitions = new PathTransition[x];
+		RotateTransition[] rotateTransitions = new RotateTransition[x];
+		
+
+		
+		for (int i = 0; i < x; i++) {
+		    //get input variables;
+		    asteroids[i] = new Asteroid();
+		
+	        groups[i] = new Group(asteroids[i]);
+	
+			int[] randomOfTwoInts = new int[8];
+			
+			for (int j = 0; j < 4; j++) {  
+				int a = -50;
+		        int b = 850;
+				randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
+			}
+	
+	        paths[i] = new Path();
+	        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
+	        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
+	       
+	        paths[i].setOpacity(0);
+	
+	        groups[i].getChildren().add(paths[i]);
+	
+	        pathTransitions[i] = new PathTransition();
+	
+	        pathTransitions[i].setDuration(Duration.seconds(10.0));
+	        pathTransitions[i].setPath(paths[i]);
+	        pathTransitions[i].setNode(asteroids[i]); 
+	        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
+	        pathTransitions[i].setAutoReverse(true);
+	        pathTransitions[i].play();
+	        
+	        
+	        rotateTransitions[i] = new RotateTransition();
+	        rotateTransitions[i].setDuration(Duration.seconds(10.0));
+	        rotateTransitions[i].setNode(asteroids[i]); 
+	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+	        rotateTransitions[i].setByAngle(360);
+	        rotateTransitions[i].play();
+			
+			// Add objects to scene
+			root.getChildren().add(asteroids[i]);
+		}
+		
 		root.getChildren().add(playerShip);
-		root.getChildren().add(firstAsteroid);
 		
 		// Add image to screen
 		Image icon = new Image("asteroid.jpg");
@@ -214,17 +277,53 @@ public class SceneController {
 		switchToGameOverScreenButton.setTranslateX(screenX / 2);
 		switchToGameOverScreenButton.setTranslateY(screenY / 4);
 		root.getChildren().add(switchToGameOverScreenButton);
-				
 		
 		// Get ship to rotate
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			if (e.getCode() == KeyCode.RIGHT) {
-				playerShip.rotateRight();
+				rotateRight = true;
 			} else if (e.getCode() == KeyCode.LEFT) {
-				playerShip.rotateLeft();
+				rotateLeft = true;
 			}
+//			switch (e.getCode()) {
+//			case LEFT: rotateLeft = true;System.out.println("Left");break;
+//			case RIGHT: rotateRight = true;System.out.println("Right");break;
+//			default:break;
+//			}
 		});
+		
+		stage.getScene().setOnKeyReleased(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.RIGHT) {
+				rotateRight = false;
+			} else if (e.getCode() == KeyCode.LEFT) {
+				rotateLeft = false;
+			}
+//			switch (e.getCode()) {
+//			case LEFT: this.rotateLeft = false;break;
+//			case RIGHT: this.rotateRight = false;break;
+//			default:break;
+//			}
+		});
+		
+		AnimationTimer timer = new AnimationTimer() {
+
+			int delta = 2;
+			@Override
+			public void handle(long arg0) {
+				// TODO Auto-generated method stub
+				if (rotateLeft == true) {
+					playerShip.rotateLeft(delta);
+				}
+				if (rotateRight == true) {
+					playerShip.rotateRight(delta);
+				}
+			}
+			
+		};
+		
+		timer.start();
 		
 		stage.show();
 		
@@ -388,7 +487,7 @@ public class SceneController {
 		levelText.setText("Level " + currentLevel);
 		levelText.setX(screenX / 4);
 		levelText.setY(screenY / 4);
-		levelText.setFont(Font.font("Verdana", 50));
+		levelText.setFont(Font.font("Verdana", 100));
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
 		
@@ -423,35 +522,17 @@ public class SceneController {
 		stage.setResizable(false);
 		stage.show();
 		
-		// Adds buttons to the screen to switch scenes
-		Button switchToGameButton = new Button("Begin Game");
-		switchToGameButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
+		// Change scene when the user presses Enter
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToGameScreen(arg0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
+					switchToGameScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		
-		switchToGameButton.setTranslateX(50);
-		switchToGameButton.setTranslateY(50);
-		root.getChildren().add(switchToGameButton);
-		
-		// Change scene when the user presses Enter
-//		stage.getScene().setOnKeyPressed(e -> {
-//			e.consume();
-//			if (e.getCode() == KeyCode.ENTER) {
-//				try {
-//					switchToGameScreen(event);
-//				} catch (IOException e1) {
-//					// TODO Auto-generated catch block
-//					e1.printStackTrace();
-//				}
-//			}
-//		});
 	}
 }
