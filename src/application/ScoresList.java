@@ -99,22 +99,4 @@ public class ScoresList {
 		int numScoresToDisplay = (this.scoresList.length > 5) ? 5: this.scoresList.length;
 		return Arrays.copyOfRange(this.scoresList, 0, numScoresToDisplay);
 	}
-	
-	// Main method
-	public static void main(String[] args) {
-		// Create scores object and new user score
-		ScoresList scores = new ScoresList();
-		Score newScore = new Score("HEM", 444);
-		
-		// Update scores with new score
-		scores.updateHighScore(newScore);
-		
-		// Get high scores
-		Score[] highScores = scores.getHighScores();
-		
-		// Get high scores
-		for (int i = 0; i < highScores.length; i++) {
-			System.out.println(highScores[i].getName() + " - " + highScores[i].getScore());
-		}
-	}
 }
