@@ -3,12 +3,9 @@ package application;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-//import javafx.fxml.FXMLLoader;
-//import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -42,17 +39,12 @@ public class SceneController {
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Create the welcome screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
 		root.setPrefSize(screenX, screenY);
 		
 		// Style the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
-		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
 		
 		// Add title to welcome users to the game
 		Text welcomeText = new Text("Welcome To Asteroids!");
@@ -102,9 +94,6 @@ public class SceneController {
 		
 		// Put welcome screen onto the main screen
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
 	}
 	
 	public void switchToControlsScreen(ActionEvent event) throws IOException {
@@ -118,15 +107,47 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the controls screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
+		
+		Text controlsText = new Text("Game Controls");
+		controlsText.setTranslateX(250);
+		controlsText.setTranslateY(100);
+		controlsText.setFill(Color.WHITE);
+		controlsText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
+		root.getChildren().add(controlsText);
+		
+		// Add controls
+		// Rotate the ship anti-clockwise
+		Control leftArrowKey = new Control("LEFT ARROW KEY (<-): Press and hold the left arrow key to rotate the ship in an anti-clockwise direction");
+		leftArrowKey.setTranslateX(50);
+		leftArrowKey.setTranslateY(150);
+		root.getChildren().add(leftArrowKey);
+		
+		// Rotate the ship clockwise
+		Control rightArrowKey = new Control("RIGHT ARROW KEY (->): Press and hold the right arrow key to rotate the ship in a clockwise direction");
+		rightArrowKey.setTranslateX(50);
+		rightArrowKey.setTranslateY(210);
+		root.getChildren().add(rightArrowKey);
+		
+		// Accelerate
+		Control upArrowKey = new Control("UP ARROW KEY: Press and hold the up arrow key to accelerate the ship. Note that the ship will continue moving in the same direction until thrust is applied in the opposite direction");
+		upArrowKey.setTranslateX(50);
+		upArrowKey.setTranslateY(270);
+		root.getChildren().add(upArrowKey);
+		
+		// Shoot
+		Control space = new Control("SPACE: Press and hold the space bar to shoot at enemies");
+		space.setTranslateX(50);
+		space.setTranslateY(355);
+		root.getChildren().add(space);
+		
+		// Hyperspace jump
+		Control sKey = new Control("S: Press S to perform a hyperspace jump (disappear and reappear in a random location)");
+		sKey.setTranslateX(50);
+		sKey.setTranslateY(390);
+		root.getChildren().add(sKey);
+		
 		
 		// Adds buttons to the screen to switch scenes
 		Button launchGameButton = new Button("Begin Game");
@@ -143,8 +164,9 @@ public class SceneController {
 			}
 		});
 		
-		launchGameButton.setTranslateX(screenX / 2);
-		launchGameButton.setTranslateY(screenY / 2);
+		launchGameButton.setTranslateX(300);
+		launchGameButton.setTranslateY(450);
+		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(launchGameButton);
 		
 		Button returnToWelcomeButton = new Button("Return to Main Menu");
@@ -161,8 +183,9 @@ public class SceneController {
 			}
 		});
 		
-		returnToWelcomeButton.setTranslateX(screenX / 2);
-		returnToWelcomeButton.setTranslateY(screenY / 4);
+		returnToWelcomeButton.setTranslateX(230);
+		returnToWelcomeButton.setTranslateY(500);
+		returnToWelcomeButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(returnToWelcomeButton);
 		
 	}
@@ -188,8 +211,6 @@ public class SceneController {
 		Path[] paths = new Path[x];
 		PathTransition[] pathTransitions = new PathTransition[x];
 		RotateTransition[] rotateTransitions = new RotateTransition[x];
-		
-
 		
 		for (int i = 0; i < x; i++) {
 		    //get input variables;
@@ -238,14 +259,8 @@ public class SceneController {
 		
 		root.getChildren().add(playerShip);
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
 		
 		// Adds buttons to the screen to switch scenes
 		Button switchLevelButton = new Button("View Level Screen");
@@ -292,11 +307,6 @@ public class SceneController {
 			} else if (e.getCode() == KeyCode.LEFT) {
 				rotateLeft = true;
 			}
-//			switch (e.getCode()) {
-//			case LEFT: rotateLeft = true;System.out.println("Left");break;
-//			case RIGHT: rotateRight = true;System.out.println("Right");break;
-//			default:break;
-//			}
 		});
 		
 		stage.getScene().setOnKeyReleased(e -> {
@@ -306,11 +316,6 @@ public class SceneController {
 			} else if (e.getCode() == KeyCode.LEFT) {
 				rotateLeft = false;
 			}
-//			switch (e.getCode()) {
-//			case LEFT: this.rotateLeft = false;break;
-//			case RIGHT: this.rotateRight = false;break;
-//			default:break;
-//			}
 		});
 		
 		AnimationTimer timer = new AnimationTimer() {
@@ -341,7 +346,6 @@ public class SceneController {
 	public void switchToGameOverScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
@@ -349,15 +353,8 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
 		
 		// Adds buttons to the screen to switch scenes
 		Button switchToEnterNameButton = new Button("Enter Name");
@@ -381,7 +378,6 @@ public class SceneController {
 	public void switchToEnterNameScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
@@ -389,15 +385,8 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
 		
 		// Adds buttons to the screen to switch scenes
 		Button switchToHighScoresButton = new Button("High Scores");
@@ -421,7 +410,6 @@ public class SceneController {
 	public void switchToViewHighScoreScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
@@ -448,15 +436,8 @@ public class SceneController {
 			root.getChildren().add(newHighScoreLabel);
 		}
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
 		
 		// Adds buttons to the screen to switch scenes
 		Button switchToWelcomeButton = new Button("Return to main menu");
@@ -518,15 +499,8 @@ public class SceneController {
 		root.getChildren().add(nextLevelText);
 		root.getChildren().add(pressEnterText);
 		
-		// Add image to screen
-		Image icon = new Image("asteroid.jpg");
-		stage.getIcons().add(icon);
-		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
-		stage.setTitle("Asteroids");
-		stage.setResizable(false);
-		stage.show();
 		
 		// Change scene when the user presses Enter
 		stage.getScene().setOnKeyPressed(e -> {
