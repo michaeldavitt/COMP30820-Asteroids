@@ -22,31 +22,46 @@ import javafx.scene.image.Image;
 //import javafx.scene.text.Font;
 //import javafx.scene.text.Text;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 
 
 //Reference: https://www.youtube.com/watch?v=9XJicRt_FaI
 public class Main extends Application {
-	private final int screenX = 800;
-	private final int screenY = 600;
+	private final int screenX = 800; // Sets the screen width - does not change
+	private final int screenY = 600; // Sets the screen height - does not change
 	
+	// Main method which launches our application
 	public static void main(String[] args) {
 		launch(args);
 	}
 
+	// Method for creating our first screen
+	// A stage variable is passed as an input, which represents the window on which we will view our application
 	@Override
 	public void start(Stage stage) throws Exception {
 		// Create the welcome screen
-		Pane root = new Pane();
-		Scene scene = new Scene(root);
-		root.setPrefSize(screenX, screenY);
+		Pane root = new Pane(); // Root node onto which we will add objects
+		Scene scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
+		root.setPrefSize(screenX, screenY); // Set preferred screen size
 		
-		// Style the welcome screen
+		// Style the screen using CSS
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Add image to screen
+		// Add customised Asteroids logo as the application icon
 		Image icon = new Image("asteroid.jpg");
 		stage.getIcons().add(icon);
+		
+		// Add title to welcome users to the game
+		Text welcomeText = new Text("Welcome To Asteroids!");
+		welcomeText.setTranslateX(170);
+		welcomeText.setTranslateY(200);
+		welcomeText.setFill(Color.WHITE);
+		welcomeText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
+		root.getChildren().add(welcomeText);
 		
 		// Adds buttons to the screen to switch scenes
 		SceneController sceneController = new SceneController();
@@ -64,8 +79,9 @@ public class Main extends Application {
 			}
 		});
 		
-		launchGameButton.setTranslateX(screenX / 2);
-		launchGameButton.setTranslateY(screenY / 2);
+		launchGameButton.setTranslateX(250);
+		launchGameButton.setTranslateY(300);
+		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(launchGameButton);
 		
 		Button viewControlsButton = new Button("Controls");
@@ -82,8 +98,9 @@ public class Main extends Application {
 			}
 		});
 		
-		viewControlsButton.setTranslateX(screenX / 2);
-		viewControlsButton.setTranslateY(screenY / 4);
+		viewControlsButton.setTranslateX(275);
+		viewControlsButton.setTranslateY(400);
+		viewControlsButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(viewControlsButton);
 		
 		// Put welcome screen onto the main screen

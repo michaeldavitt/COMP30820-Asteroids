@@ -1,10 +1,8 @@
 package application;
 
 import java.io.IOException;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-//import javafx.event.EventHandler;
 //import javafx.fxml.FXMLLoader;
 //import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -12,13 +10,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-//import javafx.scene.input.KeyEvent;
-//import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-//import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.animation.AnimationTimer;
@@ -58,6 +54,14 @@ public class SceneController {
 		Image icon = new Image("asteroid.jpg");
 		stage.getIcons().add(icon);
 		
+		// Add title to welcome users to the game
+		Text welcomeText = new Text("Welcome To Asteroids!");
+		welcomeText.setTranslateX(170);
+		welcomeText.setTranslateY(200);
+		welcomeText.setFill(Color.WHITE);
+		welcomeText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
+		root.getChildren().add(welcomeText);
+		
 		// Adds buttons to the screen to switch scenes
 		Button launchGameButton = new Button("Begin Game");
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -65,15 +69,16 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToGameScreen(arg0);
+					switchToLevelScreen(arg0);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
 			}
 		});
 		
-		launchGameButton.setTranslateX(screenX / 2);
-		launchGameButton.setTranslateY(screenY / 2);
+		launchGameButton.setTranslateX(250);
+		launchGameButton.setTranslateY(300);
+		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(launchGameButton);
 		
 		Button viewControlsButton = new Button("Controls");
@@ -90,8 +95,9 @@ public class SceneController {
 			}
 		});
 		
-		viewControlsButton.setTranslateX(screenX / 2);
-		viewControlsButton.setTranslateY(screenY / 4);
+		viewControlsButton.setTranslateX(275);
+		viewControlsButton.setTranslateY(400);
+		viewControlsButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(viewControlsButton);
 		
 		// Put welcome screen onto the main screen
