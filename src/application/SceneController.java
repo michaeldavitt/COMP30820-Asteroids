@@ -193,6 +193,8 @@ public class SceneController {
 		
 	}
 	
+	
+	// Method to display the main game screen, where the user will play the game
 	public void switchToGameScreen(ActionEvent event) throws IOException {
 		// Generate the game screen
 		root = new Pane();
@@ -203,19 +205,23 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Create player ship
+		// Create the player ship and place it in the centre of the screen
 		Ship playerShip = new Ship(screenX / 2, screenY / 2);
+		root.getChildren().add(playerShip);
 		
-		int x = 10;
+		// Create the asteroids
+		// Set the number of asteroids that are spawned initially
+		int numAsteroids = 10;
 		
-		Asteroid[] asteroids = new Asteroid[x];
+		// Initialise an array of asteroid objects
+		Asteroid[] asteroids = new Asteroid[numAsteroids];
 
-		Group[] groups = new Group[x];
-		Path[] paths = new Path[x];
-		PathTransition[] pathTransitions = new PathTransition[x];
-		RotateTransition[] rotateTransitions = new RotateTransition[x];
+		Group[] groups = new Group[numAsteroids];
+		Path[] paths = new Path[numAsteroids];
+		PathTransition[] pathTransitions = new PathTransition[numAsteroids];
+		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
 		
-		for (int i = 0; i < x; i++) {
+		for (int i = 0; i < numAsteroids; i++) {
 		    //get input variables;
 		    asteroids[i] = new Asteroid();
 		
@@ -260,12 +266,10 @@ public class SceneController {
 			root.getChildren().add(asteroids[i]);
 		}
 		
-		root.getChildren().add(playerShip);
-		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
 		
-		// Adds buttons to the screen to switch scenes
+		// Adds buttons to the screen to switch scenes (temporary, in the final version, the scene will be switched once the player dies)
 		Button switchLevelButton = new Button("View Level Screen");
 		switchLevelButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -280,8 +284,8 @@ public class SceneController {
 			}
 		});
 		
-		switchLevelButton.setTranslateX(screenX / 3);
-		switchLevelButton.setTranslateY(screenY / 3);
+		switchLevelButton.setTranslateX(620);
+		switchLevelButton.setTranslateY(0);
 		root.getChildren().add(switchLevelButton);
 		
 		Button switchToGameOverScreenButton = new Button("End game");
@@ -298,11 +302,12 @@ public class SceneController {
 			}
 		});
 		
-		switchToGameOverScreenButton.setTranslateX(screenX / 2);
-		switchToGameOverScreenButton.setTranslateY(screenY / 4);
+		switchToGameOverScreenButton.setTranslateX(730);
+		switchToGameOverScreenButton.setTranslateY(0);
 		root.getChildren().add(switchToGameOverScreenButton);
 		
-		// Get ship to rotate
+		
+		// Add onKeyPressed events to ship to enable the users to control the ship
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			if (e.getCode() == KeyCode.RIGHT) {
@@ -461,6 +466,8 @@ public class SceneController {
 		root.getChildren().add(switchToWelcomeButton);
 	}
 	
+	
+	// Method for switching to the level screen which shows the user which level they are currently on and prompts them to hit enter to begin the next level
 	public void switchToLevelScreen(ActionEvent event) throws IOException {
 		// Generate the screen
 		root = new Pane();
@@ -481,7 +488,7 @@ public class SceneController {
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
 		
-		// Update level
+		// Update level counter
 		currentLevel += 1;
 		
 		// Add text prompting the user to hit enter to begin next level
@@ -491,7 +498,6 @@ public class SceneController {
 		nextLevelText.setY(400);
 		nextLevelText.setFont(Font.font("Verdana", 30));
 		nextLevelText.setFill(Color.WHITE);
-		
 		root.getChildren().add(nextLevelText);
 		
 		// Add the welcome screen to the window and show the window
