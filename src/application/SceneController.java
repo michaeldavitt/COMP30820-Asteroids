@@ -46,6 +46,9 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
+		// Reset current level to 1
+		currentLevel = 1;
+		
 		// Add title to welcome users to the game
 		Text welcomeText = new Text("Welcome To Asteroids!");
 		welcomeText.setTranslateX(170);
@@ -459,21 +462,21 @@ public class SceneController {
 	}
 	
 	public void switchToLevelScreen(ActionEvent event) throws IOException {
-		// Generate the welcome screen
+		// Generate the screen
 		root = new Pane();
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
 		
-		// Add styling to the welcome screen
+		// Add styling to the screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add text representing the user's current level
 		Text levelText = new Text();
 		levelText.setText("Level " + currentLevel);
-		levelText.setX(screenX / 4);
-		levelText.setY(screenY / 4);
+		levelText.setX(200);
+		levelText.setY(250);
 		levelText.setFont(Font.font("Verdana", 100));
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
@@ -484,20 +487,12 @@ public class SceneController {
 		// Add text prompting the user to hit enter to begin next level
 		Text nextLevelText = new Text();
 		nextLevelText.setText("Press Enter to continue");
-		nextLevelText.setX(screenX / 4);
-		nextLevelText.setY(screenY / 2);
+		nextLevelText.setX(200);
+		nextLevelText.setY(400);
 		nextLevelText.setFont(Font.font("Verdana", 30));
 		nextLevelText.setFill(Color.WHITE);
 		
-		Text pressEnterText = new Text();
-		pressEnterText.setText("Level " + currentLevel);
-		pressEnterText.setX(screenX / 2);
-		pressEnterText.setY(screenY * (3/4));
-		pressEnterText.setFont(Font.font("Verdana", 30));
-		pressEnterText.setFill(Color.WHITE);
-		
 		root.getChildren().add(nextLevelText);
-		root.getChildren().add(pressEnterText);
 		
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
