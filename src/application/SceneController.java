@@ -444,10 +444,21 @@ public class SceneController {
 		root = new Pane();
 		root.setPrefSize(screenX, screenY);
 		scene = new Scene(root);
+		// Add the welcome screen to the window and show the window
+		stage.setScene(scene);
 		
 		// Add styling to the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Add high score title
+		Text highScoresText = new Text("High Scores");
+		highScoresText.setTranslateX(150);
+		highScoresText.setTranslateY(150);
+		highScoresText.setFont(Font.font("Verdana", 80));
+		highScoresText.setFill(Color.WHITE);
+		root.getChildren().add(highScoresText);
+		
 		
 		// Add high scores to the screen
 		// Create scores object and new user score
@@ -463,31 +474,34 @@ public class SceneController {
 		// Get high scores
 		for (int i = 0; i < highScores.length; i++) {
 			Label newHighScoreLabel = new Label(highScores[i].getName() + " - " + highScores[i].getScore());
-			newHighScoreLabel.setLayoutX(250);
-			newHighScoreLabel.setLayoutY(150 + i * 20);
+			newHighScoreLabel.setLayoutX(280);
+			newHighScoreLabel.setLayoutY(250 + i * 40);
+			newHighScoreLabel.setFont(Font.font("Courier New", FontWeight.BOLD, 32));
 			root.getChildren().add(newHighScoreLabel);
 		}
 		
-		// Add the welcome screen to the window and show the window
-		stage.setScene(scene);
 		
-		// Adds buttons to the screen to switch scenes
-		Button switchToWelcomeButton = new Button("Return to main menu");
-		switchToWelcomeButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
+		// Add press enter to continue text
+		Text continueText = new Text("Press Enter to continue");
+		continueText.setTranslateX(260);
+		continueText.setTranslateY(550);
+		continueText.setFont(Font.font("Verdana", 20));
+		continueText.setFill(Color.WHITE);
+		root.getChildren().add(continueText);
+		
+		
+		// Add a key event which switches back to the welcome screen
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToWelcomeScreen(arg0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
+					switchToWelcomeScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		
-		switchToWelcomeButton.setTranslateX(50);
-		switchToWelcomeButton.setTranslateY(50);
-		root.getChildren().add(switchToWelcomeButton);
 	}
 	
 	
