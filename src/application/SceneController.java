@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -407,23 +408,35 @@ public class SceneController {
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
 		
-		// Adds buttons to the screen to switch scenes
-		Button switchToHighScoresButton = new Button("High Scores");
-		switchToHighScoresButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
+		// Add text prompting the user to enter a username
+		Text enterNameText = new Text("Enter Username Below");
+		enterNameText.setTranslateX(100);
+		enterNameText.setTranslateY(200);
+		enterNameText.setFont(Font.font("Verdana", 50));
+		enterNameText.setFill(Color.WHITE);
+		root.getChildren().add(enterNameText);
+		
+		// Add textfield where the user can type in their username
+		TextField userInput = new TextField();
+		userInput.setTranslateX(100);
+		userInput.setTranslateY(300);
+		root.getChildren().add(userInput);
+		
+		// Extract the user's input and use it to create a score object
+		String username = userInput.getText();
+		
+		// Add a key event which switches to the view high scores screen when the user presses enter
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToViewHighScoreScreen(arg0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
+					switchToViewHighScoreScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		
-		switchToHighScoresButton.setTranslateX(screenX / 2);
-		switchToHighScoresButton.setTranslateY(screenY / 2);
-		root.getChildren().add(switchToHighScoresButton);
 	}
 	
 	public void switchToViewHighScoreScreen(ActionEvent event) throws IOException {
