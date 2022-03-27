@@ -364,23 +364,34 @@ public class SceneController {
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
 		
-		// Adds buttons to the screen to switch scenes
-		Button switchToEnterNameButton = new Button("Enter Name");
-		switchToEnterNameButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
+		// Add game over text
+		Text gameOver = new Text("Game Over");
+		gameOver.setTranslateX(100);
+		gameOver.setTranslateY(300);
+		gameOver.setFont(Font.font("Verdana", 100));
+		gameOver.setFill(Color.WHITE);
+		root.getChildren().add(gameOver);
+		
+		// Add press enter to continue text
+		Text continueText = new Text("Press Enter to continue");
+		continueText.setTranslateX(275);
+		continueText.setTranslateY(400);
+		continueText.setFont(Font.font("Verdana", 20));
+		continueText.setFill(Color.WHITE);
+		root.getChildren().add(continueText);
+		
+		// Add on click event so that the scene changes to the enter score scene when the user presses enter
+		stage.getScene().setOnKeyPressed(e -> {
+			e.consume();
+			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToEnterNameScreen(arg0);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
+					switchToEnterNameScreen(event);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		});
-		
-		switchToEnterNameButton.setTranslateX(screenX / 2);
-		switchToEnterNameButton.setTranslateY(screenY / 2);
-		root.getChildren().add(switchToEnterNameButton);
 	}
 	
 	public void switchToEnterNameScreen(ActionEvent event) throws IOException {
