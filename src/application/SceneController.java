@@ -3,7 +3,10 @@ package application;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -22,6 +25,7 @@ import javafx.animation.Timeline;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import javafx.scene.Group;
 import java.lang.Math;
@@ -210,62 +214,84 @@ public class SceneController {
 		Ship playerShip = new Ship(screenX / 2, screenY / 2);
 		root.getChildren().add(playerShip);
 		
-		// Create the asteroids
-		// Set the number of asteroids that are spawned initially
-		int numAsteroids = 10;
+		int x = 10;
 		
-		// Initialise an array of asteroid objects
-		Asteroid[] asteroids = new Asteroid[numAsteroids];
+		AsteroidMedium[] asteroids = new AsteroidMedium[x];
 
-		Group[] groups = new Group[numAsteroids];
-		Path[] paths = new Path[numAsteroids];
-		PathTransition[] pathTransitions = new PathTransition[numAsteroids];
-		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
+		Group[] groups = new Group[x];
+
+		RotateTransition[] rotateTransitions = new RotateTransition[x];
 		
-		for (int i = 0; i < numAsteroids; i++) {
-		    //get input variables;
-		    asteroids[i] = new Asteroid();
 		
-	        groups[i] = new Group(asteroids[i]);
-	
-			int[] randomOfTwoInts = new int[8];
-			
-			for (int j = 0; j < 4; j++) {  
-				int a = -50;
-		        int b = 850;
-				randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
-			}
-	
-	        paths[i] = new Path();
-	        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
-	       
-	        paths[i].setOpacity(0);
-	
-	        groups[i].getChildren().add(paths[i]);
-	
-	        pathTransitions[i] = new PathTransition();
-	
-	        pathTransitions[i].setDuration(Duration.seconds(10.0));
-	        pathTransitions[i].setPath(paths[i]);
-	        pathTransitions[i].setNode(asteroids[i]); 
-	        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
-	        pathTransitions[i].setAutoReverse(true);
-	        pathTransitions[i].play();
-	        
-	        
-	        rotateTransitions[i] = new RotateTransition();
-	        rotateTransitions[i].setDuration(Duration.seconds(10.0));
-	        rotateTransitions[i].setNode(asteroids[i]); 
-	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
-	        rotateTransitions[i].setByAngle(360);
-	        rotateTransitions[i].play();
-			
-			// Add objects to scene
-			root.getChildren().add(asteroids[i]);
-		}
+		for ( int i = 0; i < x; i++)
+		{
+		
+			Random r = new Random();
+			int randInt = r.nextInt(10-1) + 1;
+ 
+				int a = 1;
+		        int b = -1;
+				int randInt2= new Random().nextBoolean() ? a : b;
+				
+				
+				int a2 = 850;
+		        int b2 = -50;
+				int randInt3= new Random().nextBoolean() ? a2 : b2;
+				 
+			//get input variables;
+		    asteroids[i] = new AsteroidMedium(randInt3, screenY / randInt);
+		    final int x3 = i;
+
+        groups[i] = new Group(asteroids[i]);
+        
+        AnimationTimer timer = new AnimationTimer(){
+        	
+            @Override
+            public void handle(long now) {
+                asteroids[x3].setTranslateX(asteroids[x3].getTranslateX()+ randInt2);
+                asteroids[x3].setTranslateY(asteroids[x3].getTranslateY()+ randInt2);
+                
+              
+                if (asteroids[x3].getTranslateX() < 0) {
+                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+                }
+                if (asteroids[x3].getTranslateY() < 0) {
+                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+                }
+                
+                if (asteroids[x3].getTranslateX() > screenX ) {
+                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+                }
+                
+                if (asteroids[x3].getTranslateY() > screenY) {
+                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+                }
+                Shape intersect = Shape.intersect(playerShip, asteroids[x3]);
+
+                if(intersect.getBoundsInLocal().getWidth() != -1)
+                {
+                	root.getChildren().remove(playerShip);
+                }
+            }
+        };
+
+        timer.start();
+               
+        rotateTransitions[i] = new RotateTransition();
+        rotateTransitions[i].setDuration(Duration.seconds(5.0));
+        rotateTransitions[i].setNode(asteroids[x3]); 
+        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+        rotateTransitions[i].setByAngle(360);
+        rotateTransitions[i].play();
+//		
+//		// Add objects to scene
+//		
+		root.getChildren().add(asteroids[i]);}
+		
 		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
