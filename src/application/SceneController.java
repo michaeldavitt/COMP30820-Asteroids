@@ -94,7 +94,7 @@ public class SceneController {
 	public void switchToControlsScreen(Stage stage) throws IOException {
 		// Generate the controls screen
 		root = new Pane();
-		Scene scene = new Scene(root);
+		scene = new Scene(root);
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
 		// Add styling to the controls screen
@@ -378,7 +378,7 @@ public class SceneController {
 
 		        asteroids.forEach(asteroid -> {
 		            if (playerShip.collide(asteroid)) {
-		                stop();
+		                root.getChildren().remove(asteroid.getCharacter());
 		            }
 		        });
 			}
@@ -549,7 +549,6 @@ public class SceneController {
 	public void switchToLevelScreen(Stage stage) throws IOException {
 		// Generate the screen
 		root = new Pane();
-//		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
