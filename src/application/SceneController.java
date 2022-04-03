@@ -30,7 +30,9 @@ import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import javafx.scene.Group;
 import java.lang.Math;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -38,17 +40,15 @@ public class SceneController {
 	private Stage stage;
 	private Scene scene;
 	private Pane root;
-	private final int screenWidth = 800;
-	private final int screenHeight = 600;
+	public static final int SCREENWIDTH = 800;
+	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 1;
-//	public boolean rotateLeft = false;
-//	public boolean rotateRight = false;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Create the welcome screen
 		root = new Pane();
 		Scene scene = new Scene(root);
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
 		// Style the welcome screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
@@ -112,7 +112,7 @@ public class SceneController {
 		root = new Pane();
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		Scene scene = new Scene(root);
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
 		// Add styling to the controls screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
@@ -206,7 +206,7 @@ public class SceneController {
 	public void switchToGameScreen(ActionEvent event) throws IOException {
 		// Generate the game screen
 		root = new Pane();
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Adds styling to the game screen
@@ -214,96 +214,106 @@ public class SceneController {
 		scene.getStylesheets().add(css);
 		
 		// Creates the player ship and place it in the centre of the screen
-		Ship playerShip = new Ship(screenWidth / 2, screenHeight / 2);
+		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		root.getChildren().add(playerShip.getCharacter());
 		
-		// Creates integer representing the number of asteroids that are spawned
-		int numAsteroids = 10;
+//		// Creates integer representing the number of asteroids that are spawned
+//		int numAsteroids = 10;
+//		
+//		// Creates an array to store the asteroids that are present on the screen
+//		AsteroidMedium[] asteroids = new AsteroidMedium[numAsteroids];
+//
+//		// Creates a group for the asteroids
+//		Group[] groups = new Group[numAsteroids];
+//
+//		// Creates a rotate transition for the asteroids
+//		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
+//		
+//		// Loops through each asteroid on the screen
+//		for (int i = 0; i < numAsteroids; i++) {
+//		
+//			// Generates a random number between 0 and 10
+//			Random r = new Random();
+//			int randInt = r.nextInt(10-1) + 1;
+// 
+//			// Generates a random integer which will either be 1 or -1
+//			int a = 1;
+//	        int b = -1;
+//			int randInt2 = new Random().nextBoolean() ? a : b;
+//			
+//			// Generates a random integer which will either be 850 or -50
+//			int a2 = 850;
+//	        int b2 = -50;
+//			int randInt3 = new Random().nextBoolean() ? a2 : b2;
+//				 
+//			// Adds each asteroid to the asteroids array
+//		    asteroids[i] = new AsteroidMedium(randInt3, SCREENHEIGHT / randInt);
+//		    final int x3 = i;
+//
+//		    // Adds the asteroid to a group object and adds this to the groups array
+//	        groups[i] = new Group(asteroids[i]);
+//	        
+//	        // Creates an animation timer to handle the movement and collisions
+//	        AnimationTimer timer = new AnimationTimer(){
+//	        	
+//	            @Override
+//	            public void handle(long now) {
+//	            	
+//	            	// Moves the asteroid
+//	                asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + randInt2);
+//	                asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + randInt2);
+//	                
+//	                
+//	                // Puts the asteroid back on the screen if it exits the screen
+//	                if (asteroids[x3].getTranslateX() < 0) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+//	                }
+//	                if (asteroids[x3].getTranslateY() < 0) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+//	                }
+//	                
+//	                if (asteroids[x3].getTranslateX() > SCREENWIDTH) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+//	                }
+//	                
+//	                if (asteroids[x3].getTranslateY() > SCREENHEIGHT) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+//	                }
+//	                
+//	                Shape intersect = Shape.intersect(playerShip.getCharacter(), asteroids[x3]);
+//	
+//	                if(intersect.getBoundsInLocal().getWidth() != -1) {
+//	                	root.getChildren().remove(playerShip.getCharacter());
+//	                }
+//	            }
+//	        };
+//	
+//	        timer.start();
+//	               
+//	        rotateTransitions[i] = new RotateTransition();
+//	        rotateTransitions[i].setDuration(Duration.seconds(5.0));
+//	        rotateTransitions[i].setNode(asteroids[x3]); 
+//	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+//	        rotateTransitions[i].setByAngle(360);
+//	        rotateTransitions[i].play();
+//	        
+//	        // Add objects to scene
+//			root.getChildren().add(asteroids[i]);
+//		}
 		
-		// Creates an array to store the asteroids that are present on the screen
-		AsteroidMedium[] asteroids = new AsteroidMedium[numAsteroids];
-
-		// Creates a group for the asteroids
-		Group[] groups = new Group[numAsteroids];
-
-		// Creates a rotate transition for the asteroids
-		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
-		
-		// Loops through each asteroid on the screen
-		for (int i = 0; i < numAsteroids; i++) {
-		
-			// Generates a random number between 0 and 10
-			Random r = new Random();
-			int randInt = r.nextInt(10-1) + 1;
- 
-			// Generates a random integer which will either be 1 or -1
-			int a = 1;
-	        int b = -1;
-			int randInt2 = new Random().nextBoolean() ? a : b;
-			
-			// Generates a random integer which will either be 850 or -50
-			int a2 = 850;
-	        int b2 = -50;
-			int randInt3 = new Random().nextBoolean() ? a2 : b2;
-				 
-			// Adds each asteroid to the asteroids array
-		    asteroids[i] = new AsteroidMedium(randInt3, screenHeight / randInt);
-		    final int x3 = i;
-
-		    // Adds the asteroid to a group object and adds this to the groups array
-	        groups[i] = new Group(asteroids[i]);
-	        
-	        // Creates an animation timer to handle the movement and collisions
-	        AnimationTimer timer = new AnimationTimer(){
-	        	
-	            @Override
-	            public void handle(long now) {
-	            	
-	            	// Moves the asteroid
-	                asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + randInt2);
-	                asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + randInt2);
-	                
-	                
-	                // Puts the asteroid back on the screen if it exits the screen
-	                if (asteroids[x3].getTranslateX() < 0) {
-	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
-	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
-	                }
-	                if (asteroids[x3].getTranslateY() < 0) {
-	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
-	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
-	                }
-	                
-	                if (asteroids[x3].getTranslateX() > screenWidth) {
-	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
-	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
-	                }
-	                
-	                if (asteroids[x3].getTranslateY() > screenHeight) {
-	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
-	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
-	                }
-	                
-	                Shape intersect = Shape.intersect(playerShip.getCharacter(), asteroids[x3]);
-	
-	                if(intersect.getBoundsInLocal().getWidth() != -1) {
-	                	root.getChildren().remove(playerShip.getCharacter());
-	                }
-	            }
-	        };
-	
-	        timer.start();
-	               
-	        rotateTransitions[i] = new RotateTransition();
-	        rotateTransitions[i].setDuration(Duration.seconds(5.0));
-	        rotateTransitions[i].setNode(asteroids[x3]); 
-	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
-	        rotateTransitions[i].setByAngle(360);
-	        rotateTransitions[i].play();
-	        
-	        // Add objects to scene
-			root.getChildren().add(asteroids[i]);
+		List<Asteroid> asteroids = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+		    Random rnd = new Random();
+		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT));
+		    asteroids.add(asteroid);
 		}
+
+//		root.getChildren().add(playerShip.getCharacter());
+		asteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
 		
 		
 		// Add the game screen to the window and show the window
@@ -381,8 +391,14 @@ public class SceneController {
 		            playerShip.accelerate();
 		        }
 				
-				// Change the ship's movement
 				playerShip.move();
+		        asteroids.forEach(asteroid -> asteroid.move());
+
+		        asteroids.forEach(asteroid -> {
+		            if (playerShip.collide(asteroid)) {
+		                stop();
+		            }
+		        });
 			}
 			
 		}.start();
@@ -397,7 +413,7 @@ public class SceneController {
 	public void switchToGameOverScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -440,7 +456,7 @@ public class SceneController {
 	public void switchToEnterNameScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -484,7 +500,7 @@ public class SceneController {
 	public void switchToViewHighScoreScreen(ActionEvent event) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
@@ -552,7 +568,7 @@ public class SceneController {
 		// Generate the screen
 		root = new Pane();
 		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		root.setPrefSize(screenWidth, screenHeight);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the screen
