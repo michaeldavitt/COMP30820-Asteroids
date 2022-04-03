@@ -15,6 +15,7 @@ public class Ship {
 		drawShip();
 		this.character.setTranslateX(xLocation);
 		this.character.setTranslateY(yLocation);
+		this.character.setRotate(0);
 		this.character.setFill(Color.WHITE);
 		
 		this.movement = new Point2D(0, 0);
@@ -36,13 +37,29 @@ public class Ship {
 	
 	// Rotate the ship to the right
 	public void rotateRight(int delta) {
-//		this.setAngle(this.getAngle() + delta);
 		this.character.setRotate(this.character.getRotate() + delta);
 	}
 	
 	// Rotate the ship to the left
 	public void rotateLeft(int delta) {
 		this.character.setRotate(this.character.getRotate() - delta);
+	}
+	
+	// Moves the ship
+	public void move() {
+        this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
+        this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
+    }
+	
+	// Accelerate the ship
+	public void accelerate() {
+	    double changeX = Math.cos(Math.toRadians(this.character.getRotate()));
+	    double changeY = Math.sin(Math.toRadians(this.character.getRotate()));
+
+	    changeX *= -0.05;
+	    changeY *= -0.05;
+
+	    this.movement = this.movement.add(changeX, changeY);
 	}
 	
 }

@@ -376,8 +376,13 @@ public class SceneController {
 					playerShip.rotateRight(delta);
 				}
 				
+				// Accelerate when the user presses the up arrow key
+				if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+		            playerShip.accelerate();
+		        }
+				
 				// Change the ship's movement
-//				playerShip.setTranslateX(playerShip.getTranslateX() + shipMovement.getX());
+				playerShip.move();
 			}
 			
 		}.start();
