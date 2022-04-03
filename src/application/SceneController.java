@@ -42,7 +42,7 @@ public class SceneController {
 	private Pane root;
 	public static final int SCREENWIDTH = 800;
 	public static final int SCREENHEIGHT = 600;
-	private int currentLevel = 1;
+	private int currentLevel = 0;
 	
 	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
 		// Create the welcome screen
@@ -305,14 +305,15 @@ public class SceneController {
 //			root.getChildren().add(asteroids[i]);
 //		}
 		
+		// Creates the asteroids
 		List<Asteroid> asteroids = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < currentLevel; i++) {
 		    Random rnd = new Random();
 		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT));
 		    asteroids.add(asteroid);
 		}
 
-//		root.getChildren().add(playerShip.getCharacter());
+		// Adds the asteroids to the screen
 		asteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
 		
 		
@@ -359,8 +360,6 @@ public class SceneController {
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
 		
-//		Point2D shipMovement = new Point2D(1, 0);
-		
 		// Add onKeyPressed events to ship to enable the users to control the ship
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
@@ -387,7 +386,7 @@ public class SceneController {
 				}
 				
 				// Accelerate when the user presses the up arrow key
-				if(pressedKeys.getOrDefault(KeyCode.UP, false)) {
+				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
 		            playerShip.accelerate();
 		        }
 				
@@ -575,6 +574,9 @@ public class SceneController {
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
+		// Update level counter
+		currentLevel += 1;
+		
 		// Add text representing the user's current level
 		Text levelText = new Text();
 		levelText.setText("Level " + currentLevel);
@@ -584,8 +586,6 @@ public class SceneController {
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
 		
-		// Update level counter
-		currentLevel += 1;
 		
 		// Add text prompting the user to hit enter to begin next level
 		Text nextLevelText = new Text();
