@@ -30,8 +30,8 @@ import javafx.scene.text.Text;
 
 //Reference: https://www.youtube.com/watch?v=9XJicRt_FaI
 public class Main extends Application {
-	private final int screenX = 800; // Sets the screen width - does not change
-	private final int screenY = 600; // Sets the screen height - does not change
+	private final int screenWidth = 800; // Sets the screen width - does not change
+	private final int screenHeight = 600; // Sets the screen height - does not change
 	
 	// Main method which launches our application
 	public static void main(String[] args) {
@@ -45,7 +45,7 @@ public class Main extends Application {
 		// Create the welcome screen
 		Pane root = new Pane(); // Root node onto which we will add objects
 		Scene scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
-		root.setPrefSize(screenX, screenY); // Set preferred screen size
+		root.setPrefSize(screenWidth, screenHeight); // Set preferred screen size
 		
 		// Style the screen using CSS
 		String css = this.getClass().getResource("application.css").toExternalForm();
