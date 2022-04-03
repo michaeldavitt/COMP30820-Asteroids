@@ -329,7 +329,7 @@ public class SceneController {
 		
 		AnimationTimer timer = new AnimationTimer() {
 
-			int delta = 2;
+			int delta = 3;
 			@Override
 			public void handle(long arg0) {
 				// TODO Auto-generated method stub
@@ -423,7 +423,7 @@ public class SceneController {
 		root.getChildren().add(userInput);
 		
 		// Extract the user's input and use it to create a score object
-		String username = userInput.getText();
+//		String username = userInput.getText();
 		
 		// Add a key event which switches to the view high scores screen when the user presses enter
 		stage.getScene().setOnKeyPressed(e -> {
