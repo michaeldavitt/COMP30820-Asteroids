@@ -14,41 +14,31 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.scene.Node;
 import javafx.animation.AnimationTimer;
-import javafx.animation.PathTransition;
-import javafx.animation.RotateTransition;
-import javafx.animation.Timeline;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.util.Duration;
-import javafx.scene.Group;
-import java.lang.Math;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SceneController {
-	private Stage stage;
 	private Scene scene;
 	private Pane root;
-	private final int screenX = 800;
-	private final int screenY = 600;
-	private int currentLevel = 1;
-	public boolean rotateLeft = false;
-	public boolean rotateRight = false;
+	private String css;
+	public static final int SCREENWIDTH = 800;
+	public static final int SCREENHEIGHT = 600;
+	private int currentLevel = 0;
 	
-	public void switchToWelcomeScreen(ActionEvent event) throws IOException {
+	public void switchToWelcomeScreen(Stage stage) throws IOException {
 		// Create the welcome screen
-		root = new Pane();
-		Scene scene = new Scene(root);
-		root.setPrefSize(screenX, screenY);
+		Pane root = new Pane(); // Root node onto which we will add objects
+		Scene scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT); // Set preferred screen size
 		
-		// Style the welcome screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+		// Style the screen using CSS
+		css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
-		
-		// Reset current level to 1
-		currentLevel = 1;
 		
 		// Add title to welcome users to the game
 		Text welcomeText = new Text("Welcome To Asteroids!");
@@ -59,14 +49,16 @@ public class SceneController {
 		root.getChildren().add(welcomeText);
 		
 		// Adds buttons to the screen to switch scenes
+		SceneController sceneController = new SceneController();
 		Button launchGameButton = new Button("Begin Game");
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToLevelScreen(arg0);
+					sceneController.switchToLevelScreen(stage);
 				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -83,7 +75,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToControlsScreen(arg0);
+					sceneController.switchToControlsScreen(stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -98,14 +90,14 @@ public class SceneController {
 		
 		// Put welcome screen onto the main screen
 		stage.setScene(scene);
+		stage.show();
 	}
 	
-	public void switchToControlsScreen(ActionEvent event) throws IOException {
+	public void switchToControlsScreen(Stage stage) throws IOException {
 		// Generate the controls screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		Scene scene = new Scene(root);
-		root.setPrefSize(screenX, screenY);
+		scene = new Scene(root);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
 		// Add styling to the controls screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
@@ -160,7 +152,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToLevelScreen(arg0);
+					switchToLevelScreen(stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -179,7 +171,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToWelcomeScreen(arg0);
+					switchToWelcomeScreen(stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -196,76 +188,125 @@ public class SceneController {
 	
 	
 	// Method to display the main game screen, where the user will play the game
-	public void switchToGameScreen(ActionEvent event) throws IOException {
+	public void switchToGameScreen(Stage stage) throws IOException {
 		// Generate the game screen
 		root = new Pane();
-		root.setPrefSize(screenX, screenY);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
-		// Add styling to the game screen
+		// Adds styling to the game screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Create the player ship and place it in the centre of the screen
-		Ship playerShip = new Ship(screenX / 2, screenY / 2);
-		root.getChildren().add(playerShip);
+		// Creates the player ship and place it in the centre of the screen
+		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		root.getChildren().add(playerShip.getCharacter());
 		
-		// Create the asteroids
-		// Set the number of asteroids that are spawned initially
-		int numAsteroids = 10;
+//		// Creates integer representing the number of asteroids that are spawned
+//		int numAsteroids = 10;
+//		
+//		// Creates an array to store the asteroids that are present on the screen
+//		AsteroidMedium[] asteroids = new AsteroidMedium[numAsteroids];
+//
+//		// Creates a group for the asteroids
+//		Group[] groups = new Group[numAsteroids];
+//
+//		// Creates a rotate transition for the asteroids
+//		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
+//		
+//		// Loops through each asteroid on the screen
+//		for (int i = 0; i < numAsteroids; i++) {
+//		
+//			// Generates a random number between 0 and 10
+//			Random r = new Random();
+//			int randInt = r.nextInt(10-1) + 1;
+// 
+//			// Generates a random integer which will either be 1 or -1
+//			int a = 1;
+//	        int b = -1;
+//			int randInt2 = new Random().nextBoolean() ? a : b;
+//			
+//			// Generates a random integer which will either be 850 or -50
+//			int a2 = 850;
+//	        int b2 = -50;
+//			int randInt3 = new Random().nextBoolean() ? a2 : b2;
+//				 
+//			// Adds each asteroid to the asteroids array
+//		    asteroids[i] = new AsteroidMedium(randInt3, SCREENHEIGHT / randInt);
+//		    final int x3 = i;
+//
+//		    // Adds the asteroid to a group object and adds this to the groups array
+//	        groups[i] = new Group(asteroids[i]);
+//	        
+//	        // Creates an animation timer to handle the movement and collisions
+//	        AnimationTimer timer = new AnimationTimer(){
+//	        	
+//	            @Override
+//	            public void handle(long now) {
+//	            	
+//	            	// Moves the asteroid
+//	                asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + randInt2);
+//	                asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + randInt2);
+//	                
+//	                
+//	                // Puts the asteroid back on the screen if it exits the screen
+//	                if (asteroids[x3].getTranslateX() < 0) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+//	                }
+//	                if (asteroids[x3].getTranslateY() < 0) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
+//	                }
+//	                
+//	                if (asteroids[x3].getTranslateX() > SCREENWIDTH) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+//	                }
+//	                
+//	                if (asteroids[x3].getTranslateY() > SCREENHEIGHT) {
+//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
+//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
+//	                }
+//	                
+//	                Shape intersect = Shape.intersect(playerShip.getCharacter(), asteroids[x3]);
+//	
+//	                if(intersect.getBoundsInLocal().getWidth() != -1) {
+//	                	root.getChildren().remove(playerShip.getCharacter());
+//	                }
+//	            }
+//	        };
+//	
+//	        timer.start();
+//	               
+//	        rotateTransitions[i] = new RotateTransition();
+//	        rotateTransitions[i].setDuration(Duration.seconds(5.0));
+//	        rotateTransitions[i].setNode(asteroids[x3]); 
+//	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
+//	        rotateTransitions[i].setByAngle(360);
+//	        rotateTransitions[i].play();
+//	        
+//	        // Add objects to scene
+//			root.getChildren().add(asteroids[i]);
+//		}
 		
-		// Initialise an array of asteroid objects
-		Asteroid[] asteroids = new Asteroid[numAsteroids];
-
-		Group[] groups = new Group[numAsteroids];
-		Path[] paths = new Path[numAsteroids];
-		PathTransition[] pathTransitions = new PathTransition[numAsteroids];
-		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
+		// Creates the asteroids arrays
+		List<Asteroid> largeAsteroids = new ArrayList<>();
+		List<Asteroid> medAsteroids = new ArrayList<>();
+		List<Asteroid> smallAsteroids = new ArrayList<>();
 		
-		for (int i = 0; i < numAsteroids; i++) {
-		    //get input variables;
-		    asteroids[i] = new Asteroid();
-		
-	        groups[i] = new Group(asteroids[i]);
-	
-			int[] randomOfTwoInts = new int[8];
-			
-			for (int j = 0; j < 4; j++) {  
-				int a = -50;
-		        int b = 850;
-				randomOfTwoInts[j] = new Random().nextBoolean() ? a : b;
-			}
-	
-	        paths[i] = new Path();
-	        paths[i].getElements().add(new MoveTo(randomOfTwoInts[0], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[1], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[2], Math.random()*1000));
-	        paths[i].getElements().add(new LineTo(randomOfTwoInts[3], Math.random()*1000));
-	       
-	        paths[i].setOpacity(0);
-	
-	        groups[i].getChildren().add(paths[i]);
-	
-	        pathTransitions[i] = new PathTransition();
-	
-	        pathTransitions[i].setDuration(Duration.seconds(10.0));
-	        pathTransitions[i].setPath(paths[i]);
-	        pathTransitions[i].setNode(asteroids[i]); 
-	        pathTransitions[i].setCycleCount(Timeline.INDEFINITE);
-	        pathTransitions[i].setAutoReverse(true);
-	        pathTransitions[i].play();
-	        
-	        
-	        rotateTransitions[i] = new RotateTransition();
-	        rotateTransitions[i].setDuration(Duration.seconds(10.0));
-	        rotateTransitions[i].setNode(asteroids[i]); 
-	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
-	        rotateTransitions[i].setByAngle(360);
-	        rotateTransitions[i].play();
-			
-			// Add objects to scene
-			root.getChildren().add(asteroids[i]);
+		for (int i = 0; i < currentLevel; i++) {
+		    Random rnd = new Random();
+		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Large");
+		    largeAsteroids.add(asteroid);
 		}
+
+		// Adds the large asteroids to the screen
+		largeAsteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
+		
+		// Adds an empty bullet list
+		List<Bullet> bullets = new ArrayList<>();
+		
 		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
@@ -277,7 +318,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToLevelScreen(arg0);
+					switchToLevelScreen(stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -295,7 +336,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToGameOverScreen(arg0);
+					switchToGameOverScreen(stage);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -307,55 +348,186 @@ public class SceneController {
 		switchToGameOverScreenButton.setTranslateY(0);
 		root.getChildren().add(switchToGameOverScreenButton);
 		
+		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
+		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
 		
-		// Add onKeyPressed events to ship to enable the users to control the ship
+		// Add onKeyPressed events to trigger certain events (shooting, turning etc.)
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
-			if (e.getCode() == KeyCode.RIGHT) {
-				rotateRight = true;
-			} else if (e.getCode() == KeyCode.LEFT) {
-				rotateLeft = true;
-			}
+			pressedKeys.put(e.getCode(), Boolean.TRUE);
 		});
 		
 		stage.getScene().setOnKeyReleased(e -> {
 			e.consume();
-			if (e.getCode() == KeyCode.RIGHT) {
-				rotateRight = false;
-			} else if (e.getCode() == KeyCode.LEFT) {
-				rotateLeft = false;
-			}
+			pressedKeys.put(e.getCode(), Boolean.FALSE);
 		});
 		
-		AnimationTimer timer = new AnimationTimer() {
+		
+		// Main animation timer for defining the reactions to key events
+		new AnimationTimer() {
 
-			int delta = 2;
+			// variable that defines how much the ship rotation should change when the user hits LEFT or RIGHT
+			int delta = 3;
 			@Override
 			public void handle(long arg0) {
 				// TODO Auto-generated method stub
-				if (rotateLeft == true) {
+				if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
 					playerShip.rotateLeft(delta);
 				}
-				if (rotateRight == true) {
+				
+				if (pressedKeys.getOrDefault(KeyCode.RIGHT, false)) {
 					playerShip.rotateRight(delta);
 				}
+				
+				// Accelerate when the user presses the up arrow key
+				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
+		            playerShip.accelerate();
+		        }
+				
+				// Fire a bullet when the user presses SPACE
+				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && bullets.size() < 1) {
+				    // we shoot
+				    Bullet bullet = new Bullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
+				    bullet.getCharacter().setRotate(playerShip.getCharacter().getRotate());
+				    bullets.add(bullet);
+
+				    bullet.accelerate();
+				    bullet.setMovement(bullet.getMovement().normalize().multiply(3));
+
+				    root.getChildren().add(bullet.getCharacter());
+				}
+				
+				// Enables game characters to move
+				playerShip.move();
+		        largeAsteroids.forEach(asteroid -> asteroid.move());
+		        medAsteroids.forEach(asteroid -> asteroid.move());
+		        smallAsteroids.forEach(asteroid -> asteroid.move());
+		        bullets.forEach(bullet -> bullet.move());
+		        
+		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
+		        bullets.forEach(bullet -> {
+		        	
+		        	// Collision with large asteroids
+		            largeAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit Large");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    System.out.println("Spawning new mediums");
+	                    	for (int i = 0; i < 2; i++) {
+		            		    Asteroid medAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
+	                    		medAsteroids.add(medAsteroid);
+	                    		root.getChildren().add(medAsteroid.getCharacter());
+		            		} 
+		                }
+		            });
+		            
+		            
+		            // Collision with medium asteroids
+		            medAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit medium");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    System.out.println("Spawning new");
+	                    	for (int i = 0; i < 2; i++) {
+		            		    Asteroid smallAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Small");
+	                    		smallAsteroids.add(smallAsteroid);
+	                    		root.getChildren().add(smallAsteroid.getCharacter());
+		            		} 
+		                }
+		            });
+		            
+		            
+		            // Collision with medium asteroids
+		            smallAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit small");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    
+		                    System.out.println(largeAsteroids.size());
+		                    System.out.println(medAsteroids.size());
+		                    System.out.println(largeAsteroids.size());
+		                }
+		            });
+		        });
+
+		        // Removes bullets that are not alive from the bullets list
+		        bullets.stream()
+		            .filter(bullet -> !bullet.isAlive())
+		            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		        bullets.removeAll(bullets.stream()
+		                                .filter(bullet -> !bullet.isAlive())
+		                                .collect(Collectors.toList()));
+		        
+		        
+		        // Removes bullets that have travelled too far
+		        bullets.stream()
+	            .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		        bullets.removeAll(bullets.stream()
+	                                .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	                                .collect(Collectors.toList()));
+
+		        
+		        // Removes asteroids that are not alive from the largeAsteroids list
+		        largeAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        largeAsteroids.removeAll(largeAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Removes asteroids that are not alive from the medAsteroids list
+		        medAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        medAsteroids.removeAll(medAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Removes asteroids that are not alive from the medAsteroids list
+		        smallAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        smallAsteroids.removeAll(smallAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Checks if the game is over
+		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
+		        	System.out.println("Next level");
+		        	try {
+						switchToLevelScreen(stage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	stop();
+		        }
+
+		        // Handles collision between the ship and the largeAsteroids
+//		        largeAsteroids.forEach(asteroid -> {
+//		            if (playerShip.collide(asteroid)) {	
+//		            	stop();
+//		            }
+//		        });
 			}
 			
-		};
-		
-		timer.start();
+		}.start();
 		
 		stage.show();
 		
 		// Request focus on the player ship, so that it will react to key events
-		playerShip.requestFocus();
+		playerShip.getCharacter().requestFocus();
 	}
 	
 	
-	public void switchToGameOverScreen(ActionEvent event) throws IOException {
+	public void switchToGameOverScreen(Stage stage) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenX, screenY);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -386,7 +558,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToEnterNameScreen(event);
+					switchToEnterNameScreen(stage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -395,10 +567,10 @@ public class SceneController {
 		});
 	}
 	
-	public void switchToEnterNameScreen(ActionEvent event) throws IOException {
+	public void switchToEnterNameScreen(Stage stage) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenX, screenY);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
@@ -423,14 +595,14 @@ public class SceneController {
 		root.getChildren().add(userInput);
 		
 		// Extract the user's input and use it to create a score object
-		String username = userInput.getText();
+//		String username = userInput.getText();
 		
 		// Add a key event which switches to the view high scores screen when the user presses enter
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToViewHighScoreScreen(event);
+					switchToViewHighScoreScreen(stage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -439,10 +611,10 @@ public class SceneController {
 		});
 	}
 	
-	public void switchToViewHighScoreScreen(ActionEvent event) throws IOException {
+	public void switchToViewHighScoreScreen(Stage stage) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
-		root.setPrefSize(screenX, screenY);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		// Add the welcome screen to the window and show the window
 		stage.setScene(scene);
@@ -495,7 +667,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToWelcomeScreen(event);
+					switchToWelcomeScreen(stage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -506,16 +678,18 @@ public class SceneController {
 	
 	
 	// Method for switching to the level screen which shows the user which level they are currently on and prompts them to hit enter to begin the next level
-	public void switchToLevelScreen(ActionEvent event) throws IOException {
+	public void switchToLevelScreen(Stage stage) throws IOException {
 		// Generate the screen
 		root = new Pane();
-		stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-		root.setPrefSize(screenX, screenY);
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the screen
 		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
+		
+		// Update level counter
+		currentLevel += 1;
 		
 		// Add text representing the user's current level
 		Text levelText = new Text();
@@ -526,8 +700,6 @@ public class SceneController {
 		levelText.setFill(Color.WHITE);
 		root.getChildren().add(levelText);
 		
-		// Update level counter
-		currentLevel += 1;
 		
 		// Add text prompting the user to hit enter to begin next level
 		Text nextLevelText = new Text();
@@ -546,7 +718,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToGameScreen(event);
+					switchToGameScreen(stage);
 				} catch (IOException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
