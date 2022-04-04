@@ -58,7 +58,6 @@ public class SceneController {
 				try {
 					sceneController.switchToLevelScreen(stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -77,7 +76,6 @@ public class SceneController {
 				try {
 					sceneController.switchToControlsScreen(stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -154,7 +152,6 @@ public class SceneController {
 				try {
 					switchToLevelScreen(stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -173,7 +170,6 @@ public class SceneController {
 				try {
 					switchToWelcomeScreen(stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -312,23 +308,23 @@ public class SceneController {
 		stage.setScene(scene);
 		
 		// Adds buttons to the screen to switch scenes (temporary, in the final version, the scene will be switched once the player dies)
-		Button switchLevelButton = new Button("View Level Screen");
-		switchLevelButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					switchToLevelScreen(stage);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}	
-			}
-		});
-		
-		switchLevelButton.setTranslateX(620);
-		switchLevelButton.setTranslateY(0);
-		root.getChildren().add(switchLevelButton);
+//		Button switchLevelButton = new Button("View Level Screen");
+//		switchLevelButton.setOnAction(new EventHandler<ActionEvent>() {
+//
+//			@Override
+//			public void handle(ActionEvent arg0) {
+//				try {
+//					switchToLevelScreen(stage);
+//				} catch (IOException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}	
+//			}
+//		});
+//		
+//		switchLevelButton.setTranslateX(620);
+//		switchLevelButton.setTranslateY(0);
+//		root.getChildren().add(switchLevelButton);
 		
 		Button switchToGameOverScreenButton = new Button("End game");
 		switchToGameOverScreenButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -338,7 +334,6 @@ public class SceneController {
 				try {
 					switchToGameOverScreen(stage);
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}	
 			}
@@ -370,7 +365,6 @@ public class SceneController {
 			int delta = 3;
 			@Override
 			public void handle(long arg0) {
-				// TODO Auto-generated method stub
 				if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
 					playerShip.rotateLeft(delta);
 				}
@@ -410,10 +404,12 @@ public class SceneController {
 		        	// Collision with large asteroids
 		            largeAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
-		                	System.out.println("Hit Large");
+		                	
+		                	// Change alive status of bullet and hit asteroid
 		                    bullet.setAlive(false);
 		                    asteroid.setAlive(false);
-		                    System.out.println("Spawning new mediums");
+		                    
+		                    // Spawn two new medium asteroids
 	                    	for (int i = 0; i < 2; i++) {
 		            		    Asteroid medAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
 	                    		medAsteroids.add(medAsteroid);
@@ -426,10 +422,12 @@ public class SceneController {
 		            // Collision with medium asteroids
 		            medAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
-		                	System.out.println("Hit medium");
+		                	
+		                	// Change alive status of bullet and asteroid
 		                    bullet.setAlive(false);
 		                    asteroid.setAlive(false);
-		                    System.out.println("Spawning new");
+		                    
+		                    // Spawn new small asteroids
 	                    	for (int i = 0; i < 2; i++) {
 		            		    Asteroid smallAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Small");
 	                    		smallAsteroids.add(smallAsteroid);
@@ -439,16 +437,11 @@ public class SceneController {
 		            });
 		            
 		            
-		            // Collision with medium asteroids
+		            // Collision with small asteroids
 		            smallAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
-		                	System.out.println("Hit small");
 		                    bullet.setAlive(false);
 		                    asteroid.setAlive(false);
-		                    
-		                    System.out.println(largeAsteroids.size());
-		                    System.out.println(medAsteroids.size());
-		                    System.out.println(largeAsteroids.size());
 		                }
 		            });
 		        });
@@ -487,7 +480,7 @@ public class SceneController {
 		                                    .filter(asteroid -> !asteroid.isAlive())
 		                                    .collect(Collectors.toList()));
 		        
-		        // Removes asteroids that are not alive from the medAsteroids list
+		        // Removes asteroids that are not alive from the smallAsteroids list
 		        smallAsteroids.stream()
 		                .filter(asteroid -> !asteroid.isAlive())
 		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
@@ -497,11 +490,10 @@ public class SceneController {
 		        
 		        // Checks if the game is over
 		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
-		        	System.out.println("Next level");
+//		        	System.out.println("Next level");
 		        	try {
 						switchToLevelScreen(stage);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 		        	stop();
@@ -560,7 +552,6 @@ public class SceneController {
 				try {
 					switchToEnterNameScreen(stage);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -604,7 +595,6 @@ public class SceneController {
 				try {
 					switchToViewHighScoreScreen(stage);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -669,7 +659,6 @@ public class SceneController {
 				try {
 					switchToWelcomeScreen(stage);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
@@ -720,7 +709,6 @@ public class SceneController {
 				try {
 					switchToGameScreen(stage);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
