@@ -409,11 +409,7 @@ public class SceneController {
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn two new medium asteroids
-	                    	for (int i = 0; i < 2; i++) {
-		            		    Asteroid medAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
-	                    		medAsteroids.add(medAsteroid);
-	                    		root.getChildren().add(medAsteroid.getCharacter());
-		            		} 
+		                    spawnAsteroids(asteroid, "Medium", medAsteroids);
 		                }
 		            });
 		            
@@ -427,11 +423,7 @@ public class SceneController {
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn new small asteroids
-	                    	for (int i = 0; i < 2; i++) {
-		            		    Asteroid smallAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Small");
-	                    		smallAsteroids.add(smallAsteroid);
-	                    		root.getChildren().add(smallAsteroid.getCharacter());
-		            		} 
+		                    spawnAsteroids(asteroid, "Small", smallAsteroids);
 		                }
 		            });
 		            
@@ -498,7 +490,7 @@ public class SceneController {
 		        	stop();
 		        }
 
-		        // Handles collision between the ship and the largeAsteroids
+//		        // Handles collision between the ship and the largeAsteroids
 //		        largeAsteroids.forEach(asteroid -> {
 //		            if (playerShip.collide(asteroid)) {	
 //		            	stop();
@@ -512,6 +504,15 @@ public class SceneController {
 		
 		// Request focus on the player ship, so that it will react to key events
 		playerShip.getCharacter().requestFocus();
+	}
+	
+	public void spawnAsteroids(Asteroid asteroid, String size, List<Asteroid> asteroidArray) {
+		// Spawn two new asteroids
+    	for (int i = 0; i < 2; i++) {
+		    Asteroid newAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), size);
+		    asteroidArray.add(newAsteroid);
+    		root.getChildren().add(newAsteroid.getCharacter());
+		} 
 	}
 	
 	
