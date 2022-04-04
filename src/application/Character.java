@@ -9,10 +9,13 @@ public abstract class Character {
 
 	private Polygon character;
 	private Point2D movement;
+	private Boolean alive;
+	private double distanceTravelled;
 
 	// Ship constructor
 	public Character(Polygon polygon, double xLocation, double yLocation) {
 		this.character = polygon;
+		this.setAlive(true);
 		this.character.setTranslateX(xLocation);
 		this.character.setTranslateY(yLocation);
 		this.character.setFill(Color.WHITE);
@@ -23,6 +26,36 @@ public abstract class Character {
 	// Get the character (polygon)
 	public Polygon getCharacter() {
 		return character;
+	}
+	
+	// Get the character's movement
+	public Point2D getMovement() {
+		return this.movement;
+	}
+	
+	// Sets the character's movement
+	public void setMovement(Point2D newMovement) {
+		this.movement = newMovement;
+	}
+	
+	// Get distance travelled
+	public double getDistanceTravelled() {
+		return this.distanceTravelled;
+	}
+	
+	// Set the distance travelled
+	private void increaseDistanceTravelled(double distance) {
+		this.distanceTravelled += distance;
+	}
+	
+	// Set if the character is alive
+	public void setAlive(Boolean status) {
+		this.alive = status;
+	}
+	
+	// Checks if the character is alive
+	public Boolean isAlive() {
+		return this.alive;
 	}
 	
 	// Rotate the character to the right
@@ -37,9 +70,15 @@ public abstract class Character {
 	
 	// Moves the character
 	public void move() {
+		// Increases the distance travelled
+		Point2D currentPosition = new Point2D(this.character.getTranslateX(), this.character.getTranslateY());
+		this.increaseDistanceTravelled(currentPosition.distance(this.character.getTranslateX() + this.movement.getX(), this.character.getTranslateY() + this.movement.getY()));
+		
+		// Changes the new x and y coordinates for the character
 	    this.character.setTranslateX(this.character.getTranslateX() + this.movement.getX());
 	    this.character.setTranslateY(this.character.getTranslateY() + this.movement.getY());
 
+	    // Ensures that the character stays within the screen
 	    if (this.character.getTranslateX() < 0) {
 	        this.character.setTranslateX(this.character.getTranslateX() + SceneController.SCREENWIDTH);
 	    }
@@ -73,4 +112,6 @@ public abstract class Character {
 	    Shape collisionArea = Shape.intersect(this.character, other.getCharacter());
 	    return collisionArea.getBoundsInLocal().getWidth() != -1;
 	}
+	
+	
 }

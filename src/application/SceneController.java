@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 public class SceneController {
 	private Scene scene;
@@ -289,20 +290,22 @@ public class SceneController {
 //			root.getChildren().add(asteroids[i]);
 //		}
 		
-		// Creates the asteroids
-		List<Asteroid> asteroids = new ArrayList<>();
+		// Creates the asteroids arrays
+		List<Asteroid> largeAsteroids = new ArrayList<>();
+		List<Asteroid> medAsteroids = new ArrayList<>();
+		List<Asteroid> smallAsteroids = new ArrayList<>();
+		
 		for (int i = 0; i < currentLevel; i++) {
 		    Random rnd = new Random();
 		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Large");
-		    asteroids.add(asteroid);
-		    Asteroid medAsteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Medium");
-		    asteroids.add(medAsteroid);
-		    Asteroid smallAsteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Small");
-		    asteroids.add(smallAsteroid);
+		    largeAsteroids.add(asteroid);
 		}
 
-		// Adds the asteroids to the screen
-		asteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
+		// Adds the large asteroids to the screen
+		largeAsteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
+		
+		// Adds an empty bullet list
+		List<Bullet> bullets = new ArrayList<>();
 		
 		
 		// Add the game screen to the window and show the window
@@ -348,7 +351,7 @@ public class SceneController {
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
 		
-		// Add onKeyPressed events to ship to enable the users to control the ship
+		// Add onKeyPressed events to trigger certain events (shooting, turning etc.)
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			pressedKeys.put(e.getCode(), Boolean.TRUE);
@@ -359,8 +362,11 @@ public class SceneController {
 			pressedKeys.put(e.getCode(), Boolean.FALSE);
 		});
 		
+		
+		// Main animation timer for defining the reactions to key events
 		new AnimationTimer() {
 
+			// variable that defines how much the ship rotation should change when the user hits LEFT or RIGHT
 			int delta = 3;
 			@Override
 			public void handle(long arg0) {
@@ -378,32 +384,135 @@ public class SceneController {
 		            playerShip.accelerate();
 		        }
 				
-				// Enables player ship and asteroid to move
-				playerShip.move();
-		        asteroids.forEach(asteroid -> asteroid.move());
+				// Fire a bullet when the user presses SPACE
+				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && bullets.size() < 1) {
+				    // we shoot
+				    Bullet bullet = new Bullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
+				    bullet.getCharacter().setRotate(playerShip.getCharacter().getRotate());
+				    bullets.add(bullet);
 
-		        // Handles collision between the ship and the asteroids
-		        asteroids.forEach(asteroid -> {
-		            if (playerShip.collide(asteroid)) {
-	            		
-		            	// If the asteroid is large, spawn two medium asteroids
-		            	if (asteroid.getSize().equals("Large")) {
-		            		
-		            		// Remove destroyed asteroid
-		            		root.getChildren().remove(asteroid.getCharacter());
-		            		
-		            		// Remove the player ship
-		            		root.getChildren().remove(playerShip.getCharacter());
-		            		
-		            		for (int i = 0; i < 2; i++) {
-		            		    Asteroid newAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
-		            		    root.getChildren().add(newAsteroid.getCharacter());
-		            		}
-		            		
-		            		stop();
-		            	}
-		            }
+				    bullet.accelerate();
+				    bullet.setMovement(bullet.getMovement().normalize().multiply(3));
+
+				    root.getChildren().add(bullet.getCharacter());
+				}
+				
+				// Enables game characters to move
+				playerShip.move();
+		        largeAsteroids.forEach(asteroid -> asteroid.move());
+		        medAsteroids.forEach(asteroid -> asteroid.move());
+		        smallAsteroids.forEach(asteroid -> asteroid.move());
+		        bullets.forEach(bullet -> bullet.move());
+		        
+		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
+		        bullets.forEach(bullet -> {
+		        	
+		        	// Collision with large asteroids
+		            largeAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit Large");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    System.out.println("Spawning new mediums");
+	                    	for (int i = 0; i < 2; i++) {
+		            		    Asteroid medAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
+	                    		medAsteroids.add(medAsteroid);
+	                    		root.getChildren().add(medAsteroid.getCharacter());
+		            		} 
+		                }
+		            });
+		            
+		            
+		            // Collision with medium asteroids
+		            medAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit medium");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    System.out.println("Spawning new");
+	                    	for (int i = 0; i < 2; i++) {
+		            		    Asteroid smallAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Small");
+	                    		smallAsteroids.add(smallAsteroid);
+	                    		root.getChildren().add(smallAsteroid.getCharacter());
+		            		} 
+		                }
+		            });
+		            
+		            
+		            // Collision with medium asteroids
+		            smallAsteroids.forEach(asteroid -> {
+		                if(bullet.collide(asteroid)) {
+		                	System.out.println("Hit small");
+		                    bullet.setAlive(false);
+		                    asteroid.setAlive(false);
+		                    
+		                    System.out.println(largeAsteroids.size());
+		                    System.out.println(medAsteroids.size());
+		                    System.out.println(largeAsteroids.size());
+		                }
+		            });
 		        });
+
+		        // Removes bullets that are not alive from the bullets list
+		        bullets.stream()
+		            .filter(bullet -> !bullet.isAlive())
+		            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		        bullets.removeAll(bullets.stream()
+		                                .filter(bullet -> !bullet.isAlive())
+		                                .collect(Collectors.toList()));
+		        
+		        
+		        // Removes bullets that have travelled too far
+		        bullets.stream()
+	            .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		        bullets.removeAll(bullets.stream()
+	                                .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	                                .collect(Collectors.toList()));
+
+		        
+		        // Removes asteroids that are not alive from the largeAsteroids list
+		        largeAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        largeAsteroids.removeAll(largeAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Removes asteroids that are not alive from the medAsteroids list
+		        medAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        medAsteroids.removeAll(medAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Removes asteroids that are not alive from the medAsteroids list
+		        smallAsteroids.stream()
+		                .filter(asteroid -> !asteroid.isAlive())
+		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		        smallAsteroids.removeAll(smallAsteroids.stream()
+		                                    .filter(asteroid -> !asteroid.isAlive())
+		                                    .collect(Collectors.toList()));
+		        
+		        // Checks if the game is over
+		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
+		        	System.out.println("Next level");
+		        	try {
+						switchToLevelScreen(stage);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+		        	stop();
+		        }
+
+		        // Handles collision between the ship and the largeAsteroids
+//		        largeAsteroids.forEach(asteroid -> {
+//		            if (playerShip.collide(asteroid)) {	
+//		            	stop();
+//		            }
+//		        });
 			}
 			
 		}.start();
