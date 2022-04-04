@@ -316,7 +316,6 @@ public class SceneController {
 //				try {
 //					switchToLevelScreen(stage);
 //				} catch (IOException e) {
-//					// TODO Auto-generated catch block
 //					e.printStackTrace();
 //				}	
 //			}

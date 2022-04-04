@@ -7,24 +7,25 @@ public class Asteroid extends Character {
     private double rotationalMovement;
     private String size;
     private double scaler;
+    private double accelerationAmount;
 
     public Asteroid(double x, double y, String size) {
         super(new PolygonGenerator().createPolygon(), x, y);
         
         this.size = size;
         
+        // Sets the size of the asteroid
         setSize();
 
+        // Sets a random rotation speed and direction for the asteroid
         Random rnd = new Random();
-
         super.getCharacter().setRotate(rnd.nextInt(360));
-
-        int accelerationAmount = 1 + rnd.nextInt(10);
-        for (int i = 0; i < accelerationAmount; i++) {
-            accelerate();
-        }
-
-        this.rotationalMovement = 0.5 - rnd.nextDouble();
+        
+        // Sets the speed of the asteroid
+        setSpeed();
+        
+        // Sets the rotational speed of the asteroid
+        this.rotationalMovement = 1.0 - rnd.nextDouble();
     }
     
     public String getSize() {
@@ -45,6 +46,21 @@ public class Asteroid extends Character {
     	// Loops through each point in the asteroid and adjusts it according to the scaling factor
     	for (int i = 0; i < this.getCharacter().getPoints().size(); i++) {
             this.getCharacter().getPoints().set(i, this.getCharacter().getPoints().get(i) * scaler);
+        }
+    }
+    
+    private void setSpeed() {
+    	// Change the speed of the asteroid depending on its size
+    	if (this.size.equals("Large")) {
+    		this.accelerationAmount = 10.0;
+    	} else if (this.size.equals("Medium")) {
+    		this.accelerationAmount = 20.0;
+    	} else {
+    		this.accelerationAmount = 30.0;
+    	}
+        
+        for (double i = 0; i < this.accelerationAmount; i++) {
+            accelerate();
         }
     }
 
