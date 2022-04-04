@@ -385,7 +385,7 @@ public class SceneController {
 				    bullets.add(bullet);
 
 				    bullet.accelerate();
-				    bullet.setMovement(bullet.getMovement().normalize().multiply(3));
+				    bullet.setMovement(bullet.getMovement().normalize().multiply(4).add(playerShip.getMovement()));
 
 				    root.getChildren().add(bullet.getCharacter());
 				}
