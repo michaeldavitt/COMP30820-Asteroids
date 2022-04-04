@@ -438,12 +438,7 @@ public class SceneController {
 		        });
 
 		        // Removes bullets that are not alive from the bullets list
-		        bullets.stream()
-		            .filter(bullet -> !bullet.isAlive())
-		            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
-		        bullets.removeAll(bullets.stream()
-		                                .filter(bullet -> !bullet.isAlive())
-		                                .collect(Collectors.toList()));
+		        removeDeadBullets(bullets);
 		        
 		        
 		        // Removes bullets that have travelled too far
@@ -456,28 +451,13 @@ public class SceneController {
 
 		        
 		        // Removes asteroids that are not alive from the largeAsteroids list
-		        largeAsteroids.stream()
-		                .filter(asteroid -> !asteroid.isAlive())
-		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
-		        largeAsteroids.removeAll(largeAsteroids.stream()
-		                                    .filter(asteroid -> !asteroid.isAlive())
-		                                    .collect(Collectors.toList()));
+		        removeDeadAsteroids(largeAsteroids);
 		        
 		        // Removes asteroids that are not alive from the medAsteroids list
-		        medAsteroids.stream()
-		                .filter(asteroid -> !asteroid.isAlive())
-		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
-		        medAsteroids.removeAll(medAsteroids.stream()
-		                                    .filter(asteroid -> !asteroid.isAlive())
-		                                    .collect(Collectors.toList()));
+		        removeDeadAsteroids(medAsteroids);
 		        
 		        // Removes asteroids that are not alive from the smallAsteroids list
-		        smallAsteroids.stream()
-		                .filter(asteroid -> !asteroid.isAlive())
-		                .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
-		        smallAsteroids.removeAll(smallAsteroids.stream()
-		                                    .filter(asteroid -> !asteroid.isAlive())
-		                                    .collect(Collectors.toList()));
+		        removeDeadAsteroids(smallAsteroids);
 		        
 		        // Checks if the game is over
 		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
@@ -515,9 +495,30 @@ public class SceneController {
 		} 
 	}
 	
+	public void removeDeadBullets(List<Bullet> bullets) {
+		// Isolate dead characters
+		bullets.stream()
+        	.filter(bullet -> !bullet.isAlive())
+        	.forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		
+		// Remove dead characters
+		bullets.removeAll(bullets.stream()
+				.filter(bullet -> !bullet.isAlive())
+				.collect(Collectors.toList()));
+	}
+	
+	public void removeDeadAsteroids(List<Asteroid> asteroids) {
+		asteroids.stream()
+		        .filter(asteroid -> !asteroid.isAlive())
+		        .forEach(asteroid -> root.getChildren().remove(asteroid.getCharacter()));
+		asteroids.removeAll(asteroids.stream()
+                .filter(asteroid -> !asteroid.isAlive())
+                .collect(Collectors.toList()));
+	}
+	
 	
 	public void switchToGameOverScreen(Stage stage) throws IOException {
-		// Generate the welcome screen
+		// Generate the game over screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
