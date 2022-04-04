@@ -378,12 +378,30 @@ public class SceneController {
 		            playerShip.accelerate();
 		        }
 				
+				// Enables player ship and asteroid to move
 				playerShip.move();
 		        asteroids.forEach(asteroid -> asteroid.move());
 
+		        // Handles collision between the ship and the asteroids
 		        asteroids.forEach(asteroid -> {
 		            if (playerShip.collide(asteroid)) {
-		                root.getChildren().remove(asteroid.getCharacter());
+	            		
+		            	// If the asteroid is large, spawn two medium asteroids
+		            	if (asteroid.getSize().equals("Large")) {
+		            		
+		            		// Remove destroyed asteroid
+		            		root.getChildren().remove(asteroid.getCharacter());
+		            		
+		            		// Remove the player ship
+		            		root.getChildren().remove(playerShip.getCharacter());
+		            		
+		            		for (int i = 0; i < 2; i++) {
+		            		    Asteroid newAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), "Medium");
+		            		    root.getChildren().add(newAsteroid.getCharacter());
+		            		}
+		            		
+		            		stop();
+		            	}
 		            }
 		        });
 			}

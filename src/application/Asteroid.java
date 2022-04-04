@@ -8,7 +8,7 @@ public class Asteroid extends Character {
     private String size;
     private double scaler;
 
-    public Asteroid(int x, int y, String size) {
+    public Asteroid(double x, double y, String size) {
         super(new PolygonGenerator().createPolygon(), x, y);
         
         this.size = size;
@@ -32,6 +32,8 @@ public class Asteroid extends Character {
     }
     
     private void setSize() {
+    	
+    	// Checks the size of the asteroid to determine the scaling factor that should be applied to the size
     	if (this.size.equals("Large")) {
     		this.scaler = 1.0;
     	} else if (this.size.equals("Medium")) {
@@ -40,6 +42,7 @@ public class Asteroid extends Character {
     		this.scaler = 0.3;
     	}
     	
+    	// Loops through each point in the asteroid and adjusts it according to the scaling factor
     	for (int i = 0; i < this.getCharacter().getPoints().size(); i++) {
             this.getCharacter().getPoints().set(i, this.getCharacter().getPoints().get(i) * scaler);
         }
