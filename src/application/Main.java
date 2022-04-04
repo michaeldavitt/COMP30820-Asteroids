@@ -7,8 +7,6 @@ import javafx.scene.image.Image;
 
 //Reference: https://www.youtube.com/watch?v=9XJicRt_FaI
 public class Main extends Application {
-	public static final int SCREENWIDTH = 800;
-	public static final int SCREENHEIGHT = 600;
 	
 	// Main method which launches our application
 	public static void main(String[] args) {

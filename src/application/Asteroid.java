@@ -1,19 +1,19 @@
 package application;
 
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import javafx.scene.paint.Color;
-//import javafx.scene.shape.Polygon;
-
 import java.util.Random;
 
 public class Asteroid extends Character {
 
     private double rotationalMovement;
+    private String size;
+    private double scaler;
 
-    public Asteroid(int x, int y) {
+    public Asteroid(int x, int y, String size) {
         super(new PolygonGenerator().createPolygon(), x, y);
+        
+        this.size = size;
+        
+        setSize();
 
         Random rnd = new Random();
 
@@ -25,6 +25,24 @@ public class Asteroid extends Character {
         }
 
         this.rotationalMovement = 0.5 - rnd.nextDouble();
+    }
+    
+    public String getSize() {
+    	return this.size;
+    }
+    
+    private void setSize() {
+    	if (this.size.equals("Large")) {
+    		this.scaler = 1.0;
+    	} else if (this.size.equals("Medium")) {
+    		this.scaler = 0.6;
+    	} else {
+    		this.scaler = 0.3;
+    	}
+    	
+    	for (int i = 0; i < this.getCharacter().getPoints().size(); i++) {
+            this.getCharacter().getPoints().set(i, this.getCharacter().getPoints().get(i) * scaler);
+        }
     }
 
     @Override

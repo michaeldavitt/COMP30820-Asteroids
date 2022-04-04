@@ -24,6 +24,7 @@ import java.util.Random;
 public class SceneController {
 	private Scene scene;
 	private Pane root;
+	private String css;
 	public static final int SCREENWIDTH = 800;
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
@@ -35,7 +36,7 @@ public class SceneController {
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT); // Set preferred screen size
 		
 		// Style the screen using CSS
-		String css = this.getClass().getResource("application.css").toExternalForm();
+		css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add title to welcome users to the game
@@ -292,8 +293,12 @@ public class SceneController {
 		List<Asteroid> asteroids = new ArrayList<>();
 		for (int i = 0; i < currentLevel; i++) {
 		    Random rnd = new Random();
-		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT));
+		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Large");
 		    asteroids.add(asteroid);
+		    Asteroid medAsteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Medium");
+		    asteroids.add(medAsteroid);
+		    Asteroid smallAsteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Small");
+		    asteroids.add(smallAsteroid);
 		}
 
 		// Adds the asteroids to the screen
