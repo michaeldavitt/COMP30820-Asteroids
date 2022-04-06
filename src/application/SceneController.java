@@ -23,6 +23,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 public class SceneController {
+	private Stage stage;
 	private Scene scene;
 	private Pane root;
 	private String css;
@@ -30,14 +31,28 @@ public class SceneController {
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
 	
-	public void switchToWelcomeScreen(Stage stage) throws IOException {
+	public SceneController(Stage stage) {
+		this.stage = stage;
+		this.css = this.getClass().getResource("application.css").toExternalForm();
+		try {
+			switchToWelcomeScreen();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void switchToWelcomeScreen() throws IOException {
+		// Resets current level to 0
+		currentLevel = 0;
+		
 		// Create the welcome screen
 		Pane root = new Pane(); // Root node onto which we will add objects
 		Scene scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT); // Set preferred screen size
 		
 		// Style the screen using CSS
-		css = this.getClass().getResource("application.css").toExternalForm();
+//		css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add title to welcome users to the game
@@ -49,14 +64,14 @@ public class SceneController {
 		root.getChildren().add(welcomeText);
 		
 		// Adds buttons to the screen to switch scenes
-		SceneController sceneController = new SceneController();
+//		SceneController sceneController = new SceneController();
 		Button launchGameButton = new Button("Begin Game");
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					sceneController.switchToLevelScreen(stage);
+					switchToLevelScreen();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -74,7 +89,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					sceneController.switchToControlsScreen(stage);
+					switchToControlsScreen();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -91,14 +106,14 @@ public class SceneController {
 		stage.show();
 	}
 	
-	public void switchToControlsScreen(Stage stage) throws IOException {
+	public void switchToControlsScreen() throws IOException {
 		// Generate the controls screen
 		root = new Pane();
 		scene = new Scene(root);
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
 		// Add styling to the controls screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add the controls screen to the window and show the window
@@ -150,7 +165,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToLevelScreen(stage);
+					switchToLevelScreen();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -168,7 +183,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToWelcomeScreen(stage);
+					switchToWelcomeScreen();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -184,14 +199,14 @@ public class SceneController {
 	
 	
 	// Method to display the main game screen, where the user will play the game
-	public void switchToGameScreen(Stage stage) throws IOException {
+	public void switchToGameScreen() throws IOException {
 		// Generate the game screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Adds styling to the game screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Creates the player ship and place it in the centre of the screen
@@ -331,7 +346,7 @@ public class SceneController {
 			@Override
 			public void handle(ActionEvent arg0) {
 				try {
-					switchToGameOverScreen(stage);
+					switchToGameOverScreen();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}	
@@ -463,7 +478,7 @@ public class SceneController {
 		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
 //		        	System.out.println("Next level");
 		        	try {
-						switchToLevelScreen(stage);
+						switchToLevelScreen();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -517,14 +532,14 @@ public class SceneController {
 	}
 	
 	
-	public void switchToGameOverScreen(Stage stage) throws IOException {
+	public void switchToGameOverScreen() throws IOException {
 		// Generate the game over screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add the welcome screen to the window and show the window
@@ -551,7 +566,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToEnterNameScreen(stage);
+					switchToEnterNameScreen();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -559,14 +574,14 @@ public class SceneController {
 		});
 	}
 	
-	public void switchToEnterNameScreen(Stage stage) throws IOException {
+	public void switchToEnterNameScreen() throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add the welcome screen to the window and show the window
@@ -594,7 +609,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToViewHighScoreScreen(stage);
+					switchToViewHighScoreScreen();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -602,7 +617,7 @@ public class SceneController {
 		});
 	}
 	
-	public void switchToViewHighScoreScreen(Stage stage) throws IOException {
+	public void switchToViewHighScoreScreen() throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
@@ -611,7 +626,7 @@ public class SceneController {
 		stage.setScene(scene);
 		
 		// Add styling to the welcome screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add high score title
@@ -658,7 +673,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToWelcomeScreen(stage);
+					switchToWelcomeScreen();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -668,14 +683,14 @@ public class SceneController {
 	
 	
 	// Method for switching to the level screen which shows the user which level they are currently on and prompts them to hit enter to begin the next level
-	public void switchToLevelScreen(Stage stage) throws IOException {
+	public void switchToLevelScreen() throws IOException {
 		// Generate the screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the screen
-		String css = this.getClass().getResource("application.css").toExternalForm();
+//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Update level counter
@@ -708,7 +723,7 @@ public class SceneController {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToGameScreen(stage);
+					switchToGameScreen();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}

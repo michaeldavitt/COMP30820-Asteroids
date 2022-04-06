@@ -12,12 +12,8 @@ public class Main extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-	// Method for creating our first screen
-	// A stage variable is passed as an input, which represents the window on which we will view our application
-	@Override
-	public void start(Stage stage) throws Exception {
-		
+	
+	public Stage createWindow(Stage stage) {
 		// Creates the window
 		// Adds image to the window
 		Image icon = new Image("asteroid.jpg");
@@ -27,9 +23,20 @@ public class Main extends Application {
 		stage.setTitle("Asteroids");
 		stage.setResizable(false);
 		
+		return stage;
+	}
+
+	// Method for creating our first screen
+	// A stage variable is passed as an input, which represents the window on which we will view our application
+	@Override
+	public void start(Stage stage) throws Exception {
+		
+		// Calls a method to create the game window
+		stage = createWindow(stage);
+		
 		// Creates an instance of the screen controller class to generate the welcome screen
-		SceneController sceneController = new SceneController();
-		sceneController.switchToWelcomeScreen(stage);
+		new SceneController(stage);
+//		sceneController.switchToWelcomeScreen();
 		
 	}
 }
