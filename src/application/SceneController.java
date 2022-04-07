@@ -392,8 +392,11 @@ public class SceneController {
 
 			// variable that defines how much the ship rotation should change when the user hits LEFT or RIGHT
 			int delta = 3;
+			
+			private long lastBulletUpdate = 0;
+			private long lastHyperSpaceJump = 0;
 			@Override
-			public void handle(long arg0) {
+			public void handle(long now) {
 				if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
 					playerShip.rotateLeft(delta);
 				}
@@ -407,7 +410,7 @@ public class SceneController {
 		            playerShip.accelerate();
 		        }
 		;
-			    if (pressedKeys.getOrDefault(KeyCode.S, false)){
+			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
 			    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
 				    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
 				    
@@ -421,7 +424,7 @@ public class SceneController {
 					
 				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
 			    	
-					
+					lastHyperSpaceJump = now;
 			 
 			    } 
 			    
@@ -431,7 +434,7 @@ public class SceneController {
 			    
 				
 				// Fire a bullet when the user presses SPACE
-				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && bullets.size() < 1) {
+				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && now - lastBulletUpdate >= 280_000_000) {
 				    // we shoot
 				    Bullet bullet = new Bullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
 				    bullet.getCharacter().setRotate(playerShip.getCharacter().getRotate());
@@ -442,7 +445,7 @@ public class SceneController {
 
 				    root.getChildren().add(bullet.getCharacter());
 				    
-				    
+				    lastBulletUpdate = now;
 
 				}
 				
@@ -533,10 +536,10 @@ public class SceneController {
 //		            }
 //		        });
 			}
-			private void While(boolean b) {
-				// TODO Auto-generated method stub
-				
-			}
+//			private void While(boolean b) {
+//				// TODO Auto-generated method stub
+//				
+//			}
 			
 		}.start();
 		
