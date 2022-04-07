@@ -318,6 +318,21 @@ public class SceneController {
 		// Adds an empty bullet list
 		List<Bullet> bullets = new ArrayList<>();
 		
+	
+		List<Asteroid> completeAsteroids = new ArrayList<>();	
+		completeAsteroids.addAll(largeAsteroids);
+		completeAsteroids.addAll(medAsteroids);
+		completeAsteroids.addAll(smallAsteroids);
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
@@ -371,7 +386,7 @@ public class SceneController {
 			pressedKeys.put(e.getCode(), Boolean.FALSE);
 		});
 		
-		
+
 		// Main animation timer for defining the reactions to key events
 		new AnimationTimer() {
 
@@ -391,6 +406,29 @@ public class SceneController {
 				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
 		            playerShip.accelerate();
 		        }
+		;
+			    if (pressedKeys.getOrDefault(KeyCode.S, false)){
+			    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+				    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+				    
+				    
+				    do {
+				    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+				    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+				    }
+					while(playerShip.isSafeSpawn(completeAsteroids.get(0)) == true);
+					
+				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+			    	
+					
+			 
+			    } 
+			    
+			    
+			    
+			  
+			    
 				
 				// Fire a bullet when the user presses SPACE
 				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && bullets.size() < 1) {
@@ -403,6 +441,9 @@ public class SceneController {
 				    bullet.setMovement(bullet.getMovement().normalize().multiply(4).add(playerShip.getMovement()));
 
 				    root.getChildren().add(bullet.getCharacter());
+				    
+				    
+
 				}
 				
 				// Enables game characters to move
@@ -491,6 +532,10 @@ public class SceneController {
 //		            	stop();
 //		            }
 //		        });
+			}
+			private void While(boolean b) {
+				// TODO Auto-generated method stub
+				
 			}
 			
 		}.start();

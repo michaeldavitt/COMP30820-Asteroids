@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Random;
+
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -37,6 +39,38 @@ public abstract class Character {
 	public void setMovement(Point2D newMovement) {
 		this.movement = newMovement;
 	}
+	
+	public void hyperspace(double hyperSpaceX, double hyperSpaceY) {
+		
+//		this.character.setFill(Color.BLACK);
+	    this.character.setTranslateX(hyperSpaceX);
+		this.character.setTranslateY(hyperSpaceY);
+//	    hyperspaceComplete();
+		
+	}
+	
+	public  boolean isSafeSpawn(Character other){
+		
+
+        Shape intersect = Shape.intersect(this.character, other.getCharacter());
+
+        if(intersect.getBoundsInLocal().getWidth() != -1){
+        	return false;
+        };
+		
+		return true;
+		}
+	
+	
+
+	
+//	public void hyperspaceComplete() {
+//		
+//		this.character.setFill(Color.WHITE);
+//	
+//		
+//		
+//	}
 	
 	// Get distance travelled
 	public double getDistanceTravelled() {
@@ -112,6 +146,8 @@ public abstract class Character {
 	    Shape collisionArea = Shape.intersect(this.character, other.getCharacter());
 	    return collisionArea.getBoundsInLocal().getWidth() != -1;
 	}
+	
+
 	
 	
 }
