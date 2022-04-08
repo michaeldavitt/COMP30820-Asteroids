@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Random;
+
 //import java.util.Random;
 
 import javafx.geometry.Point2D;
@@ -147,6 +149,13 @@ public abstract class Character {
 	    return collisionArea.getBoundsInLocal().getWidth() != -1;
 	}
 	
+	public void accelerateSlow() {
+//		int three = 3;
+//        int minusThree = -3;
+//		int accSlowChange = new Random().nextBoolean() ? three  : minusThree;
+
+	    this.movement = new Point2D(3,0);
+	}
 
 	
 	

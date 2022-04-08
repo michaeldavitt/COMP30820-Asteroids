@@ -213,6 +213,23 @@ public class SceneController {
 		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		root.getChildren().add(playerShip.getCharacter());
 		
+		
+		int a2 = 850;
+        int b2 = -50;
+		int randInt3 = new Random().nextBoolean() ? a2 : b2;
+		
+		Random r = new Random();
+		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
+
+
+		
+		
+		enemyship enemyship = new enemyship(randInt3,randInt);
+		root.getChildren().add(enemyship.getCharacter());
+		
+		
+		
+		
 //		// Creates integer representing the number of asteroids that are spawned
 //		int numAsteroids = 10;
 //		
@@ -229,18 +246,10 @@ public class SceneController {
 //		for (int i = 0; i < numAsteroids; i++) {
 //		
 //			// Generates a random number between 0 and 10
-//			Random r = new Random();
-//			int randInt = r.nextInt(10-1) + 1;
-// 
-//			// Generates a random integer which will either be 1 or -1
-//			int a = 1;
-//	        int b = -1;
-//			int randInt2 = new Random().nextBoolean() ? a : b;
+
 //			
 //			// Generates a random integer which will either be 850 or -50
-//			int a2 = 850;
-//	        int b2 = -50;
-//			int randInt3 = new Random().nextBoolean() ? a2 : b2;
+
 //				 
 //			// Adds each asteroid to the asteroids array
 //		    asteroids[i] = new AsteroidMedium(randInt3, SCREENHEIGHT / randInt);
@@ -410,7 +419,12 @@ public class SceneController {
 		            playerShip.accelerate();
 		        }
 		;
+		
+		
+		int hyperCounter ;
+		
 			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
+			    	for (hyperCounter = 0; hyperCounter < completeAsteroids.size(); hyperCounter++) {
 			    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
 				    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
 				    
@@ -420,14 +434,15 @@ public class SceneController {
 				    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
 				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
 				    }
-					while(playerShip.isSafeSpawn(completeAsteroids.get(0)) == true);
+					while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
 					
 				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
 			    	
 					lastHyperSpaceJump = now;
 			 
 			    } 
-			    
+			    }
+		
 			    
 			    
 			  
@@ -449,6 +464,17 @@ public class SceneController {
 
 				}
 				
+				
+			
+					enemyship.accelerateSlow();
+					
+					enemyship.move();
+					
+	    
+					
+					
+					
+				
 				// Enables game characters to move
 				playerShip.move();
 		        largeAsteroids.forEach(asteroid -> asteroid.move());
@@ -458,6 +484,14 @@ public class SceneController {
 		        
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
+		        	
+            if(bullet.collide(enemyship)) {
+	                	
+            	root.getChildren().remove(enemyship.getCharacter());
+            	
+	                 
+	                }
+					
 		        	
 		        	// Collision with large asteroids
 		            largeAsteroids.forEach(asteroid -> {
