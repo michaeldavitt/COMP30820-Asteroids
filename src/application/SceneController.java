@@ -422,6 +422,75 @@ public class SceneController {
 		            });
 		            
 		        });
+		        
+		        
+		        // Collision between player ship and large asteroid
+		        largeAsteroids.forEach(asteroid -> {
+		        	if (playerShip.collide(asteroid)) {
+		        		playerShip.decrementLives();
+		        		asteroid.setAlive(false);
+		        		
+		        		// Spawn new medium asteroids
+		        		spawnAsteroids(asteroid, "Medium", medAsteroids);
+		        		
+		        		// Spawn player ship in a safe location
+		        		List<Character> enemyCharacters = new ArrayList<>();	
+						enemyCharacters.addAll(largeAsteroids);
+						enemyCharacters.addAll(medAsteroids);
+						enemyCharacters.addAll(smallAsteroids);	
+						enemyCharacters.add(enemyShip);
+		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        	}
+		        });
+		        
+		        // Collision between player ship and medium asteroid
+		        medAsteroids.forEach(asteroid -> {
+		        	if (playerShip.collide(asteroid)) {
+		        		playerShip.decrementLives();
+		        		asteroid.setAlive(false);
+		        		
+		        		// Spawn new small asteroids
+		        		spawnAsteroids(asteroid, "Small", smallAsteroids);
+		        		
+		        		// Spawn player ship in a safe location
+		        		List<Character> enemyCharacters = new ArrayList<>();	
+						enemyCharacters.addAll(largeAsteroids);
+						enemyCharacters.addAll(medAsteroids);
+						enemyCharacters.addAll(smallAsteroids);	
+						enemyCharacters.add(enemyShip);
+		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        	}
+		        });
+		        
+		        // Collision between player ship and small asteroid
+		        smallAsteroids.forEach(asteroid -> {
+		        	if (playerShip.collide(asteroid)) {
+		        		playerShip.decrementLives();
+		        		asteroid.setAlive(false);
+		        		
+		        		// Spawn player ship in a safe location
+		        		List<Character> enemyCharacters = new ArrayList<>();	
+						enemyCharacters.addAll(largeAsteroids);
+						enemyCharacters.addAll(medAsteroids);
+						enemyCharacters.addAll(smallAsteroids);	
+						enemyCharacters.add(enemyShip);
+		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        	}
+		        });
+		        
+		        // Collision between player ship and enemy ship
+		        if (playerShip.collide(enemyShip)) {
+		        	playerShip.decrementLives();
+		        	enemyShip.setAlive(false);
+		        	
+		        	// Spawn player ship in a safe location
+	        		List<Character> enemyCharacters = new ArrayList<>();	
+					enemyCharacters.addAll(largeAsteroids);
+					enemyCharacters.addAll(medAsteroids);
+					enemyCharacters.addAll(smallAsteroids);	
+					enemyCharacters.add(enemyShip);
+	        		spawnPlayerShip(playerShip, enemyCharacters);
+		        }
 
 		        // Removes dead items from the screen
 		        removeDeadBullets(bullets);
@@ -439,6 +508,17 @@ public class SceneController {
 					}
 		        	
 		        	// Stops the animation timer
+		        	stop();
+		        }
+		        
+		        // Checks if the player ship has been destroyed
+		        if (playerShip.getLives() <= 0) {
+		        	try {
+		        		switchToGameOverScreen();
+		        	} catch (IOException e) {
+		        		e.printStackTrace();
+		        	}
+		        	
 		        	stop();
 		        }
 			}
