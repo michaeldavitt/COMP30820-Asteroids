@@ -47,17 +47,15 @@ public abstract class Character {
 		
 	}
 	
-	public  boolean isSafeSpawn(Character other){
-		
-
-        Shape intersect = Shape.intersect(this.character, other.getCharacter());
-
+	public boolean isSafeSpawn(Character other) {
+		Shape intersect = Shape.intersect(this.character, other.getCharacter());
+	
         if(intersect.getBoundsInLocal().getWidth() != -1){
         	return false;
         };
 		
 		return true;
-		}
+	}
 	
 	
 

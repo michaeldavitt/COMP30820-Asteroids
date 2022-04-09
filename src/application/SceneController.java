@@ -245,9 +245,9 @@ public class SceneController {
 		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
 		
 		// Spawns the enemy ship and adds it to the screen
-		enemyship enemyship = new enemyship(randInt3, randInt);
-		root.getChildren().add(enemyship.getCharacter());
-		enemyship.accelerateSlow();
+		EnemyShip enemyShip = new EnemyShip(randInt3, randInt);
+		root.getChildren().add(enemyShip.getCharacter());
+		enemyShip.accelerateSlow();
 		
 		// Creates the asteroids arrays
 		List<Asteroid> largeAsteroids = new ArrayList<>();
@@ -267,27 +267,11 @@ public class SceneController {
 		List<Bullet> bullets = new ArrayList<>();
 		
 		// Creates an array to store all of the asteroids
-		List<Asteroid> completeAsteroids = new ArrayList<>();	
-		completeAsteroids.addAll(largeAsteroids);
-		completeAsteroids.addAll(medAsteroids);
-		completeAsteroids.addAll(smallAsteroids);
-		
-
-		
-//		double safeSpaceX;
-//		double safeSpaceY;
-//		Ship playerShip;
-//		
-//		do {
-//		    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-//		    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
-//		    playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);	
-//		    }
-//		while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
-		
-		
-		
-		
+    	List<Character> enemyCharacters = new ArrayList<>();	
+		enemyCharacters.addAll(largeAsteroids);
+		enemyCharacters.addAll(medAsteroids);
+		enemyCharacters.addAll(smallAsteroids);
+		enemyCharacters.add(enemyShip);
 		
 		// Adds the game screen to the window and show the window
 		stage.setScene(scene);
@@ -349,26 +333,23 @@ public class SceneController {
 				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
 		            playerShip.accelerate();
 		        };
-		
-		
-		        int hyperCounter;
-		
+
+		        
+		        // Respawn the player in a random location when the user presses S
 			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
-			    	for (hyperCounter = 0; hyperCounter < completeAsteroids.size(); hyperCounter++) {
-				    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-					    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
-				    
-					    do {
-						    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-						    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
-						    playerShip.hyperspace(safeSpaceX,safeSpaceY);
-					    }
-						while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
-					
-					    playerShip.hyperspace(safeSpaceX,safeSpaceY);
 			    	
-					    lastHyperSpaceJump = now;
-			    	} 
+			    	// Create a list containing all asteroids
+			    	List<Character> enemyCharacters = new ArrayList<>();	
+					enemyCharacters.addAll(largeAsteroids);
+					enemyCharacters.addAll(medAsteroids);
+					enemyCharacters.addAll(smallAsteroids);	
+					enemyCharacters.add(enemyShip);
+					
+					// Spawn the player ship and ensure that the player does not collide with asteroids upon spawning
+					spawnPlayerShip(playerShip, enemyCharacters);
+			    	
+			    	// Resets last hyper space jump variable
+			    	lastHyperSpaceJump = now;
 			    }
 			    
 				
@@ -390,7 +371,7 @@ public class SceneController {
 					
 				// Enables game characters to move
 				playerShip.move();
-				enemyship.move();
+				enemyShip.move();
 		        largeAsteroids.forEach(asteroid -> asteroid.move());
 		        medAsteroids.forEach(asteroid -> asteroid.move());
 		        smallAsteroids.forEach(asteroid -> asteroid.move());
@@ -399,8 +380,8 @@ public class SceneController {
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
 		        	
-			        if(bullet.collide(enemyship)) {
-			        	root.getChildren().remove(enemyship.getCharacter()); 	
+			        if(bullet.collide(enemyShip)) {
+			        	root.getChildren().remove(enemyShip.getCharacter()); 	
 			        }
 						
 			        	
@@ -471,6 +452,32 @@ public class SceneController {
 		playerShip.getCharacter().requestFocus();
 	}
 	
+	
+	// Method to spawn the player ship in a safe location
+	public void spawnPlayerShip(Ship playerShip, List<Character> enemyCharacters) {
+		double safeSpaceX;
+		double safeSpaceY;
+		
+		// Spawn the player ship and ensure that the player does not collide with asteroids upon spawning
+		do {
+			
+			// Try spawn the player in a random location on the screen and set safe spawn = true
+			safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+			safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+			playerShip.hyperspace(safeSpaceX, safeSpaceY);
+			playerShip.setSafelySpawned(true);
+			
+			// Loop through all asteroids, and if there is a collision, set safe spawn = false
+			enemyCharacters.forEach(enemy -> {
+				if (playerShip.collide(enemy)) {
+					playerShip.setSafelySpawned(false);
+				}
+				
+			});
+		}
+		while(!playerShip.isSafelySpawned());
+		
+	}
 	
 	// Method for spawning two new asteroids when an asteroid has been hit
 	public void spawnAsteroids(Asteroid asteroid, String size, List<Asteroid> asteroidArray) {
