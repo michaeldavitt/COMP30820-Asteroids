@@ -253,9 +253,14 @@ public class SceneController {
 		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
 		
 		// Spawns the enemy ship and adds it to the screen
+		List<EnemyShip> enemyShips = new ArrayList<>();
 		EnemyShip enemyShip = new EnemyShip(randInt3, randInt);
-		root.getChildren().add(enemyShip.getCharacter());
-		enemyShip.accelerateSlow();
+		
+		enemyShips.add(enemyShip);
+		enemyShips.forEach(enemy -> {
+			root.getChildren().add(enemy.getCharacter());
+			enemyShip.accelerateSlow();
+		});
 		
 		// Creates the asteroids arrays
 		List<Asteroid> largeAsteroids = new ArrayList<>();
@@ -279,7 +284,7 @@ public class SceneController {
 		enemyCharacters.addAll(largeAsteroids);
 		enemyCharacters.addAll(medAsteroids);
 		enemyCharacters.addAll(smallAsteroids);
-		enemyCharacters.add(enemyShip);
+		enemyCharacters.addAll(enemyShips);
 		
 		// Spawn the playerShip
 		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
@@ -362,7 +367,7 @@ public class SceneController {
 					enemyCharacters.addAll(largeAsteroids);
 					enemyCharacters.addAll(medAsteroids);
 					enemyCharacters.addAll(smallAsteroids);	
-					enemyCharacters.add(enemyShip);
+					enemyCharacters.addAll(enemyShips);
 					
 					// Spawn the player ship and ensure that the player does not collide with asteroids upon spawning
 					spawnPlayerShip(playerShip, enemyCharacters);
@@ -390,7 +395,7 @@ public class SceneController {
 					
 				// Enables game characters to move
 				playerShip.move();
-				enemyShip.move();
+				enemyShips.forEach(enemy -> enemy.move());
 		        largeAsteroids.forEach(asteroid -> asteroid.move());
 		        medAsteroids.forEach(asteroid -> asteroid.move());
 		        smallAsteroids.forEach(asteroid -> asteroid.move());
@@ -399,12 +404,14 @@ public class SceneController {
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
 		        	
-			        if(bullet.collide(enemyShip)) {
-			        	bullet.setAlive(false);
-			        	pointsTally.setText("Points: " + score.addAndGet(500));
-			        	root.getChildren().remove(enemyShip.getCharacter());
-			        }
-						
+		        	enemyShips.forEach(enemy -> {
+		        		if(bullet.collide(enemy)) {
+				        	bullet.setAlive(false);
+				        	enemy.setAlive(false);
+				        	pointsTally.setText("Points: " + score.addAndGet(500));
+				        }
+		        	});
+			        
 			        	
 		        	// Collision with large asteroids
 		            largeAsteroids.forEach(asteroid -> {
@@ -465,7 +472,7 @@ public class SceneController {
 						enemyCharacters.addAll(largeAsteroids);
 						enemyCharacters.addAll(medAsteroids);
 						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.add(enemyShip);
+						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        	}
 		        });
@@ -487,7 +494,7 @@ public class SceneController {
 						enemyCharacters.addAll(largeAsteroids);
 						enemyCharacters.addAll(medAsteroids);
 						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.add(enemyShip);
+						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        	}
 		        });
@@ -506,33 +513,37 @@ public class SceneController {
 						enemyCharacters.addAll(largeAsteroids);
 						enemyCharacters.addAll(medAsteroids);
 						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.add(enemyShip);
+						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        	}
 		        });
 		        
 		        // Collision between player ship and enemy ship
-		        if (playerShip.collide(enemyShip)) {
-		        	playerShip.decrementLives();
-		        	enemyShip.setAlive(false);
-		        	
-		        	// Decrease player health
-	        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
-		        	
-		        	// Spawn player ship in a safe location
-	        		List<Character> enemyCharacters = new ArrayList<>();	
-					enemyCharacters.addAll(largeAsteroids);
-					enemyCharacters.addAll(medAsteroids);
-					enemyCharacters.addAll(smallAsteroids);	
-					enemyCharacters.add(enemyShip);
-	        		spawnPlayerShip(playerShip, enemyCharacters);
-		        }
+		        enemyShips.forEach(enemy -> {
+		        	if (playerShip.collide(enemy)) {
+			        	playerShip.decrementLives();
+			        	enemy.setAlive(false);
+			        	
+			        	// Decrease player health
+		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
+			        	
+			        	// Spawn player ship in a safe location
+		        		List<Character> enemyCharacters = new ArrayList<>();	
+						enemyCharacters.addAll(largeAsteroids);
+						enemyCharacters.addAll(medAsteroids);
+						enemyCharacters.addAll(smallAsteroids);	
+						enemyCharacters.addAll(enemyShips);
+		        		spawnPlayerShip(playerShip, enemyCharacters);
+			        }
+		        });
+		        
 
 		        // Removes dead items from the screen
 		        removeDeadBullets(bullets);
 		        removeDeadAsteroids(largeAsteroids);
 		        removeDeadAsteroids(medAsteroids);
 		        removeDeadAsteroids(smallAsteroids);
+		        removeDeadEnemies(enemyShips);
 		        
 		        // Checks if all asteroids have been destroyed
 		        // If this is the case, the player will move onto the next level
@@ -640,6 +651,14 @@ public class SceneController {
                 .collect(Collectors.toList()));
 	}
 	
+	public void removeDeadEnemies(List<EnemyShip> enemies) {
+		enemies.stream()
+	        .filter(enemy -> !enemy.isAlive())
+	        .forEach(enemy -> root.getChildren().remove(enemy.getCharacter()));
+		enemies.removeAll(enemies.stream()
+		    .filter(enemy -> !enemy.isAlive())
+		    .collect(Collectors.toList()));
+	}
 	
 	public void switchToGameOverScreen() throws IOException {
 		// Generates the game over screen
