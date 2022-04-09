@@ -442,32 +442,15 @@ public class SceneController {
 		            
 		        });
 
-		        // Removes bullets that are not alive from the bullets list
+		        // Removes dead items from the screen
 		        removeDeadBullets(bullets);
-		        
-		        
-		        // Removes bullets that have travelled too far
-		        bullets.stream()
-	            .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
-	            .forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
-		        bullets.removeAll(bullets.stream()
-	                                .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
-	                                .collect(Collectors.toList()));
-
-		        
-		        // Removes asteroids that are not alive from the largeAsteroids list
 		        removeDeadAsteroids(largeAsteroids);
-		        
-		        // Removes asteroids that are not alive from the medAsteroids list
 		        removeDeadAsteroids(medAsteroids);
-		        
-		        // Removes asteroids that are not alive from the smallAsteroids list
 		        removeDeadAsteroids(smallAsteroids);
 		        
 		        // Checks if all asteroids have been destroyed
 		        // If this is the case, the player will move onto the next level
 		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
-//		        	System.out.println("Next level");
 		        	try {
 						switchToLevelScreen();
 					} catch (IOException e) {
@@ -500,17 +483,27 @@ public class SceneController {
 	}
 	
 	// Method to remove all dead bullets from the screen
-	// Dead bullets are ones that have either hit an asteroid or have travelled too far
+	// Dead bullets are ones that have hit an asteroid
 	public void removeDeadBullets(List<Bullet> bullets) {
-		// Isolate dead characters
+		// Isolates bullets that have hit an asteroid
 		bullets.stream()
-        	.filter(bullet -> !bullet.isAlive())
+			.filter(bullet -> !bullet.isAlive())
         	.forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
 		
-		// Remove dead characters
+		// Removes bullets that have hit an asteroid
 		bullets.removeAll(bullets.stream()
-				.filter(bullet -> !bullet.isAlive())
-				.collect(Collectors.toList()));
+			.filter(bullet -> !bullet.isAlive())
+			.collect(Collectors.toList()));
+		
+		// Removes bullets that have travelled too far
+        bullets.stream()
+        	.filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+        	.forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+        
+        // Removes bullets that have travelled too far
+        bullets.removeAll(bullets.stream()
+	        .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	        .collect(Collectors.toList()));
 	}
 	
 	
