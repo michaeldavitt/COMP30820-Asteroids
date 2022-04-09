@@ -3,11 +3,14 @@ package application;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
-
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 // Class for launching our application for the first time
 // After the game window is created, the responsibility of managing the game's content is passed over to the ScreenController class
 public class Main extends Application {
+	
+	MediaPlayer mediaPlayer;
 	
 	// Main method which launches our application
 	public static void main(String[] args) {
@@ -21,6 +24,11 @@ public class Main extends Application {
 		// Adds image to the window
 		Image icon = new Image("asteroid.jpg");
 		stage.getIcons().add(icon);
+		
+		// Adds background music
+		Media backgroundMusic = new Media(getClass().getResource("background_music.mp3").toExternalForm());
+		mediaPlayer = new MediaPlayer(backgroundMusic);
+		mediaPlayer.play();
 		
 		// Adds title to the window and makes it re-sizable
 		stage.setTitle("Asteroids");

@@ -10,6 +10,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -39,6 +40,7 @@ public class SceneController {
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
 	private AtomicInteger score;
+	AudioClip explosionSoundEffect;
 	
 	
 	// Constructor for the scene controller
@@ -47,6 +49,7 @@ public class SceneController {
 	public SceneController(Stage stage) {
 		this.stage = stage;
 		this.css = this.getClass().getResource("application.css").toExternalForm();
+		
 		try {
 			switchToWelcomeScreen();
 		} catch (IOException e) {
@@ -236,8 +239,14 @@ public class SceneController {
 		// Adds styling to the game screen
 		scene.getStylesheets().add(css);
 		
+		// Adds the current level to the screen
+		Text currentLevelText = new Text(10, 20, "Level: " + currentLevel);
+		currentLevelText.setFill(Color.WHITE);
+		currentLevelText.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+	    root.getChildren().add(currentLevelText);
+	    
 		// Adds the player's score to the screen
-		Text pointsTally = new Text(10, 20, "Points: " + score);
+		Text pointsTally = new Text(10, 40, "Points: " + score);
 		pointsTally.setFill(Color.WHITE);
 		pointsTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 	    root.getChildren().add(pointsTally);
@@ -292,7 +301,7 @@ public class SceneController {
 		root.getChildren().add(playerShip.getCharacter());
 		
 		// Adds the player's health to the screen
-	    Text playerHealthTally = new Text(10, 40, "Lives Remaining: " + playerShip.getLives());
+	    Text playerHealthTally = new Text(10, 60, "Lives Remaining: " + playerShip.getLives());
 	    playerHealthTally.setFill(Color.WHITE);
 	    playerHealthTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 	    root.getChildren().add(playerHealthTally);
@@ -371,6 +380,9 @@ public class SceneController {
 
 				    root.getChildren().add(bullet.getCharacter());
 				    
+				    AudioClip shootingSoundEffect = new AudioClip(getClass().getResource("shooting.mp3").toExternalForm());
+				    shootingSoundEffect.play();
+				    
 				    lastBulletUpdate = now;
 
 				}
@@ -391,6 +403,9 @@ public class SceneController {
 				        	bullet.setAlive(false);
 				        	enemy.setAlive(false);
 				        	pointsTally.setText("Points: " + score.addAndGet(500));
+				        	
+				        	explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+		                    explosionSoundEffect.play();
 				        }
 		        	});
 			        
@@ -406,6 +421,9 @@ public class SceneController {
 		                    
 		                    // Spawn two new medium asteroids
 		                    spawnAsteroids(asteroid, "Medium", medAsteroids);
+		                    
+		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+		                    explosionSoundEffect.play();
 		                }
 		            });
 			            
@@ -421,6 +439,9 @@ public class SceneController {
 		                    
 		                    // Spawn new small asteroids
 		                    spawnAsteroids(asteroid, "Small", smallAsteroids);
+		                    
+		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+		                    explosionSoundEffect.play();
 		                }
 		            });
 			            
@@ -431,6 +452,9 @@ public class SceneController {
 		                    bullet.setAlive(false);
 		                    pointsTally.setText("Points: " + score.addAndGet(300));
 		                    asteroid.setAlive(false);
+		                    
+		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+		                    explosionSoundEffect.play();
 		                }
 		            });
 		            
@@ -456,6 +480,9 @@ public class SceneController {
 						enemyCharacters.addAll(smallAsteroids);	
 						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        		
+		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+	                    explosionSoundEffect.play();
 		        	}
 		        });
 		        
@@ -478,6 +505,9 @@ public class SceneController {
 						enemyCharacters.addAll(smallAsteroids);	
 						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        		
+		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+	                    explosionSoundEffect.play();
 		        	}
 		        });
 		        
@@ -497,6 +527,9 @@ public class SceneController {
 						enemyCharacters.addAll(smallAsteroids);	
 						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        		
+		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+	                    explosionSoundEffect.play();
 		        	}
 		        });
 		        
@@ -516,6 +549,9 @@ public class SceneController {
 						enemyCharacters.addAll(smallAsteroids);	
 						enemyCharacters.addAll(enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        		
+		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+	                    explosionSoundEffect.play();
 			        }
 		        });
 		        
