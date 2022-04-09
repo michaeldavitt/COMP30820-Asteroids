@@ -32,4 +32,10 @@ public class Ship extends Character {
     public void setSafelySpawned(Boolean safelySpawned) {
     	this.safelySpawned = safelySpawned;
     }
+    
+    // Method for performing a hyperspace jump
+	public void hyperspace(double hyperSpaceX, double hyperSpaceY) {
+		this.getCharacter().setTranslateX(hyperSpaceX);
+		this.getCharacter().setTranslateY(hyperSpaceY);
+	}
 }

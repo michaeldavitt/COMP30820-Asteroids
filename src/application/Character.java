@@ -38,25 +38,6 @@ public abstract class Character {
 		this.movement = newMovement;
 	}
 	
-	public void hyperspace(double hyperSpaceX, double hyperSpaceY) {
-		
-//		this.character.setFill(Color.BLACK);
-	    this.character.setTranslateX(hyperSpaceX);
-		this.character.setTranslateY(hyperSpaceY);
-//	    hyperspaceComplete();
-		
-	}
-	
-	public boolean isSafeSpawn(Character other) {
-		Shape intersect = Shape.intersect(this.character, other.getCharacter());
-	
-        if(intersect.getBoundsInLocal().getWidth() != -1){
-        	return false;
-        };
-		
-		return true;
-	}
-	
 	// Get distance travelled
 	public double getDistanceTravelled() {
 		return this.distanceTravelled;

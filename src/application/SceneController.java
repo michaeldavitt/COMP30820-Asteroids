@@ -300,24 +300,6 @@ public class SceneController {
 		// Adds the game screen to the window and show the window
 		stage.setScene(scene);
 		
-		// Adds button to end the game (temporary to test scene switching, we will want the game to end when the player runs out of lives)
-		Button switchToGameOverScreenButton = new Button("End game");
-		switchToGameOverScreenButton.setOnAction(new EventHandler<ActionEvent>() {
-
-			@Override
-			public void handle(ActionEvent arg0) {
-				try {
-					switchToGameOverScreen();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}	
-			}
-		});
-		
-		switchToGameOverScreenButton.setTranslateX(730);
-		switchToGameOverScreenButton.setTranslateY(0);
-		root.getChildren().add(switchToGameOverScreenButton);
-		
 		
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
@@ -735,7 +717,6 @@ public class SceneController {
 				try {
 					// Extract the user's input and use it to create a score object
 					String username = userInput.getText();
-					System.out.println(username);
 					switchToViewHighScoreScreen(username);
 				} catch (IOException e1) {
 					e1.printStackTrace();
@@ -816,7 +797,6 @@ public class SceneController {
 		scene = new Scene(root);
 		
 		// Add styling to the screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Update level counter
