@@ -8,6 +8,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
@@ -753,12 +755,47 @@ public class SceneController {
 				try {
 					// Extract the user's input and use it to create a score object
 					String username = userInput.getText();
-					switchToViewHighScoreScreen(username);
+					if (validUserInput(username)) {
+						switchToViewHighScoreScreen(username);
+					} else {
+						switchToEnterNameScreen();
+					}
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 			}
 		});
+	}
+	
+	public Boolean validUserInput(String username) {
+		Alert invalidInputAlert = new Alert(AlertType.ERROR);
+		
+		// Check if the user input is empty
+		if (username.length() == 0) {
+			invalidInputAlert.setContentText("Username cannot be empty");
+			invalidInputAlert.show();
+			return false;
+		}
+		
+		// Check if the user input is greater than three letters
+		else if (username.length() > 3) {
+			invalidInputAlert.setContentText("Username must be less than or equal to 3 letters");
+			invalidInputAlert.show();
+			return false;
+		}
+		
+		// Check that there are no commas in the username
+		else {
+			for (int i = 0; i < username.length(); i++) {
+				if (username.charAt(i) == ',') {
+					invalidInputAlert.setContentText("Username cannot contain a comma");
+					invalidInputAlert.show();
+					return false;
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	public void switchToViewHighScoreScreen(String username) throws IOException {
