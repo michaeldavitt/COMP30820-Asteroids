@@ -1,5 +1,6 @@
 package application;
 
+// Imports required packages
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,7 +23,13 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+
+// Class representing the application in general
+// In this class, we control the content that is displayed on the screen
 public class SceneController {
+	// Initialise scene controller variables
+	// These variables all relate to the game screen (the window itself, the content in the window, size of the window etc.)
+	// Current level is also initialised to be 0, and this will be reset in each iteration of the game
 	private Stage stage;
 	private Scene scene;
 	private Pane root;
@@ -31,6 +38,10 @@ public class SceneController {
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
 	
+	
+	// Constructor for the scene controller
+	// Here, we assign the game window to the stage variable and define the default css styles
+	// We also call the switch to welcome screen method, which generates the welcome screen for the user
 	public SceneController(Stage stage) {
 		this.stage = stage;
 		this.css = this.getClass().getResource("application.css").toExternalForm();
@@ -42,17 +53,20 @@ public class SceneController {
 		}
 	}
 	
+	
+	// Method that displays the welcome screen to the user
+	// This is the first screen that the user will see when they start the game
+	// When the user dies and wants to play again, they will return to this screen before starting
 	public void switchToWelcomeScreen() throws IOException {
-		// Resets current level to 0
+		// Resets current level to 0 before the user starts playing
 		currentLevel = 0;
 		
 		// Create the welcome screen
-		Pane root = new Pane(); // Root node onto which we will add objects
-		Scene scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
+		root = new Pane(); // Root node onto which we will add objects
+		scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT); // Set preferred screen size
 		
 		// Style the screen using CSS
-//		css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add title to welcome users to the game
@@ -63,8 +77,8 @@ public class SceneController {
 		welcomeText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(welcomeText);
 		
-		// Adds buttons to the screen to switch scenes
-//		SceneController sceneController = new SceneController();
+		// Add button to start the game
+		// Clicking this button will go to the level screen, which will display "Level 1" before starting the game
 		Button launchGameButton = new Button("Begin Game");
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -77,12 +91,14 @@ public class SceneController {
 				}	
 			}
 		});
-		
 		launchGameButton.setTranslateX(250);
 		launchGameButton.setTranslateY(300);
 		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(launchGameButton);
 		
+		
+		// Add button to view game controls
+		// Clicking this button will redirect the user to a page with the game controls described
 		Button viewControlsButton = new Button("Controls");
 		viewControlsButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -95,30 +111,30 @@ public class SceneController {
 				}	
 			}
 		});
-		
 		viewControlsButton.setTranslateX(275);
 		viewControlsButton.setTranslateY(400);
 		viewControlsButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(viewControlsButton);
 		
-		// Put welcome screen onto the main screen
+		
+		// Show the welcome screen to the user
 		stage.setScene(scene);
 		stage.show();
 	}
 	
+	
+	// Method that displays the controls screen to the user
+	// Users can view the buttons they need to press to interact with the game on this screen
 	public void switchToControlsScreen() throws IOException {
-		// Generate the controls screen
+		// Generates the controls screen
 		root = new Pane();
 		scene = new Scene(root);
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
-		// Add styling to the controls screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
+		// Adds styling to the controls screen
 		scene.getStylesheets().add(css);
 		
-		// Add the controls screen to the window and show the window
-		stage.setScene(scene);
-		
+		// Adds a title to the game controls screen
 		Text controlsText = new Text("Game Controls");
 		controlsText.setTranslateX(250);
 		controlsText.setTranslateY(100);
@@ -126,7 +142,7 @@ public class SceneController {
 		controlsText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(controlsText);
 		
-		// Add controls
+		// Adds controls
 		// Rotate the ship anti-clockwise
 		Control leftArrowKey = new Control("LEFT ARROW KEY (<-): Press and hold the left arrow key to rotate the ship in an anti-clockwise direction");
 		leftArrowKey.setTranslateX(50);
@@ -158,7 +174,8 @@ public class SceneController {
 		root.getChildren().add(sKey);
 		
 		
-		// Adds buttons to the screen to switch scenes
+		// Adds button to launch the game
+		// Clicking this button will launch the level screen with "Level 1" before the game starts
 		Button launchGameButton = new Button("Begin Game");
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -177,6 +194,9 @@ public class SceneController {
 		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(launchGameButton);
 		
+		
+		// Adds button to return to the main menu screen
+		// Clicking this button will return the user to the welcome screen that was displayed to the user when they first launched the application
 		Button returnToWelcomeButton = new Button("Return to Main Menu");
 		returnToWelcomeButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -195,6 +215,9 @@ public class SceneController {
 		returnToWelcomeButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(returnToWelcomeButton);
 		
+		
+		// Add the controls screen to the window and show the window
+		stage.setScene(scene);
 	}
 	
 	
@@ -206,109 +229,25 @@ public class SceneController {
 		scene = new Scene(root);
 		
 		// Adds styling to the game screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
-		// Creates the player ship and place it in the centre of the screen
-		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		// Creates the player ship and places it in the centre of the screen
+		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);	
 		root.getChildren().add(playerShip.getCharacter());
 		
-		
+		// Spawns the enemy ship at either end of the screen
+		// The spawn location of the ship is random (either left or right)
 		int a2 = 850;
         int b2 = -50;
 		int randInt3 = new Random().nextBoolean() ? a2 : b2;
 		
 		Random r = new Random();
 		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
-
-
 		
-		
-		enemyship enemyship = new enemyship(randInt3,randInt);
+		// Spawns the enemy ship and adds it to the screen
+		enemyship enemyship = new enemyship(randInt3, randInt);
 		root.getChildren().add(enemyship.getCharacter());
-		
-		
-		
-		
-//		// Creates integer representing the number of asteroids that are spawned
-//		int numAsteroids = 10;
-//		
-//		// Creates an array to store the asteroids that are present on the screen
-//		AsteroidMedium[] asteroids = new AsteroidMedium[numAsteroids];
-//
-//		// Creates a group for the asteroids
-//		Group[] groups = new Group[numAsteroids];
-//
-//		// Creates a rotate transition for the asteroids
-//		RotateTransition[] rotateTransitions = new RotateTransition[numAsteroids];
-//		
-//		// Loops through each asteroid on the screen
-//		for (int i = 0; i < numAsteroids; i++) {
-//		
-//			// Generates a random number between 0 and 10
-
-//			
-//			// Generates a random integer which will either be 850 or -50
-
-//				 
-//			// Adds each asteroid to the asteroids array
-//		    asteroids[i] = new AsteroidMedium(randInt3, SCREENHEIGHT / randInt);
-//		    final int x3 = i;
-//
-//		    // Adds the asteroid to a group object and adds this to the groups array
-//	        groups[i] = new Group(asteroids[i]);
-//	        
-//	        // Creates an animation timer to handle the movement and collisions
-//	        AnimationTimer timer = new AnimationTimer(){
-//	        	
-//	            @Override
-//	            public void handle(long now) {
-//	            	
-//	            	// Moves the asteroid
-//	                asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + randInt2);
-//	                asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + randInt2);
-//	                
-//	                
-//	                // Puts the asteroid back on the screen if it exits the screen
-//	                if (asteroids[x3].getTranslateX() < 0) {
-//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
-//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
-//	                }
-//	                if (asteroids[x3].getTranslateY() < 0) {
-//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() + 850);
-//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() + 850);
-//	                }
-//	                
-//	                if (asteroids[x3].getTranslateX() > SCREENWIDTH) {
-//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
-//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
-//	                }
-//	                
-//	                if (asteroids[x3].getTranslateY() > SCREENHEIGHT) {
-//	                    asteroids[x3].setTranslateX(asteroids[x3].getTranslateX() - 850);
-//	                    asteroids[x3].setTranslateY(asteroids[x3].getTranslateY() - 850);
-//	                }
-//	                
-//	                Shape intersect = Shape.intersect(playerShip.getCharacter(), asteroids[x3]);
-//	
-//	                if(intersect.getBoundsInLocal().getWidth() != -1) {
-//	                	root.getChildren().remove(playerShip.getCharacter());
-//	                }
-//	            }
-//	        };
-//	
-//	        timer.start();
-//	               
-//	        rotateTransitions[i] = new RotateTransition();
-//	        rotateTransitions[i].setDuration(Duration.seconds(5.0));
-//	        rotateTransitions[i].setNode(asteroids[x3]); 
-//	        rotateTransitions[i].setCycleCount(Timeline.INDEFINITE);
-//	        rotateTransitions[i].setByAngle(360);
-//	        rotateTransitions[i].play();
-//	        
-//	        // Add objects to scene
-//			root.getChildren().add(asteroids[i]);
-//		}
+		enemyship.accelerateSlow();
 		
 		// Creates the asteroids arrays
 		List<Asteroid> largeAsteroids = new ArrayList<>();
@@ -327,7 +266,7 @@ public class SceneController {
 		// Adds an empty bullet list
 		List<Bullet> bullets = new ArrayList<>();
 		
-	
+		// Creates an array to store all of the asteroids
 		List<Asteroid> completeAsteroids = new ArrayList<>();	
 		completeAsteroids.addAll(largeAsteroids);
 		completeAsteroids.addAll(medAsteroids);
@@ -335,35 +274,25 @@ public class SceneController {
 		
 
 		
+//		double safeSpaceX;
+//		double safeSpaceY;
+//		Ship playerShip;
+//		
+//		do {
+//		    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+//		    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+//		    playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);	
+//		    }
+//		while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
 		
 		
 		
 		
 		
-		
-		
-		
-		// Add the game screen to the window and show the window
+		// Adds the game screen to the window and show the window
 		stage.setScene(scene);
 		
-		// Adds buttons to the screen to switch scenes (temporary, in the final version, the scene will be switched once the player dies)
-//		Button switchLevelButton = new Button("View Level Screen");
-//		switchLevelButton.setOnAction(new EventHandler<ActionEvent>() {
-//
-//			@Override
-//			public void handle(ActionEvent arg0) {
-//				try {
-//					switchToLevelScreen(stage);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}	
-//			}
-//		});
-//		
-//		switchLevelButton.setTranslateX(620);
-//		switchLevelButton.setTranslateY(0);
-//		root.getChildren().add(switchLevelButton);
-		
+		// Adds button to end the game (temporary to test scene switching, we will want the game to end when the player runs out of lives)
 		Button switchToGameOverScreenButton = new Button("End game");
 		switchToGameOverScreenButton.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -381,8 +310,10 @@ public class SceneController {
 		switchToGameOverScreenButton.setTranslateY(0);
 		root.getChildren().add(switchToGameOverScreenButton);
 		
+		
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
+		
 		
 		// Add onKeyPressed events to trigger certain events (shooting, turning etc.)
 		stage.getScene().setOnKeyPressed(e -> {
@@ -417,35 +348,28 @@ public class SceneController {
 				// Accelerate when the user presses the up arrow key
 				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
 		            playerShip.accelerate();
-		        }
-		;
+		        };
 		
 		
-		int hyperCounter ;
+		        int hyperCounter;
 		
 			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
 			    	for (hyperCounter = 0; hyperCounter < completeAsteroids.size(); hyperCounter++) {
-			    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-				    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+				    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+					    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
 				    
-				    
-				    do {
-				    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-				    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
-				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
-				    }
-					while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
+					    do {
+						    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+						    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+						    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+					    }
+						while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
 					
-				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+					    playerShip.hyperspace(safeSpaceX,safeSpaceY);
 			    	
-					lastHyperSpaceJump = now;
-			 
-			    } 
+					    lastHyperSpaceJump = now;
+			    	} 
 			    }
-		
-			    
-			    
-			  
 			    
 				
 				// Fire a bullet when the user presses SPACE
@@ -463,20 +387,10 @@ public class SceneController {
 				    lastBulletUpdate = now;
 
 				}
-				
-				
-			
-					enemyship.accelerateSlow();
 					
-					enemyship.move();
-					
-	    
-					
-					
-					
-				
 				// Enables game characters to move
 				playerShip.move();
+				enemyship.move();
 		        largeAsteroids.forEach(asteroid -> asteroid.move());
 		        medAsteroids.forEach(asteroid -> asteroid.move());
 		        smallAsteroids.forEach(asteroid -> asteroid.move());
@@ -485,14 +399,11 @@ public class SceneController {
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
 		        	
-            if(bullet.collide(enemyship)) {
-	                	
-            	root.getChildren().remove(enemyship.getCharacter());
-            	
-	                 
-	                }
-					
-		        	
+			        if(bullet.collide(enemyship)) {
+			        	root.getChildren().remove(enemyship.getCharacter()); 	
+			        }
+						
+			        	
 		        	// Collision with large asteroids
 		            largeAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
@@ -505,8 +416,8 @@ public class SceneController {
 		                    spawnAsteroids(asteroid, "Medium", medAsteroids);
 		                }
 		            });
-		            
-		            
+			            
+			            
 		            // Collision with medium asteroids
 		            medAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
@@ -519,8 +430,8 @@ public class SceneController {
 		                    spawnAsteroids(asteroid, "Small", smallAsteroids);
 		                }
 		            });
-		            
-		            
+			            
+			            
 		            // Collision with small asteroids
 		            smallAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
@@ -528,6 +439,7 @@ public class SceneController {
 		                    asteroid.setAlive(false);
 		                }
 		            });
+		            
 		        });
 
 		        // Removes bullets that are not alive from the bullets list
@@ -552,7 +464,8 @@ public class SceneController {
 		        // Removes asteroids that are not alive from the smallAsteroids list
 		        removeDeadAsteroids(smallAsteroids);
 		        
-		        // Checks if the game is over
+		        // Checks if all asteroids have been destroyed
+		        // If this is the case, the player will move onto the next level
 		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
 //		        	System.out.println("Next level");
 		        	try {
@@ -560,29 +473,23 @@ public class SceneController {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+		        	
+		        	// Stops the animation timer
 		        	stop();
 		        }
-
-//		        // Handles collision between the ship and the largeAsteroids
-//		        largeAsteroids.forEach(asteroid -> {
-//		            if (playerShip.collide(asteroid)) {	
-//		            	stop();
-//		            }
-//		        });
 			}
-//			private void While(boolean b) {
-//				// TODO Auto-generated method stub
-//				
-//			}
 			
 		}.start();
 		
+		// Displays the game screen
 		stage.show();
 		
 		// Request focus on the player ship, so that it will react to key events
 		playerShip.getCharacter().requestFocus();
 	}
 	
+	
+	// Method for spawning two new asteroids when an asteroid has been hit
 	public void spawnAsteroids(Asteroid asteroid, String size, List<Asteroid> asteroidArray) {
 		// Spawn two new asteroids
     	for (int i = 0; i < 2; i++) {
@@ -592,6 +499,8 @@ public class SceneController {
 		} 
 	}
 	
+	// Method to remove all dead bullets from the screen
+	// Dead bullets are ones that have either hit an asteroid or have travelled too far
 	public void removeDeadBullets(List<Bullet> bullets) {
 		// Isolate dead characters
 		bullets.stream()
@@ -604,6 +513,8 @@ public class SceneController {
 				.collect(Collectors.toList()));
 	}
 	
+	
+	// Method to remove all dead asteroids from the screen
 	public void removeDeadAsteroids(List<Asteroid> asteroids) {
 		asteroids.stream()
 		        .filter(asteroid -> !asteroid.isAlive())
@@ -615,16 +526,15 @@ public class SceneController {
 	
 	
 	public void switchToGameOverScreen() throws IOException {
-		// Generate the game over screen
+		// Generates the game over screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		scene = new Scene(root);
 		
-		// Add styling to the welcome screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
+		// Adds styling to the screen
 		scene.getStylesheets().add(css);
 		
-		// Add the welcome screen to the window and show the window
+		// Adds the screen to the window and show the window
 		stage.setScene(scene);
 		
 		// Add game over text
@@ -635,7 +545,7 @@ public class SceneController {
 		gameOver.setFill(Color.WHITE);
 		root.getChildren().add(gameOver);
 		
-		// Add press enter to continue text
+		// Adds press enter to continue text
 		Text continueText = new Text("Press Enter to continue");
 		continueText.setTranslateX(275);
 		continueText.setTranslateY(400);
@@ -663,7 +573,6 @@ public class SceneController {
 		scene = new Scene(root);
 		
 		// Add styling to the welcome screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add the welcome screen to the window and show the window
@@ -708,7 +617,6 @@ public class SceneController {
 		stage.setScene(scene);
 		
 		// Add styling to the welcome screen
-//		String css = this.getClass().getResource("application.css").toExternalForm();
 		scene.getStylesheets().add(css);
 		
 		// Add high score title

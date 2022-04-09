@@ -5,7 +5,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
 
-//Reference: https://www.youtube.com/watch?v=9XJicRt_FaI
+// Class for launching our application for the first time
+// After the game window is created, the responsibility of managing the game's content is passed over to the ScreenController class
 public class Main extends Application {
 	
 	// Main method which launches our application
@@ -13,6 +14,8 @@ public class Main extends Application {
 		launch(args);
 	}
 	
+	// Method which creates the game window
+	// Adds the title of our application and our logo
 	public Stage createWindow(Stage stage) {
 		// Creates the window
 		// Adds image to the window
@@ -26,8 +29,8 @@ public class Main extends Application {
 		return stage;
 	}
 
-	// Method for creating our first screen
-	// A stage variable is passed as an input, which represents the window on which we will view our application
+	// Method for instantiating an instance of the SceneController class
+	// Once SceneController has been instantiated, this instance manages the game content
 	@Override
 	public void start(Stage stage) throws Exception {
 		
@@ -36,7 +39,6 @@ public class Main extends Application {
 		
 		// Creates an instance of the screen controller class to generate the welcome screen
 		new SceneController(stage);
-//		sceneController.switchToWelcomeScreen();
 		
 	}
 }
