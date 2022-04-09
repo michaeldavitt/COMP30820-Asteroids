@@ -57,17 +57,6 @@ public abstract class Character {
 		return true;
 	}
 	
-	
-
-	
-//	public void hyperspaceComplete() {
-//		
-//		this.character.setFill(Color.WHITE);
-//	
-//		
-//		
-//	}
-	
 	// Get distance travelled
 	public double getDistanceTravelled() {
 		return this.distanceTravelled;

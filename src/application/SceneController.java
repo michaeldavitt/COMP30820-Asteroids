@@ -547,7 +547,7 @@ public class SceneController {
 		        
 		        // Checks if all asteroids have been destroyed
 		        // If this is the case, the player will move onto the next level
-		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0) {
+		        if (smallAsteroids.size() == 0 && medAsteroids.size() == 0 && largeAsteroids.size() == 0 && enemyShips.size() == 0) {
 		        	try {
 						switchToLevelScreen();
 					} catch (IOException e) {
@@ -727,15 +727,16 @@ public class SceneController {
 		userInput.setTranslateY(300);
 		root.getChildren().add(userInput);
 		
-		// Extract the user's input and use it to create a score object
-//		String username = userInput.getText();
 		
 		// Add a key event which switches to the view high scores screen when the user presses enter
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
 			if (e.getCode() == KeyCode.ENTER) {
 				try {
-					switchToViewHighScoreScreen();
+					// Extract the user's input and use it to create a score object
+					String username = userInput.getText();
+					System.out.println(username);
+					switchToViewHighScoreScreen(username);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
@@ -743,7 +744,7 @@ public class SceneController {
 		});
 	}
 	
-	public void switchToViewHighScoreScreen() throws IOException {
+	public void switchToViewHighScoreScreen(String username) throws IOException {
 		// Generate the welcome screen
 		root = new Pane();
 		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
@@ -766,7 +767,7 @@ public class SceneController {
 		// Add high scores to the screen
 		// Create scores object and new user score
 		ScoresList scores = new ScoresList();
-		Score newScore = new Score("TRK", 5000);
+		Score newScore = new Score(username, score.intValue());
 		
 		// Update scores with new score
 		scores.updateHighScore(newScore);
