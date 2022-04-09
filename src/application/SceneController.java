@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -37,6 +38,7 @@ public class SceneController {
 	public static final int SCREENWIDTH = 800;
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
+	private AtomicInteger score;
 	
 	
 	// Constructor for the scene controller
@@ -60,6 +62,9 @@ public class SceneController {
 	public void switchToWelcomeScreen() throws IOException {
 		// Resets current level to 0 before the user starts playing
 		currentLevel = 0;
+		
+		// Resets score to 0
+		score = new AtomicInteger();
 		
 		// Create the welcome screen
 		root = new Pane(); // Root node onto which we will add objects
@@ -231,9 +236,12 @@ public class SceneController {
 		// Adds styling to the game screen
 		scene.getStylesheets().add(css);
 		
-		// Creates the player ship and places it in the centre of the screen
-		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);	
-		root.getChildren().add(playerShip.getCharacter());
+		// Adds the player's score to the screen
+		Text pointsTally = new Text(10, 20, "Points: " + score);
+		pointsTally.setFill(Color.WHITE);
+		pointsTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+	    root.getChildren().add(pointsTally);
+	    
 		
 		// Spawns the enemy ship at either end of the screen
 		// The spawn location of the ship is random (either left or right)
@@ -272,6 +280,17 @@ public class SceneController {
 		enemyCharacters.addAll(medAsteroids);
 		enemyCharacters.addAll(smallAsteroids);
 		enemyCharacters.add(enemyShip);
+		
+		// Spawn the playerShip
+		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		spawnPlayerShip(playerShip, enemyCharacters);
+		root.getChildren().add(playerShip.getCharacter());
+		
+		// Adds the player's health to the screen
+	    Text playerHealthTally = new Text(10, 40, "Lives Remaining: " + playerShip.getLives());
+	    playerHealthTally.setFill(Color.WHITE);
+	    playerHealthTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+	    root.getChildren().add(playerHealthTally);
 		
 		// Adds the game screen to the window and show the window
 		stage.setScene(scene);
@@ -381,7 +400,9 @@ public class SceneController {
 		        bullets.forEach(bullet -> {
 		        	
 			        if(bullet.collide(enemyShip)) {
-			        	root.getChildren().remove(enemyShip.getCharacter()); 	
+			        	bullet.setAlive(false);
+			        	pointsTally.setText("Points: " + score.addAndGet(500));
+			        	root.getChildren().remove(enemyShip.getCharacter());
 			        }
 						
 			        	
@@ -391,6 +412,7 @@ public class SceneController {
 		                	
 		                	// Change alive status of bullet and hit asteroid
 		                    bullet.setAlive(false);
+		                    pointsTally.setText("Points: " + score.addAndGet(100));
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn two new medium asteroids
@@ -405,6 +427,7 @@ public class SceneController {
 		                	
 		                	// Change alive status of bullet and asteroid
 		                    bullet.setAlive(false);
+		                    pointsTally.setText("Points: " + score.addAndGet(200));
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn new small asteroids
@@ -417,6 +440,7 @@ public class SceneController {
 		            smallAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
 		                    bullet.setAlive(false);
+		                    pointsTally.setText("Points: " + score.addAndGet(300));
 		                    asteroid.setAlive(false);
 		                }
 		            });
@@ -432,6 +456,9 @@ public class SceneController {
 		        		
 		        		// Spawn new medium asteroids
 		        		spawnAsteroids(asteroid, "Medium", medAsteroids);
+		        		
+		        		// Decrease player health
+		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        		
 		        		// Spawn player ship in a safe location
 		        		List<Character> enemyCharacters = new ArrayList<>();	
@@ -452,6 +479,9 @@ public class SceneController {
 		        		// Spawn new small asteroids
 		        		spawnAsteroids(asteroid, "Small", smallAsteroids);
 		        		
+		        		// Decrease player health
+		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
+		        		
 		        		// Spawn player ship in a safe location
 		        		List<Character> enemyCharacters = new ArrayList<>();	
 						enemyCharacters.addAll(largeAsteroids);
@@ -468,6 +498,9 @@ public class SceneController {
 		        		playerShip.decrementLives();
 		        		asteroid.setAlive(false);
 		        		
+		        		// Decrease player health
+		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
+		        		
 		        		// Spawn player ship in a safe location
 		        		List<Character> enemyCharacters = new ArrayList<>();	
 						enemyCharacters.addAll(largeAsteroids);
@@ -482,6 +515,9 @@ public class SceneController {
 		        if (playerShip.collide(enemyShip)) {
 		        	playerShip.decrementLives();
 		        	enemyShip.setAlive(false);
+		        	
+		        	// Decrease player health
+	        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        	
 		        	// Spawn player ship in a safe location
 	        		List<Character> enemyCharacters = new ArrayList<>();	
