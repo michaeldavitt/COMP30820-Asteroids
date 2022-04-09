@@ -213,6 +213,23 @@ public class SceneController {
 		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		root.getChildren().add(playerShip.getCharacter());
 		
+		
+		int a2 = 850;
+        int b2 = -50;
+		int randInt3 = new Random().nextBoolean() ? a2 : b2;
+		
+		Random r = new Random();
+		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
+
+
+		
+		
+		enemyship enemyship = new enemyship(randInt3,randInt);
+		root.getChildren().add(enemyship.getCharacter());
+		
+		
+		
+		
 //		// Creates integer representing the number of asteroids that are spawned
 //		int numAsteroids = 10;
 //		
@@ -229,18 +246,10 @@ public class SceneController {
 //		for (int i = 0; i < numAsteroids; i++) {
 //		
 //			// Generates a random number between 0 and 10
-//			Random r = new Random();
-//			int randInt = r.nextInt(10-1) + 1;
-// 
-//			// Generates a random integer which will either be 1 or -1
-//			int a = 1;
-//	        int b = -1;
-//			int randInt2 = new Random().nextBoolean() ? a : b;
+
 //			
 //			// Generates a random integer which will either be 850 or -50
-//			int a2 = 850;
-//	        int b2 = -50;
-//			int randInt3 = new Random().nextBoolean() ? a2 : b2;
+
 //				 
 //			// Adds each asteroid to the asteroids array
 //		    asteroids[i] = new AsteroidMedium(randInt3, SCREENHEIGHT / randInt);
@@ -318,6 +327,21 @@ public class SceneController {
 		// Adds an empty bullet list
 		List<Bullet> bullets = new ArrayList<>();
 		
+	
+		List<Asteroid> completeAsteroids = new ArrayList<>();	
+		completeAsteroids.addAll(largeAsteroids);
+		completeAsteroids.addAll(medAsteroids);
+		completeAsteroids.addAll(smallAsteroids);
+		
+
+		
+		
+		
+		
+		
+		
+		
+		
 		
 		// Add the game screen to the window and show the window
 		stage.setScene(scene);
@@ -371,14 +395,17 @@ public class SceneController {
 			pressedKeys.put(e.getCode(), Boolean.FALSE);
 		});
 		
-		
+
 		// Main animation timer for defining the reactions to key events
 		new AnimationTimer() {
 
 			// variable that defines how much the ship rotation should change when the user hits LEFT or RIGHT
 			int delta = 3;
+			
+			private long lastBulletUpdate = 0;
+			private long lastHyperSpaceJump = 0;
 			@Override
-			public void handle(long arg0) {
+			public void handle(long now) {
 				if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
 					playerShip.rotateLeft(delta);
 				}
@@ -391,9 +418,38 @@ public class SceneController {
 				if (pressedKeys.getOrDefault(KeyCode.UP, false)) {
 		            playerShip.accelerate();
 		        }
+		;
+		
+		
+		int hyperCounter ;
+		
+			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
+			    	for (hyperCounter = 0; hyperCounter < completeAsteroids.size(); hyperCounter++) {
+			    	double safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+				    double safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+				    
+				    
+				    do {
+				    safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
+				    safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+				    }
+					while(playerShip.isSafeSpawn(completeAsteroids.get(hyperCounter)) == false);
+					
+				    playerShip.hyperspace(safeSpaceX,safeSpaceY);
+			    	
+					lastHyperSpaceJump = now;
+			 
+			    } 
+			    }
+		
+			    
+			    
+			  
+			    
 				
 				// Fire a bullet when the user presses SPACE
-				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && bullets.size() < 1) {
+				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && now - lastBulletUpdate >= 280_000_000) {
 				    // we shoot
 				    Bullet bullet = new Bullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
 				    bullet.getCharacter().setRotate(playerShip.getCharacter().getRotate());
@@ -403,7 +459,21 @@ public class SceneController {
 				    bullet.setMovement(bullet.getMovement().normalize().multiply(4).add(playerShip.getMovement()));
 
 				    root.getChildren().add(bullet.getCharacter());
+				    
+				    lastBulletUpdate = now;
+
 				}
+				
+				
+			
+					enemyship.accelerateSlow();
+					
+					enemyship.move();
+					
+	    
+					
+					
+					
 				
 				// Enables game characters to move
 				playerShip.move();
@@ -414,6 +484,14 @@ public class SceneController {
 		        
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
+		        	
+            if(bullet.collide(enemyship)) {
+	                	
+            	root.getChildren().remove(enemyship.getCharacter());
+            	
+	                 
+	                }
+					
 		        	
 		        	// Collision with large asteroids
 		            largeAsteroids.forEach(asteroid -> {
@@ -492,6 +570,10 @@ public class SceneController {
 //		            }
 //		        });
 			}
+//			private void While(boolean b) {
+//				// TODO Auto-generated method stub
+//				
+//			}
 			
 		}.start();
 		
