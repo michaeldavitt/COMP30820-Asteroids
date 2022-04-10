@@ -254,15 +254,10 @@ public class GameController {
 		List<PlayerBullet> bullets = new ArrayList<>();
 		List<EnemyBullet> enemyBullets = new ArrayList<>();
 		
-		// Creates an array to store all of the asteroids
-    	List<Character> enemyCharacters = new ArrayList<>();	
-		enemyCharacters.addAll(largeAsteroids);
-		enemyCharacters.addAll(medAsteroids);
-		enemyCharacters.addAll(smallAsteroids);
-		enemyCharacters.addAll(enemyShips);
+		// Creates an array to store all of the enemies
+		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		
 		// Spawn the playerShip
-//		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		spawnPlayerShip(playerShip, enemyCharacters);
 		root.getChildren().add(playerShip.getCharacter());
 		
@@ -272,7 +267,6 @@ public class GameController {
 		
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
-		
 		
 		// Add onKeyPressed events to trigger certain events (shooting, turning etc.)
 		stage.getScene().setOnKeyPressed(e -> {
@@ -316,11 +310,7 @@ public class GameController {
 			    if (pressedKeys.getOrDefault(KeyCode.S, false) && now - lastHyperSpaceJump >= 280_000_000){
 			    	
 			    	// Create a list containing all asteroids
-			    	List<Character> enemyCharacters = new ArrayList<>();	
-					enemyCharacters.addAll(largeAsteroids);
-					enemyCharacters.addAll(medAsteroids);
-					enemyCharacters.addAll(smallAsteroids);	
-					enemyCharacters.addAll(enemyShips);
+			    	List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 					
 					// Spawn the player ship and ensure that the player does not collide with asteroids upon spawning
 					spawnPlayerShip(playerShip, enemyCharacters);
@@ -461,11 +451,7 @@ public class GameController {
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        		
 		        		// Spawn player ship in a safe location
-		        		List<Character> enemyCharacters = new ArrayList<>();	
-						enemyCharacters.addAll(largeAsteroids);
-						enemyCharacters.addAll(medAsteroids);
-						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.addAll(enemyShips);
+		        		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        		
 		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -486,11 +472,7 @@ public class GameController {
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        		
 		        		// Spawn player ship in a safe location
-		        		List<Character> enemyCharacters = new ArrayList<>();	
-						enemyCharacters.addAll(largeAsteroids);
-						enemyCharacters.addAll(medAsteroids);
-						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.addAll(enemyShips);
+		        		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        		
 		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -511,11 +493,7 @@ public class GameController {
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        		
 		        		// Spawn player ship in a safe location
-		        		List<Character> enemyCharacters = new ArrayList<>();	
-						enemyCharacters.addAll(largeAsteroids);
-						enemyCharacters.addAll(medAsteroids);
-						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.addAll(enemyShips);
+		        		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        		
 		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -533,11 +511,7 @@ public class GameController {
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 		        		
 		        		// Spawn player ship in a safe location
-		        		List<Character> enemyCharacters = new ArrayList<>();	
-						enemyCharacters.addAll(largeAsteroids);
-						enemyCharacters.addAll(medAsteroids);
-						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.addAll(enemyShips);
+		        		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        		
 		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -555,11 +529,7 @@ public class GameController {
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
 			        	
 			        	// Spawn player ship in a safe location
-		        		List<Character> enemyCharacters = new ArrayList<>();	
-						enemyCharacters.addAll(largeAsteroids);
-						enemyCharacters.addAll(medAsteroids);
-						enemyCharacters.addAll(smallAsteroids);	
-						enemyCharacters.addAll(enemyShips);
+		        		List<Character> enemyCharacters =  getEnemyCharacters(largeAsteroids, medAsteroids, smallAsteroids, enemyShips);
 		        		spawnPlayerShip(playerShip, enemyCharacters);
 		        		
 		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -603,11 +573,20 @@ public class GameController {
 			
 		}.start();
 		
-		// Displays the game screen
-		stage.show();
-		
 		// Request focus on the player ship, so that it will react to key events
 		playerShip.getCharacter().requestFocus();
+	}
+	
+	
+	// Method for getting a list of the enemy characters
+	public List<Character> getEnemyCharacters(List<Asteroid> largeAsteroids, List<Asteroid> medAsteroids, List<Asteroid> smallAsteroids, List<EnemyShip> enemyShips) {
+		List<Character> enemyCharacters = new ArrayList<>();	
+		enemyCharacters.addAll(largeAsteroids);
+		enemyCharacters.addAll(medAsteroids);
+		enemyCharacters.addAll(smallAsteroids);	
+		enemyCharacters.addAll(enemyShips);
+		
+		return enemyCharacters;
 	}
 	
 	
@@ -746,7 +725,7 @@ public class GameController {
 		
 		// Add textfield where the user can type in their username
 		TextField userInput = new TextField();
-		userInput.setTranslateX(100);
+		userInput.setTranslateX(300);
 		userInput.setTranslateY(300);
 		root.getChildren().add(userInput);
 		
@@ -803,9 +782,6 @@ public class GameController {
 	
 	public void switchToViewHighScoreScreen(String username) throws IOException {
 		clearScreen();
-		
-		// Add the welcome screen to the window and show the window
-		
 		
 		// Add high score title
 		GameText highScoresText = new GameText("High Scores", 150, 150, 80);
