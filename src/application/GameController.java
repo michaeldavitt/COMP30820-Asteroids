@@ -286,7 +286,7 @@ public class GameController {
 		largeAsteroids.forEach(asteroid -> root.getChildren().add(asteroid.getCharacter()));
 		
 		// Adds an empty bullet list
-		List<Bullet> bullets = new ArrayList<>();
+		List<PlayerBullet> bullets = new ArrayList<>();
 		List<EnemyBullet> enemyBullets = new ArrayList<>();
 		
 		// Creates an array to store all of the asteroids
@@ -374,7 +374,7 @@ public class GameController {
 				// Fire a bullet when the user presses SPACE
 				if (pressedKeys.getOrDefault(KeyCode.SPACE, false) && now - lastBulletUpdate >= 280_000_000) {
 				    // we shoot
-				    Bullet bullet = new Bullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
+				    PlayerBullet bullet = new PlayerBullet((int) playerShip.getCharacter().getTranslateX(), (int) playerShip.getCharacter().getTranslateY());
 				    bullet.getCharacter().setRotate(playerShip.getCharacter().getRotate());
 				    bullets.add(bullet);
 
@@ -690,7 +690,7 @@ public class GameController {
 	
 	// Method to remove all dead bullets from the screen
 	// Dead bullets are ones that have hit an asteroid
-	public void removeDeadBullets(List<Bullet> bullets) {
+	public void removeDeadBullets(List<PlayerBullet> bullets) {
 		// Isolates bullets that have hit an asteroid
 		bullets.stream()
 			.filter(bullet -> !bullet.isAlive())
