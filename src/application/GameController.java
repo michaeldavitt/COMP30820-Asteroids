@@ -41,7 +41,7 @@ public class GameController {
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
 	private AudioClip explosionSoundEffect;
-	private Ship playerShip;
+	private PlayerShip playerShip;
 	
 	
 	// Constructor for the scene controller
@@ -67,7 +67,7 @@ public class GameController {
 		currentLevel = 0;
 		
 		// Creates new enemy ship and resets score to 0
-		playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		playerShip = new PlayerShip(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		
 		// Create the welcome screen
 		root = new Pane(); // Root node onto which we will add objects
@@ -653,7 +653,7 @@ public class GameController {
 	
 	
 	// Method to spawn the player ship in a safe location
-	public void spawnPlayerShip(Ship playerShip, List<Character> enemyCharacters) {
+	public void spawnPlayerShip(PlayerShip playerShip, List<Character> enemyCharacters) {
 		double safeSpaceX;
 		double safeSpaceY;
 		
