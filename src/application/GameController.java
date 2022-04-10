@@ -35,8 +35,8 @@ public class GameController {
 	private Scene scene;
 	private Pane root;
 	private final String css;
-	public static final int SCREENWIDTH = 800;
-	public static final int SCREENHEIGHT = 600;
+	public static final int SCREEN_WIDTH = 800;
+	public static final int SCREEN_HEIGHT = 600;
 	private int currentLevel = 0;
 	private AudioClip explosionSoundEffect;
 	private PlayerShip playerShip;
@@ -65,7 +65,7 @@ public class GameController {
 		currentLevel = 0;
 		
 		// Creates new player ship and resets score to 0
-		playerShip = new PlayerShip(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+		playerShip = new PlayerShip(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 		
 		// Clears the screen and generates a new screen
 		clearScreen();
@@ -215,25 +215,15 @@ public class GameController {
 		// Adds the player's score to the screen
 		GameText pointsTally = new GameText("Points: " + playerShip.getScore(), 10, 40, 24);
 	    root.getChildren().add(pointsTally);
-	    
-		
-		// Spawns the enemy ship at either end of the screen
-		// The spawn location of the ship is random (either left or right)
-		int a2 = 850;
-        int b2 = -50;
-		int randInt3 = new Random().nextBoolean() ? a2 : b2;
-		
-		Random r = new Random();
-		int randInt = r.nextInt(SCREENHEIGHT-1) + 1;
 		
 		// Spawns the enemy ship and adds it to the screen
 		List<EnemyShip> enemyShips = new ArrayList<>();
-		EnemyShip enemyShip = new EnemyShip(randInt3, randInt);
+		EnemyShip enemyShip = spawnEnemyShip();
 		
 		enemyShips.add(enemyShip);
 		enemyShips.forEach(enemy -> {
 			root.getChildren().add(enemy.getCharacter());
-			enemyShip.accelerateSlow();
+			enemy.accelerateSlow();
 		});
 		
 		// Creates the asteroids arrays
@@ -243,7 +233,7 @@ public class GameController {
 		
 		for (int i = 0; i < currentLevel; i++) {
 		    Random rnd = new Random();
-		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREENWIDTH), rnd.nextInt(SCREENHEIGHT), "Large");
+		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREEN_WIDTH), rnd.nextInt(SCREEN_HEIGHT), "Large");
 		    largeAsteroids.add(asteroid);
 		}
 
@@ -599,8 +589,8 @@ public class GameController {
 		do {
 			
 			// Try spawn the player in a random location on the screen and set safe spawn = true
-			safeSpaceX = Math.random() * (GameController.SCREENWIDTH - 400.0) + 200.0;
-			safeSpaceY = Math.random() * (GameController.SCREENHEIGHT - 200.00) + 100.0;
+			safeSpaceX = Math.random() * (GameController.SCREEN_WIDTH - 400.0) + 200.0;
+			safeSpaceY = Math.random() * (GameController.SCREEN_HEIGHT - 200.00) + 100.0;
 			playerShip.hyperspace(safeSpaceX, safeSpaceY);
 			playerShip.setSafelySpawned(true);
 			
@@ -614,6 +604,24 @@ public class GameController {
 		}
 		while(!playerShip.isSafelySpawned());
 		
+	}
+	
+	// Method for spawning the enemy ship at a random side of the screen
+	public EnemyShip spawnEnemyShip() {
+		// Spawns the enemy ship at either end of the screen
+		// The spawn location of the ship is random (either left or right)
+		int rightSpawn = SCREEN_WIDTH + 50;
+        int leftSpawn = SCREEN_WIDTH - 50;
+		int spawnDirection = new Random().nextBoolean() ? rightSpawn : leftSpawn;
+		
+		// The Y-Axis spawn is also random (between 1 and the screen height)
+		Random r = new Random();
+		int randInt = r.nextInt(SCREEN_HEIGHT-1) + 1;
+		
+		// Create an enemy ship which spawns in the random location selected above
+		EnemyShip enemyShip = new EnemyShip(spawnDirection, randInt);
+		
+		return enemyShip;
 	}
 	
 	// Method for spawning two new asteroids when an asteroid has been hit
@@ -860,7 +868,7 @@ public class GameController {
 	public void clearScreen() {
 		// Generate the screen
 		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
+		root.setPrefSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		scene = new Scene(root);
 		
 		// Add styling to the screen
