@@ -1,16 +1,20 @@
 package application;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import javafx.scene.shape.Polygon;
 
 public class Ship extends Character {
 
 	private int lives;
+	private AtomicInteger score;
 	private Boolean safelySpawned;
 	
     public Ship(int x, int y) {
         super(new Polygon(-20, 0, 10, 10, 10, -10), x, y);
-        this.lives = 3;
-        this.safelySpawned = true;
+        this.setLives(3);
+        this.setSafelySpawned(true);
+        this.score = new AtomicInteger();
     }
     
     // Method to get the number of lives that the ship has left
@@ -18,9 +22,25 @@ public class Ship extends Character {
     	return this.lives;
     }
     
+    // Method to set the number of lives that the ship starts with
+    // Private so that this can only be done within the ship class
+    private void setLives(int lives) {
+    	this.lives = lives;
+    }
+    
     // Method to decrease the number of lives the ship has
     public void decrementLives() {
     	this.lives -= 1;
+    }
+    
+    // Method to get the player's current score
+    public AtomicInteger getScore() {
+    	return this.score;
+    }
+    
+    // Method to increase the player's score
+    public void increaseScore(int scoreIncrease) {
+    	this.score.addAndGet(scoreIncrease);
     }
     
     // Method to set if the player has safely spawned or not

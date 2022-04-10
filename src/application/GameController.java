@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 
@@ -41,8 +40,8 @@ public class GameController {
 	public static final int SCREENWIDTH = 800;
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
-	private AtomicInteger score;
 	private AudioClip explosionSoundEffect;
+	private Ship playerShip;
 	
 	
 	// Constructor for the scene controller
@@ -67,8 +66,8 @@ public class GameController {
 		// Resets current level to 0 before the user starts playing
 		currentLevel = 0;
 		
-		// Resets score to 0
-		score = new AtomicInteger();
+		// Creates new enemy ship and resets score to 0
+		playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		
 		// Create the welcome screen
 		root = new Pane(); // Root node onto which we will add objects
@@ -247,7 +246,7 @@ public class GameController {
 	    root.getChildren().add(currentLevelText);
 	    
 		// Adds the player's score to the screen
-		Text pointsTally = new Text(10, 40, "Points: " + score);
+		Text pointsTally = new Text(10, 40, "Points: " + playerShip.getScore());
 		pointsTally.setFill(Color.WHITE);
 		pointsTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 	    root.getChildren().add(pointsTally);
@@ -298,7 +297,7 @@ public class GameController {
 		enemyCharacters.addAll(enemyShips);
 		
 		// Spawn the playerShip
-		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
+//		Ship playerShip = new Ship(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		spawnPlayerShip(playerShip, enemyCharacters);
 		root.getChildren().add(playerShip.getCharacter());
 		
@@ -431,7 +430,8 @@ public class GameController {
 		        		if(bullet.collide(enemy)) {
 				        	bullet.setAlive(false);
 				        	enemy.setAlive(false);
-				        	pointsTally.setText("Points: " + score.addAndGet(500));
+				        	playerShip.increaseScore(500);
+				        	pointsTally.setText("Points: " + playerShip.getScore());
 				        	
 				        	explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
 		                    explosionSoundEffect.play();
@@ -445,7 +445,8 @@ public class GameController {
 		                	
 		                	// Change alive status of bullet and hit asteroid
 		                    bullet.setAlive(false);
-		                    pointsTally.setText("Points: " + score.addAndGet(100));
+		                    playerShip.increaseScore(100);
+		                    pointsTally.setText("Points: " + playerShip.getScore());
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn two new medium asteroids
@@ -463,7 +464,8 @@ public class GameController {
 		                	
 		                	// Change alive status of bullet and asteroid
 		                    bullet.setAlive(false);
-		                    pointsTally.setText("Points: " + score.addAndGet(200));
+		                    playerShip.increaseScore(200);
+		                    pointsTally.setText("Points: " + playerShip.getScore());
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn new small asteroids
@@ -479,7 +481,8 @@ public class GameController {
 		            smallAsteroids.forEach(asteroid -> {
 		                if(bullet.collide(asteroid)) {
 		                    bullet.setAlive(false);
-		                    pointsTally.setText("Points: " + score.addAndGet(300));
+		                    playerShip.increaseScore(300);
+		                    pointsTally.setText("Points: " + playerShip.getScore());
 		                    asteroid.setAlive(false);
 		                    
 		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
@@ -892,7 +895,7 @@ public class GameController {
 		// Add high scores to the screen
 		// Create scores object and new user score
 		ScoresList scores = new ScoresList();
-		Score newScore = new Score(username, score.intValue());
+		Score newScore = new Score(username, playerShip.getScore().intValue());
 		
 		// Update scores with new score
 		scores.updateHighScore(newScore);
