@@ -289,6 +289,7 @@ public class SceneController {
 		
 		// Adds an empty bullet list
 		List<Bullet> bullets = new ArrayList<>();
+		List<EnemyBullet> enemyBullets = new ArrayList<>();
 		
 		// Creates an array to store all of the asteroids
     	List<Character> enemyCharacters = new ArrayList<>();	
@@ -336,6 +337,8 @@ public class SceneController {
 			
 			private long lastBulletUpdate = 0;
 			private long lastHyperSpaceJump = 0;
+			private long lastEnemyShot = 0;
+			
 			@Override
 			public void handle(long now) {
 				if (pressedKeys.getOrDefault(KeyCode.LEFT, false)) {
@@ -388,6 +391,30 @@ public class SceneController {
 				    lastBulletUpdate = now;
 
 				}
+				
+				// Get the enemy ship to fire a bullet
+				enemyShips.forEach(enemy -> {
+					if (now - lastEnemyShot >= 1080_000_000 && enemy.isAlive()) {
+						// Get the change in x divided by the change in y = slope formula
+						double deltaX = (playerShip.getCharacter().getTranslateX() - enemy.getCharacter().getTranslateX());
+						double deltaY = (enemy.getCharacter().getTranslateY() - playerShip.getCharacter().getTranslateY());
+						double shootingDirection = Math.toDegrees(Math.atan2(deltaY, deltaX));
+						
+						EnemyBullet bullet = new EnemyBullet((int) enemy.getCharacter().getTranslateX(), (int) enemy.getCharacter().getTranslateY());
+						bullet.getCharacter().setRotate(shootingDirection);
+						enemyBullets.add(bullet);
+						
+						bullet.accelerate();
+					    bullet.setMovement(bullet.getMovement().normalize().multiply(4));
+
+					    root.getChildren().add(bullet.getCharacter());
+					    
+					    AudioClip shootingSoundEffect = new AudioClip(getClass().getResource("shooting.mp3").toExternalForm());
+					    shootingSoundEffect.play();
+					    
+					    lastEnemyShot = now;
+					}
+				});
 					
 				// Enables game characters to move
 				playerShip.move();
@@ -396,6 +423,7 @@ public class SceneController {
 		        medAsteroids.forEach(asteroid -> asteroid.move());
 		        smallAsteroids.forEach(asteroid -> asteroid.move());
 		        bullets.forEach(bullet -> bullet.move());
+		        enemyBullets.forEach(bullet -> bullet.move());
 		        
 		        // Changes the is alive status of the asteroid and the bullet when the bullet hits the asteroid
 		        bullets.forEach(bullet -> {
@@ -462,6 +490,27 @@ public class SceneController {
 		            
 		        });
 		        
+		        // Player gets shot
+		        enemyBullets.forEach(bullet -> {
+		        	if (playerShip.collide(bullet)) {
+		        		playerShip.decrementLives();
+		        		bullet.setAlive(false);
+		        		
+		        		// Decrease player's health
+		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
+		        		
+		        		// Spawn player ship in a safe location
+		        		List<Character> enemyCharacters = new ArrayList<>();	
+						enemyCharacters.addAll(largeAsteroids);
+						enemyCharacters.addAll(medAsteroids);
+						enemyCharacters.addAll(smallAsteroids);	
+						enemyCharacters.addAll(enemyShips);
+		        		spawnPlayerShip(playerShip, enemyCharacters);
+		        		
+		        		explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
+	                    explosionSoundEffect.play();
+		        	}
+		        });
 		        
 		        // Collision between player ship and large asteroid
 		        largeAsteroids.forEach(asteroid -> {
@@ -560,6 +609,7 @@ public class SceneController {
 
 		        // Removes dead items from the screen
 		        removeDeadBullets(bullets);
+		        removeDeadEnemyBullets(enemyBullets);
 		        removeDeadAsteroids(largeAsteroids);
 		        removeDeadAsteroids(medAsteroids);
 		        removeDeadAsteroids(smallAsteroids);
@@ -639,6 +689,28 @@ public class SceneController {
 	// Method to remove all dead bullets from the screen
 	// Dead bullets are ones that have hit an asteroid
 	public void removeDeadBullets(List<Bullet> bullets) {
+		// Isolates bullets that have hit an asteroid
+		bullets.stream()
+			.filter(bullet -> !bullet.isAlive())
+        	.forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+		
+		// Removes bullets that have hit an asteroid
+		bullets.removeAll(bullets.stream()
+			.filter(bullet -> !bullet.isAlive())
+			.collect(Collectors.toList()));
+		
+		// Removes bullets that have travelled too far
+        bullets.stream()
+        	.filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+        	.forEach(bullet -> root.getChildren().remove(bullet.getCharacter()));
+        
+        // Removes bullets that have travelled too far
+        bullets.removeAll(bullets.stream()
+	        .filter(bullet -> bullet.getDistanceTravelled() > bullet.getMaxDistance())
+	        .collect(Collectors.toList()));
+	}
+	
+	public void removeDeadEnemyBullets(List<EnemyBullet> bullets) {
 		// Isolates bullets that have hit an asteroid
 		bullets.stream()
 			.filter(bullet -> !bullet.isAlive())

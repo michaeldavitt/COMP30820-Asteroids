@@ -2,6 +2,7 @@ package application;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -28,6 +29,11 @@ public class Main extends Application {
 		// Adds background music
 		Media backgroundMusic = new Media(getClass().getResource("background_music.mp3").toExternalForm());
 		mediaPlayer = new MediaPlayer(backgroundMusic);
+		mediaPlayer.setOnEndOfMedia(new Runnable() {
+			public void run() {
+				mediaPlayer.seek(Duration.ZERO);
+			};
+		});
 		mediaPlayer.play();
 		
 		// Adds title to the window and makes it re-sizable
