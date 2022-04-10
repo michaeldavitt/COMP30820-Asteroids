@@ -827,7 +827,7 @@ public class GameController {
 					// Extract the user's input and use it to create a score object
 					String username = userInput.getText();
 					if (validUserInput(username)) {
-						switchToViewHighScoreScreen(username);
+						switchToViewHighScoreScreen(username.toUpperCase());
 					} else {
 						switchToEnterNameScreen();
 					}
