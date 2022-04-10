@@ -52,7 +52,7 @@ public class Main extends Application {
 		stage = createWindow(stage);
 		
 		// Creates an instance of the screen controller class to generate the welcome screen
-		new SceneController(stage);
+		new GameController(stage);
 		
 	}
 }

@@ -80,19 +80,19 @@ public abstract class Character {
 
 	    // Ensures that the character stays within the screen
 	    if (this.character.getTranslateX() < 0) {
-	        this.character.setTranslateX(this.character.getTranslateX() + SceneController.SCREENWIDTH);
+	        this.character.setTranslateX(this.character.getTranslateX() + GameController.SCREENWIDTH);
 	    }
 
-	    if (this.character.getTranslateX() > SceneController.SCREENWIDTH) {
-	        this.character.setTranslateX(this.character.getTranslateX() % SceneController.SCREENWIDTH);
+	    if (this.character.getTranslateX() > GameController.SCREENWIDTH) {
+	        this.character.setTranslateX(this.character.getTranslateX() % GameController.SCREENWIDTH);
 	    }
 
 	    if (this.character.getTranslateY() < 0) {
-	        this.character.setTranslateY(this.character.getTranslateY() + SceneController.SCREENHEIGHT);
+	        this.character.setTranslateY(this.character.getTranslateY() + GameController.SCREENHEIGHT);
 	    }
 
-	    if (this.character.getTranslateY() > SceneController.SCREENHEIGHT) {
-	        this.character.setTranslateY(this.character.getTranslateY() % SceneController.SCREENHEIGHT);
+	    if (this.character.getTranslateY() > GameController.SCREENHEIGHT) {
+	        this.character.setTranslateY(this.character.getTranslateY() % GameController.SCREENHEIGHT);
 	    }
 	}
 	

@@ -30,32 +30,31 @@ import java.util.stream.Collectors;
 
 // Class representing the application in general
 // In this class, we control the content that is displayed on the screen
-public class SceneController {
+public class GameController {
 	// Initialise scene controller variables
 	// These variables all relate to the game screen (the window itself, the content in the window, size of the window etc.)
 	// Current level is also initialised to be 0, and this will be reset in each iteration of the game
-	private Stage stage;
+	private final Stage stage;
 	private Scene scene;
 	private Pane root;
-	private String css;
+	private final String css;
 	public static final int SCREENWIDTH = 800;
 	public static final int SCREENHEIGHT = 600;
 	private int currentLevel = 0;
 	private AtomicInteger score;
-	AudioClip explosionSoundEffect;
+	private AudioClip explosionSoundEffect;
 	
 	
 	// Constructor for the scene controller
 	// Here, we assign the game window to the stage variable and define the default css styles
 	// We also call the switch to welcome screen method, which generates the welcome screen for the user
-	public SceneController(Stage stage) {
+	public GameController(Stage stage) {
 		this.stage = stage;
 		this.css = this.getClass().getResource("application.css").toExternalForm();
 		
 		try {
 			switchToWelcomeScreen();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -659,8 +658,8 @@ public class SceneController {
 		do {
 			
 			// Try spawn the player in a random location on the screen and set safe spawn = true
-			safeSpaceX = Math.random() * (SceneController.SCREENWIDTH - 400.0) + 200.0;
-			safeSpaceY = Math.random() * (SceneController.SCREENHEIGHT - 200.00) + 100.0;
+			safeSpaceX = Math.random() * (GameController.SCREENWIDTH - 400.0) + 200.0;
+			safeSpaceY = Math.random() * (GameController.SCREENHEIGHT - 200.00) + 100.0;
 			playerShip.hyperspace(safeSpaceX, safeSpaceY);
 			playerShip.setSafelySpawned(true);
 			
