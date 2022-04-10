@@ -5,7 +5,6 @@ import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert;
@@ -76,7 +75,7 @@ public class GameController {
 		
 		// Add button to start the game
 		// Clicking this button will go to the level screen, which will display "Level 1" before starting the game
-		Button launchGameButton = new Button("Begin Game");
+		GameButton launchGameButton = new GameButton("Begin Game", 250, 300, 36);
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -88,15 +87,12 @@ public class GameController {
 				}	
 			}
 		});
-		launchGameButton.setTranslateX(250);
-		launchGameButton.setTranslateY(300);
-		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(launchGameButton);
 		
 		
 		// Add button to view game controls
 		// Clicking this button will redirect the user to a page with the game controls described
-		Button viewControlsButton = new Button("Controls");
+		GameButton viewControlsButton = new GameButton("Controls", 275, 400, 36);
 		viewControlsButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -108,9 +104,6 @@ public class GameController {
 				}	
 			}
 		});
-		viewControlsButton.setTranslateX(275);
-		viewControlsButton.setTranslateY(400);
-		viewControlsButton.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
 		root.getChildren().add(viewControlsButton);
 		
 		
@@ -162,7 +155,7 @@ public class GameController {
 		
 		// Adds button to launch the game
 		// Clicking this button will launch the level screen with "Level 1" before the game starts
-		Button launchGameButton = new Button("Begin Game");
+		GameButton launchGameButton = new GameButton("Begin Game", 300, 450, 24);
 		launchGameButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -174,16 +167,12 @@ public class GameController {
 				}	
 			}
 		});
-		
-		launchGameButton.setTranslateX(300);
-		launchGameButton.setTranslateY(450);
-		launchGameButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(launchGameButton);
 		
 		
 		// Adds button to return to the main menu screen
 		// Clicking this button will return the user to the welcome screen that was displayed to the user when they first launched the application
-		Button returnToWelcomeButton = new Button("Return to Main Menu");
+		GameButton returnToWelcomeButton = new GameButton("Return to Main Menu", 230, 500, 24);
 		returnToWelcomeButton.setOnAction(new EventHandler<ActionEvent>() {
 
 			@Override
@@ -195,10 +184,6 @@ public class GameController {
 				}	
 			}
 		});
-		
-		returnToWelcomeButton.setTranslateX(230);
-		returnToWelcomeButton.setTranslateY(500);
-		returnToWelcomeButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(returnToWelcomeButton);
 
 	}
