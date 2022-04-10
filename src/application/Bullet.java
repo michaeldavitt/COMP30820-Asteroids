@@ -2,7 +2,7 @@ package application;
 
 import javafx.scene.shape.Polygon;
 
-public class Bullet extends Character {
+public abstract class Bullet extends Character {
 	
 	private static final int MAXDISTANCE = 400;
 
