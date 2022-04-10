@@ -24,7 +24,7 @@ public class Asteroid extends Character {
         setDirection(rnd);
         
         // Sets the speed of the asteroid
-        setSpeed();
+        setSpeed(rnd);
         
         // Sets the rotational movement of the asteroid
         setRotationalMovement(rnd);
@@ -40,9 +40,9 @@ public class Asteroid extends Character {
     	if (this.size.equals("Large")) {
     		this.scaler = 1.0;
     	} else if (this.size.equals("Medium")) {
-    		this.scaler = 0.6;
+    		this.scaler = 0.5;
     	} else {
-    		this.scaler = 0.3;
+    		this.scaler = 0.2;
     	}
     	
     	// Loops through each point in the asteroid and adjusts it according to the scaling factor
@@ -51,14 +51,14 @@ public class Asteroid extends Character {
         }
     }
     
-    private void setSpeed() {
+    private void setSpeed(Random rnd) {
     	// Change the speed of the asteroid depending on its size
     	if (this.size.equals("Large")) {
-    		this.accelerationAmount = 15.0;
+    		this.accelerationAmount = 20.0 + rnd.nextDouble() * 10.0;
     	} else if (this.size.equals("Medium")) {
-    		this.accelerationAmount = 30.0;
+    		this.accelerationAmount = 45.0 + rnd.nextDouble() * 10.0;
     	} else {
-    		this.accelerationAmount = 45.0;
+    		this.accelerationAmount = 60.0 + rnd.nextDouble() * 5.0;
     	}
         
         for (double i = 0; i < this.accelerationAmount; i++) {

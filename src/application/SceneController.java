@@ -405,7 +405,7 @@ public class SceneController {
 						enemyBullets.add(bullet);
 						
 						bullet.accelerate();
-					    bullet.setMovement(bullet.getMovement().normalize().multiply(4));
+					    bullet.setMovement(bullet.getMovement().normalize().multiply(5));
 
 					    root.getChildren().add(bullet.getCharacter());
 					    
@@ -659,8 +659,8 @@ public class SceneController {
 		do {
 			
 			// Try spawn the player in a random location on the screen and set safe spawn = true
-			safeSpaceX = Math.random() * SceneController.SCREENWIDTH;
-			safeSpaceY = Math.random() * SceneController.SCREENHEIGHT;
+			safeSpaceX = Math.random() * (SceneController.SCREENWIDTH - 400.0) + 200.0;
+			safeSpaceY = Math.random() * (SceneController.SCREENHEIGHT - 200.00) + 100.0;
 			playerShip.hyperspace(safeSpaceX, safeSpaceY);
 			playerShip.setSafelySpawned(true);
 			
