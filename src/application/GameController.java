@@ -233,7 +233,7 @@ public class GameController {
 		
 		for (int i = 0; i < currentLevel; i++) {
 		    Random rnd = new Random();
-		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREEN_WIDTH), rnd.nextInt(SCREEN_HEIGHT), "Large");
+		    Asteroid asteroid = new Asteroid(rnd.nextInt(SCREEN_WIDTH), rnd.nextInt(SCREEN_HEIGHT), Size.LARGE);
 		    largeAsteroids.add(asteroid);
 		}
 
@@ -389,7 +389,7 @@ public class GameController {
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn two new medium asteroids
-		                    spawnAsteroids(asteroid, "Medium", medAsteroids);
+		                    spawnAsteroids(asteroid, Size.MEDIUM, medAsteroids);
 		                    
 		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
 		                    explosionSoundEffect.play();
@@ -408,7 +408,7 @@ public class GameController {
 		                    asteroid.setAlive(false);
 		                    
 		                    // Spawn new small asteroids
-		                    spawnAsteroids(asteroid, "Small", smallAsteroids);
+		                    spawnAsteroids(asteroid, Size.SMALL, smallAsteroids);
 		                    
 		                    explosionSoundEffect = new AudioClip(getClass().getResource("explosion.mp3").toExternalForm());
 		                    explosionSoundEffect.play();
@@ -456,7 +456,7 @@ public class GameController {
 		        		asteroid.setAlive(false);
 		        		
 		        		// Spawn new medium asteroids
-		        		spawnAsteroids(asteroid, "Medium", medAsteroids);
+		        		spawnAsteroids(asteroid, Size.MEDIUM, medAsteroids);
 		        		
 		        		// Decrease player health
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
@@ -477,7 +477,7 @@ public class GameController {
 		        		asteroid.setAlive(false);
 		        		
 		        		// Spawn new small asteroids
-		        		spawnAsteroids(asteroid, "Small", smallAsteroids);
+		        		spawnAsteroids(asteroid, Size.SMALL, smallAsteroids);
 		        		
 		        		// Decrease player health
 		        		playerHealthTally.setText("Lives Remaining: " + playerShip.getLives());
@@ -625,7 +625,7 @@ public class GameController {
 	}
 	
 	// Method for spawning two new asteroids when an asteroid has been hit
-	public void spawnAsteroids(Asteroid asteroid, String size, List<Asteroid> asteroidArray) {
+	public void spawnAsteroids(Asteroid asteroid, Size size, List<Asteroid> asteroidArray) {
 		// Spawn two new asteroids
     	for (int i = 0; i < 2; i++) {
 		    Asteroid newAsteroid = new Asteroid(asteroid.getCharacter().getTranslateX(), asteroid.getCharacter().getTranslateY(), size);

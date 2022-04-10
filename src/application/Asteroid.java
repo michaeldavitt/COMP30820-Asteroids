@@ -5,11 +5,11 @@ import java.util.Random;
 public class Asteroid extends Character {
 
     private double rotationalMovement;
-    private String size;
+    private Size size;
     private double scaler;
     private double accelerationAmount;
 
-    public Asteroid(double x, double y, String size) {
+    public Asteroid(double x, double y, Size size) {
         super(new PolygonGenerator().createPolygon(), x, y);
         
         this.size = size;
@@ -30,19 +30,21 @@ public class Asteroid extends Character {
         setRotationalMovement(rnd);
     }
     
-    public String getSize() {
+    public Size getSize() {
     	return this.size;
     }
     
     private void setSize() {
     	
     	// Checks the size of the asteroid to determine the scaling factor that should be applied to the size
-    	if (this.size.equals("Large")) {
+    	if (this.size == Size.LARGE) {
     		this.scaler = 1.0;
-    	} else if (this.size.equals("Medium")) {
+    	} else if (this.size == Size.MEDIUM) {
     		this.scaler = 0.5;
-    	} else {
+    	} else if (this.size == Size.SMALL) {
     		this.scaler = 0.2;
+    	} else {
+    		this.scaler = 0;
     	}
     	
     	// Loops through each point in the asteroid and adjusts it according to the scaling factor
@@ -53,12 +55,14 @@ public class Asteroid extends Character {
     
     private void setSpeed(Random rnd) {
     	// Change the speed of the asteroid depending on its size
-    	if (this.size.equals("Large")) {
+    	if (this.size == Size.LARGE) {
     		this.accelerationAmount = 20.0 + rnd.nextDouble() * 10.0;
-    	} else if (this.size.equals("Medium")) {
+    	} else if (this.size == Size.MEDIUM) {
     		this.accelerationAmount = 45.0 + rnd.nextDouble() * 10.0;
-    	} else {
+    	} else if (this.size == Size.SMALL) {
     		this.accelerationAmount = 60.0 + rnd.nextDouble() * 5.0;
+    	} else {
+    		this.accelerationAmount = 0.0;
     	}
         
         for (double i = 0; i < this.accelerationAmount; i++) {
