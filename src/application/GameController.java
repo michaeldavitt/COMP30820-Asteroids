@@ -13,10 +13,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.media.AudioClip;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.animation.AnimationTimer;
 import java.util.ArrayList;
@@ -66,7 +64,7 @@ public class GameController {
 		// Resets current level to 0 before the user starts playing
 		currentLevel = 0;
 		
-		// Creates new enemy ship and resets score to 0
+		// Creates new player ship and resets score to 0
 		playerShip = new PlayerShip(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		
 		// Create the welcome screen
@@ -78,11 +76,7 @@ public class GameController {
 		scene.getStylesheets().add(css);
 		
 		// Add title to welcome users to the game
-		Text welcomeText = new Text("Welcome To Asteroids!");
-		welcomeText.setTranslateX(170);
-		welcomeText.setTranslateY(200);
-		welcomeText.setFill(Color.WHITE);
-		welcomeText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
+		GameText welcomeText = new GameText("Welcome To Asteroids!", 170, 200, 36);
 		root.getChildren().add(welcomeText);
 		
 		// Add button to start the game
@@ -143,11 +137,7 @@ public class GameController {
 		scene.getStylesheets().add(css);
 		
 		// Adds a title to the game controls screen
-		Text controlsText = new Text("Game Controls");
-		controlsText.setTranslateX(250);
-		controlsText.setTranslateY(100);
-		controlsText.setFill(Color.WHITE);
-		controlsText.setFont(Font.font("Courier New", FontWeight.BOLD, 36));
+		GameText controlsText = new GameText("Game Controls", 250, 100, 36);
 		root.getChildren().add(controlsText);
 		
 		// Adds controls
@@ -240,15 +230,11 @@ public class GameController {
 		scene.getStylesheets().add(css);
 		
 		// Adds the current level to the screen
-		Text currentLevelText = new Text(10, 20, "Level: " + currentLevel);
-		currentLevelText.setFill(Color.WHITE);
-		currentLevelText.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+		GameText currentLevelText = new GameText("Level: " + currentLevel, 10, 20, 24);
 	    root.getChildren().add(currentLevelText);
 	    
 		// Adds the player's score to the screen
-		Text pointsTally = new Text(10, 40, "Points: " + playerShip.getScore());
-		pointsTally.setFill(Color.WHITE);
-		pointsTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+		GameText pointsTally = new GameText("Points: " + playerShip.getScore(), 10, 40, 24);
 	    root.getChildren().add(pointsTally);
 	    
 		
@@ -302,9 +288,7 @@ public class GameController {
 		root.getChildren().add(playerShip.getCharacter());
 		
 		// Adds the player's health to the screen
-	    Text playerHealthTally = new Text(10, 60, "Lives Remaining: " + playerShip.getLives());
-	    playerHealthTally.setFill(Color.WHITE);
-	    playerHealthTally.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
+	    GameText playerHealthTally = new GameText("Lives Remaining: " + playerShip.getLives(), 10, 60, 24);
 	    root.getChildren().add(playerHealthTally);
 		
 		// Adds the game screen to the window and show the window
@@ -767,19 +751,11 @@ public class GameController {
 		stage.setScene(scene);
 		
 		// Add game over text
-		Text gameOver = new Text("Game Over");
-		gameOver.setTranslateX(100);
-		gameOver.setTranslateY(300);
-		gameOver.setFont(Font.font("Verdana", 100));
-		gameOver.setFill(Color.WHITE);
+		GameText gameOver = new GameText("Game Over", 100, 300, 100);
 		root.getChildren().add(gameOver);
 		
 		// Adds press enter to continue text
-		Text continueText = new Text("Press Enter to continue");
-		continueText.setTranslateX(275);
-		continueText.setTranslateY(400);
-		continueText.setFont(Font.font("Verdana", 20));
-		continueText.setFill(Color.WHITE);
+		GameText continueText = new GameText("Press Enter to continue", 230, 400, 20);
 		root.getChildren().add(continueText);
 		
 		// Add on click event so that the scene changes to the enter score scene when the user presses enter
@@ -808,11 +784,7 @@ public class GameController {
 		stage.setScene(scene);
 		
 		// Add text prompting the user to enter a username
-		Text enterNameText = new Text("Enter Username Below");
-		enterNameText.setTranslateX(100);
-		enterNameText.setTranslateY(200);
-		enterNameText.setFont(Font.font("Verdana", 50));
-		enterNameText.setFill(Color.WHITE);
+		GameText enterNameText = new GameText("Enter Username Below", 100, 200, 50);
 		root.getChildren().add(enterNameText);
 		
 		// Add textfield where the user can type in their username
@@ -884,11 +856,7 @@ public class GameController {
 		scene.getStylesheets().add(css);
 		
 		// Add high score title
-		Text highScoresText = new Text("High Scores");
-		highScoresText.setTranslateX(150);
-		highScoresText.setTranslateY(150);
-		highScoresText.setFont(Font.font("Verdana", 80));
-		highScoresText.setFill(Color.WHITE);
+		GameText highScoresText = new GameText("High Scores", 150, 150, 80);
 		root.getChildren().add(highScoresText);
 		
 		
@@ -914,11 +882,7 @@ public class GameController {
 		
 		
 		// Add press enter to continue text
-		Text continueText = new Text("Press Enter to continue");
-		continueText.setTranslateX(260);
-		continueText.setTranslateY(550);
-		continueText.setFont(Font.font("Verdana", 20));
-		continueText.setFill(Color.WHITE);
+		GameText continueText = new GameText("Press Enter to continue", 250, 550, 20);
 		root.getChildren().add(continueText);
 		
 		
@@ -950,22 +914,12 @@ public class GameController {
 		currentLevel += 1;
 		
 		// Add text representing the user's current level
-		Text levelText = new Text();
-		levelText.setText("Level " + currentLevel);
-		levelText.setX(200);
-		levelText.setY(250);
-		levelText.setFont(Font.font("Verdana", 100));
-		levelText.setFill(Color.WHITE);
+		GameText levelText = new GameText("Level " + currentLevel, 200, 250, 80);
 		root.getChildren().add(levelText);
 		
 		
 		// Add text prompting the user to hit enter to begin next level
-		Text nextLevelText = new Text();
-		nextLevelText.setText("Press Enter to continue");
-		nextLevelText.setX(200);
-		nextLevelText.setY(400);
-		nextLevelText.setFont(Font.font("Verdana", 30));
-		nextLevelText.setFill(Color.WHITE);
+		GameText nextLevelText = new GameText("Press Enter to continue", 200, 400, 24);
 		root.getChildren().add(nextLevelText);
 		
 		// Add the welcome screen to the window and show the window
