@@ -67,13 +67,8 @@ public class GameController {
 		// Creates new player ship and resets score to 0
 		playerShip = new PlayerShip(SCREENWIDTH / 2, SCREENHEIGHT / 2);
 		
-		// Create the welcome screen
-		root = new Pane(); // Root node onto which we will add objects
-		scene = new Scene(root); // A drawing surface - will be different for each screen type (welcome screen, game screen etc.)
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT); // Set preferred screen size
-		
-		// Style the screen using CSS
-		scene.getStylesheets().add(css);
+		// Clears the screen and generates a new screen
+		clearScreen();
 		
 		// Add title to welcome users to the game
 		GameText welcomeText = new GameText("Welcome To Asteroids!", 170, 200, 36);
@@ -119,8 +114,6 @@ public class GameController {
 		root.getChildren().add(viewControlsButton);
 		
 		
-		// Show the welcome screen to the user
-		stage.setScene(scene);
 		stage.show();
 	}
 	
@@ -128,13 +121,8 @@ public class GameController {
 	// Method that displays the controls screen to the user
 	// Users can view the buttons they need to press to interact with the game on this screen
 	public void switchToControlsScreen() throws IOException {
-		// Generates the controls screen
-		root = new Pane();
-		scene = new Scene(root);
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
 		
-		// Adds styling to the controls screen
-		scene.getStylesheets().add(css);
+		clearScreen();
 		
 		// Adds a title to the game controls screen
 		GameText controlsText = new GameText("Game Controls", 250, 100, 36);
@@ -212,22 +200,13 @@ public class GameController {
 		returnToWelcomeButton.setTranslateY(500);
 		returnToWelcomeButton.setFont(Font.font("Courier New", FontWeight.BOLD, 24));
 		root.getChildren().add(returnToWelcomeButton);
-		
-		
-		// Add the controls screen to the window and show the window
-		stage.setScene(scene);
+
 	}
 	
 	
 	// Method to display the main game screen, where the user will play the game
 	public void switchToGameScreen() throws IOException {
-		// Generate the game screen
-		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
-		scene = new Scene(root);
-		
-		// Adds styling to the game screen
-		scene.getStylesheets().add(css);
+		clearScreen();
 		
 		// Adds the current level to the screen
 		GameText currentLevelText = new GameText("Level: " + currentLevel, 10, 20, 24);
@@ -290,10 +269,6 @@ public class GameController {
 		// Adds the player's health to the screen
 	    GameText playerHealthTally = new GameText("Lives Remaining: " + playerShip.getLives(), 10, 60, 24);
 	    root.getChildren().add(playerHealthTally);
-		
-		// Adds the game screen to the window and show the window
-		stage.setScene(scene);
-		
 		
 		// Creates a dictionary/hash map to store the keys that have been pressed for the ship movement/rotation
 		Map<KeyCode, Boolean> pressedKeys = new HashMap<>();
@@ -739,16 +714,7 @@ public class GameController {
 	}
 	
 	public void switchToGameOverScreen() throws IOException {
-		// Generates the game over screen
-		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
-		scene = new Scene(root);
-		
-		// Adds styling to the screen
-		scene.getStylesheets().add(css);
-		
-		// Adds the screen to the window and show the window
-		stage.setScene(scene);
+		clearScreen();
 		
 		// Add game over text
 		GameText gameOver = new GameText("Game Over", 100, 300, 100);
@@ -772,16 +738,7 @@ public class GameController {
 	}
 	
 	public void switchToEnterNameScreen() throws IOException {
-		// Generate the welcome screen
-		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
-		scene = new Scene(root);
-		
-		// Add styling to the welcome screen
-		scene.getStylesheets().add(css);
-		
-		// Add the welcome screen to the window and show the window
-		stage.setScene(scene);
+		clearScreen();
 		
 		// Add text prompting the user to enter a username
 		GameText enterNameText = new GameText("Enter Username Below", 100, 200, 50);
@@ -845,15 +802,10 @@ public class GameController {
 	}
 	
 	public void switchToViewHighScoreScreen(String username) throws IOException {
-		// Generate the welcome screen
-		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
-		scene = new Scene(root);
-		// Add the welcome screen to the window and show the window
-		stage.setScene(scene);
+		clearScreen();
 		
-		// Add styling to the welcome screen
-		scene.getStylesheets().add(css);
+		// Add the welcome screen to the window and show the window
+		
 		
 		// Add high score title
 		GameText highScoresText = new GameText("High Scores", 150, 150, 80);
@@ -902,13 +854,7 @@ public class GameController {
 	
 	// Method for switching to the level screen which shows the user which level they are currently on and prompts them to hit enter to begin the next level
 	public void switchToLevelScreen() throws IOException {
-		// Generate the screen
-		root = new Pane();
-		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
-		scene = new Scene(root);
-		
-		// Add styling to the screen
-		scene.getStylesheets().add(css);
+		clearScreen();
 		
 		// Update level counter
 		currentLevel += 1;
@@ -922,9 +868,6 @@ public class GameController {
 		GameText nextLevelText = new GameText("Press Enter to continue", 200, 400, 24);
 		root.getChildren().add(nextLevelText);
 		
-		// Add the welcome screen to the window and show the window
-		stage.setScene(scene);
-		
 		// Change scene when the user presses Enter
 		stage.getScene().setOnKeyPressed(e -> {
 			e.consume();
@@ -936,5 +879,18 @@ public class GameController {
 				}
 			}
 		});
+	}
+	
+	public void clearScreen() {
+		// Generate the screen
+		root = new Pane();
+		root.setPrefSize(SCREENWIDTH, SCREENHEIGHT);
+		scene = new Scene(root);
+		
+		// Add styling to the screen
+		scene.getStylesheets().add(css);
+		
+		// Display screen
+		stage.setScene(scene);
 	}
 }
