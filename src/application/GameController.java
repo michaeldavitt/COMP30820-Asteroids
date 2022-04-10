@@ -37,7 +37,7 @@ public class GameController {
 	private final String css;
 	public static final int SCREEN_WIDTH = 800;
 	public static final int SCREEN_HEIGHT = 600;
-	private int currentLevel = 0;
+	private int currentLevel;
 	private AudioClip explosionSoundEffect;
 	private PlayerShip playerShip;
 	
@@ -64,7 +64,7 @@ public class GameController {
 		// Resets current level to 0 before the user starts playing
 		currentLevel = 0;
 		
-		// Creates new player ship and resets score to 0
+		// Creates new player ship
 		playerShip = new PlayerShip(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 		
 		// Clears the screen and generates a new screen
@@ -841,7 +841,7 @@ public class GameController {
 		clearScreen();
 		
 		// Update level counter
-		currentLevel += 1;
+		incrementLevel();
 		
 		// Add text representing the user's current level
 		GameText levelText = new GameText("Level " + currentLevel, 200, 250, 80);
@@ -865,6 +865,7 @@ public class GameController {
 		});
 	}
 	
+	// Method for clearing the screen when a new screen has been generated
 	public void clearScreen() {
 		// Generate the screen
 		root = new Pane();
@@ -876,5 +877,10 @@ public class GameController {
 		
 		// Display screen
 		stage.setScene(scene);
+	}
+	
+	// Method for incrementing the current level
+	private void incrementLevel() {
+		this.currentLevel += 1;
 	}
 }
