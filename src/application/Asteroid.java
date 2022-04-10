@@ -17,7 +17,7 @@ public class Asteroid extends Character {
         // Sets the size of the asteroid
         setSize();
         
-        // Generates a random number for the direction and rotational movement
+        // Generates a random number for the direction, speed, and rotational movement
         Random rnd = new Random();
         
         // Sets a random direction of the asteroid
@@ -34,7 +34,7 @@ public class Asteroid extends Character {
     	return this.size;
     }
     
-    private void setSize() {
+    private final void setSize() {
     	
     	// Checks the size of the asteroid to determine the scaling factor that should be applied to the size
     	if (this.size == Size.LARGE) {
@@ -70,12 +70,12 @@ public class Asteroid extends Character {
         }
     }
     
-    private void setDirection(Random rnd) {
+    private final void setDirection(Random rnd) {
     	// Sets a random rotation speed and direction for the asteroid
         super.getCharacter().setRotate(rnd.nextInt(360));
     }
     
-    private void setRotationalMovement(Random rnd) {
+    private final void setRotationalMovement(Random rnd) {
     	this.rotationalMovement = 1.0 - rnd.nextDouble();
     }
 

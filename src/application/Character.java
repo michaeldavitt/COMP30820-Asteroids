@@ -49,7 +49,7 @@ public abstract class Character {
 	}
 	
 	// Set if the character is alive
-	public void setAlive(Boolean status) {
+	public final void setAlive(Boolean status) {
 		this.alive = status;
 	}
 	

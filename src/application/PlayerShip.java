@@ -24,7 +24,7 @@ public class PlayerShip extends Ship {
     
     // Method to set the number of lives that the ship starts with
     // Private so that this can only be done within the ship class
-    private void setLives(int lives) {
+    private final void setLives(int lives) {
     	this.lives = lives;
     }
     
@@ -49,7 +49,7 @@ public class PlayerShip extends Ship {
     }
     
     // Method to set the safely spawned status
-    public void setSafelySpawned(Boolean safelySpawned) {
+    public final void setSafelySpawned(Boolean safelySpawned) {
     	this.safelySpawned = safelySpawned;
     }
     
