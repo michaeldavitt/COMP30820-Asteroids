@@ -53,3 +53,7 @@ The user will be prompted to sumbit their username and press enter. Upon doing s
 On this screen, the user can view the best players in the game, and their associated scores. If the user scored within the top 5 on their attempt, their score will be present in this list. The user will be prompted to press enter to continue. Upon doing so, they will be brought back to the main menu screen for a chance to play again.
 
 ![](screenshots/high_scores.png)
+
+### Gameplay demo
+
+![](videos/gameplay_demo.gif)
