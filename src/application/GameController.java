@@ -4,6 +4,7 @@ package application;
 import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -316,9 +317,9 @@ public class GameController {
 				
 				// Get the enemy ship to fire a bullet
 				enemyShips.forEach(enemy -> {
-					if (now - lastEnemyShot >= 1080_000_000 && enemy.isAlive()) {
+					if (now - lastEnemyShot >= 2080_000_000 && enemy.isAlive()) {
 						// Get the change in x divided by the change in y = slope formula
-						double deltaX = (playerShip.getCharacter().getTranslateX() - enemy.getCharacter().getTranslateX());
+						double deltaX = (enemy.getCharacter().getTranslateX() - playerShip.getCharacter().getTranslateX());
 						double deltaY = (enemy.getCharacter().getTranslateY() - playerShip.getCharacter().getTranslateY());
 						double shootingDirection = Math.toDegrees(Math.atan2(deltaY, deltaX));
 						
@@ -569,6 +570,8 @@ public class GameController {
 	public void spawnPlayerShip(PlayerShip playerShip, List<Character> enemyCharacters) {
 		double safeSpaceX;
 		double safeSpaceY;
+		
+		playerShip.setMovement(new Point2D(0,0));
 		
 		// Spawn the player ship and ensure that the player does not collide with asteroids upon spawning
 		do {
