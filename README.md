@@ -1,5 +1,11 @@
 # COMP30820 - Asteroids
 
+## Running the program
+- Clone the repository using git clone git@github.com:michaeldavitt/COMP30820-Asteroids.git, or download the zip folder directly and unzip it
+- Assuming you are using the Eclipse IDE, select file -> import -> general -> Existing Projects into Workspace
+- You will be prompted to specify a root directory. Set this root directory to the project's root directory
+- You should be able to run the program by going into src -> Main.java and clicking run.
+
 ## Introduction:
 A version of the classic arcade game "Asteroids" built in Java. Part of the module COMP30820 - Java Programming.
 

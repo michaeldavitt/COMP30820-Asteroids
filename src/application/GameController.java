@@ -260,7 +260,7 @@ public class GameController {
 		new AnimationTimer() {
 
 			// variable that defines how much the ship rotation should change when the user hits LEFT or RIGHT
-			int delta = 3;
+			int delta = 4;
 			
 			private long lastBulletUpdate = 0;
 			private long lastHyperSpaceJump = 0;

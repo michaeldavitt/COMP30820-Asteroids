@@ -115,8 +115,4 @@ public abstract class Character {
 	    return collisionArea.getBoundsInLocal().getWidth() != -1;
 	}
 	
-
-
-
-	
 }
