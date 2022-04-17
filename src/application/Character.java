@@ -1,6 +1,6 @@
 package application;
 
-import java.util.Random;
+
 
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
@@ -10,7 +10,7 @@ import javafx.scene.shape.Shape;
 public abstract class Character {
 
 	private Polygon character;
-	private Point2D movement;
+	protected Point2D movement;
 	private Boolean alive;
 	private double distanceTravelled;
 
@@ -117,15 +117,6 @@ public abstract class Character {
 	
 
 
-	public void accelerateEnemy() {
-		Random randomY = new Random();
-		int enemyY = randomY.nextInt(3+3) - 3;
 
-		int three = 3;
-        int minusThree = -3;
-		int enemyX = new Random().nextBoolean() ? three  : minusThree;
-		
-	    this.movement = new Point2D(enemyX,enemyY);
-	}
 	
 }

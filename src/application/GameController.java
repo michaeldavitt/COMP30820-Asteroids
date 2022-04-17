@@ -209,7 +209,7 @@ public class GameController {
 		enemyShips.add(enemyShip);
 		enemyShips.forEach(enemy -> {
 			root.getChildren().add(enemy.getCharacter());
-			enemy.accelerateEnemy();
+
 		});
 		
 		// Creates the asteroids arrays
@@ -336,7 +336,7 @@ public class GameController {
 					    shootingSoundEffect.play();
 					    
 					    lastEnemyShot = now;
-					    enemyShip.accelerateEnemy();
+					    enemyShip.accelerate();
 					}
 				});
 					
