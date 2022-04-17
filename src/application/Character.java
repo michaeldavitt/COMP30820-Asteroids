@@ -1,5 +1,7 @@
 package application;
 
+import java.util.Random;
+
 import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -113,14 +115,17 @@ public abstract class Character {
 	    return collisionArea.getBoundsInLocal().getWidth() != -1;
 	}
 	
-	public void accelerateSlow() {
-//		int three = 3;
-//        int minusThree = -3;
-//		int accSlowChange = new Random().nextBoolean() ? three  : minusThree;
 
-	    this.movement = new Point2D(3,0);
+
+	public void accelerateEnemy() {
+		Random randomY = new Random();
+		int enemyY = randomY.nextInt(3+3) - 3;
+
+		int three = 3;
+        int minusThree = -3;
+		int enemyX = new Random().nextBoolean() ? three  : minusThree;
+		
+	    this.movement = new Point2D(enemyX,enemyY);
 	}
-
-	
 	
 }
